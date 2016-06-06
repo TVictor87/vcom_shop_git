@@ -20,3 +20,5 @@
 /coverage
 vcom_shop.iml
 /public/uploads
+
+.ruby-version
