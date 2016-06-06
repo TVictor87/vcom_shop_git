@@ -1,0 +1,14 @@
+%section.content-header
+  %h1
+    = t('admin.products.title')
+    %small= t('helpers.links.edit')
+    .pull-right
+      = link_to new_admin_product_product_image_path(@product.id), class: 'btn btn-default', title: t('admin.products.add_image') do
+        %i.fa.fa-file-image-o
+
+%section.content
+  .box
+    .box-body
+      = render 'form'
+    .box-footer
+      = link_to t('helpers.links.edit'), 'javascript:', class: 'btn btn-primary', onclick: "$('.edit_product').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"

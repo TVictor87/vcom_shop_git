@@ -1,0 +1,19 @@
+= simple_form_for [:admin, @page], validate: true do |f|
+  = f.input :title_ru
+  = f.input :description_ru
+  = f.input :url_ru
+  = f.input :title_uk
+  = f.input :description_uk
+  = f.input :url_uk
+  = f.input :title_en
+  = f.input :description_en
+  = f.input :url_en
+  = f.input :constant_name
+
+  -#TODO: Make dropdown list
+  = f.input :parent_page_id
+
+  = f.input :active, label: t('activerecord.attributes.active')
+
+  -#TODO: Make with Simple_Form method & multiple Select2
+  = f.select_tag 'active_sites', options_from_collection_for_select(Site.all, :id, :title_ru, SitePage.where(page_id: @page).pluck(:site_id)), multiple: true

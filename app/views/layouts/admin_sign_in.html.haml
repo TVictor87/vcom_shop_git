@@ -1,0 +1,10 @@
+!!! 5
+%html{ lang: locale }
+  %head
+    %meta{content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type'}/
+    %title VcomShopAdmin | SignIn
+    = stylesheet_link_tag 'admin/application', media: 'all', 'data-turbolinks-track': true
+    = javascript_include_tag 'admin/application', 'data-turbolinks-track': true
+    = csrf_meta_tags
+  %body.hold-transition.login-page
+    = yield

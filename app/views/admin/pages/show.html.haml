@@ -1,0 +1,46 @@
+%section.content-header
+  %h1
+    = t('admin.pages.title')
+    %small= @page.try("title_#{locale}") || @page.title_ru
+
+%section.content
+  .box
+    .box-body
+      %form{ class: 'show_form'}
+        %p
+          %b Title ru:
+          = @page.title_ru
+        %p
+          %b Description ru:
+          = sanitize @page.description_ru
+        %p
+          %b Url ru:
+          = @page.url_ru
+        %p
+          %b Title uk:
+          = @page.title_uk
+        %p
+          %b Description uk:
+          = sanitize @page.description_uk
+        %p
+          %b Url uk:
+          = @page.url_uk
+        %p
+          %b Title en:
+          = @page.title_en
+        %p
+          %b Description en:
+          = sanitize @page.description_en
+        %p
+          %b Url en:
+          = @page.url_en
+        %p
+          %b Constant name:
+          = @page.constant_name
+        %p
+          %b Parent page:
+          = @page.parent_page_id
+
+      .editor_actions
+        = link_to 'Edit', edit_admin_page_path(@page), class: 'btn btn-primary'
+        = link_to 'Back', admin_pages_path, class: 'btn btn-primary'

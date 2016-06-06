@@ -1,0 +1,18 @@
+%section.content-header
+  %h1
+    = t('admin.options_groups.title')
+    %small= @options_group.try('title_#{locale}') || @options_group.title_ru
+
+%section.content
+  .box
+    .box-body 
+      %ul       
+        %li 
+          = @options_group.title_uk
+        %li 
+          = @options_group.title_en
+        %li 
+          = @options_group.constant_name
+  .box_footer
+    = link_to t('helpers.links.back'), admin_options_groups_path, class:'btn btn-primary'
+    = link_to t('helpers.links.edit'), edit_admin_options_group_path(@options_group), class:'btn btn-primary'

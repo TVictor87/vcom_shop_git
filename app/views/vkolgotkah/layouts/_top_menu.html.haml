@@ -1,0 +1,42 @@
+%header#header
+  .row
+    %form.search-form{action: '#'}
+      %fieldset
+        %input{placeholder: t('search_placeholder'), type: 'text'}/
+        %input{type: 'submit', value: t('search_placeholder')}/
+    %nav.add-nav
+      %ul
+        %li
+          %a{href: ''}= t('registration')
+        %li
+          %a{href: ''}= t('enter')
+        %li
+          %form{action: '#'}
+            %fieldset
+              %select.currency-select
+                %option= t('currency_grn')
+                %option= t('currency_usd')
+        %li
+          %a.cart{href: ''}
+            = t('cart') + ':'
+            %strong 2
+%nav#nav.slide-holder
+  .row
+    .slide-block
+      %ul
+        %li
+          %a{href: '#'}= t('main_menu.for_women')
+        %li
+          %a{href: '#'}= t('main_menu.for_men')
+        %li
+          %a{href: '#'}= t('main_menu.for_children')
+      %ul
+        %li
+          %a{href: '#'}= t('main_menu.wholesale_customers')
+        %li
+          %a{href: '#'}= t('main_menu.bestsellers')
+        %li
+          %a{href: '#'}= t('main_menu.sale')
+    %strong.logo
+      %a{href: '#'}= t('application_name')
+    %a.opener{href: ''}= t('main_menu.menu')

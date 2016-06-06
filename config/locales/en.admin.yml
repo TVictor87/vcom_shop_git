@@ -1,0 +1,109 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  admin:
+    create:
+      success: Successfully created
+    update:
+      success: Successfully updated
+    destroy:
+      success: Successfully destroyed
+    main_menu: MAIN MENU
+    home:
+      title: Home
+    products:
+      title: Products
+      add_image: Add an image
+      information: Information
+    pages:
+      title: Pages
+    sites:
+      title: Sites
+    images:
+      title: Images
+    options:
+      title: Options
+    options_groups: 
+      title: Options groups 
+
+  activerecord:
+    attributes:
+      active: Active
+      priority: Priority
+
+      product:
+        title_ru: Name rus
+        description_ru: Description rus
+        url_ru: URL rus
+        title_uk: Name ukr
+        description_uk: Description ukr
+        url_uk: URL ukr
+        title_en: Name eng
+        description_en: Description eng
+        url_en: URL eng
+        base_page_id: Base page
+        page_ids: Pages
+        site_ids: Sites
+        retail_price: Retail price
+        retail_price_currency_id: Retail price currency
+        wholesale_price: Wholesale price
+        wholesale_price_currency_id: Wholesale price currency
+        special_price: Special price
+        special_price_currency_id: Special price currency
+        special_link_id: Special link
+
+      page:
+        title_ru: Page Name (RU)
+        title_uk: Page Name (UK)
+        title_en: Page Name (EN)
+        active: Active Sites
+
+      site:
+        title_ru: Site Name (RU)
+        title_uk: Site Name (UK)
+        title_en: Site Name (EN)
+
+      image:
+        image: Image
+        title_ru: Image Name (RU)
+        title_uk: Image Name (UK)
+        title_en: Image Name (EN)
+        alt_ru: Alternate text (RU)
+        alt_uk: Alternate text (UK)
+        alt_en: Alternate text (EN)
+        title_en: Site Name (EN)
+
+      options_group:
+        title_ru: Group name (RU)
+        title_uk: Group name (UK)
+        title_en: Group name (EN)  
+        constant_name: Constant name
+
+      option:
+        options_group_id: options group  
+        title_ru: Options name (RU)
+        title_uk: Options name (UK)
+        title_en: Options name (EN)
+        field_type: Field type
+        required: Required
+        is_active: Active
+        priority:  Priority  

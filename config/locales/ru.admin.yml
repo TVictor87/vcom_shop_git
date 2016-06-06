@@ -1,0 +1,90 @@
+ru:
+  admin:
+    create:
+      success: Успешно создано
+    update:
+      success: Успешно обновлено
+    destroy:
+      success: Успешно удалено
+    main_manu: ГЛАВНОЕ МЕНЮ
+    home:
+      title: Главная
+    products:
+      title: Товары
+      add_image: Добавить изображение
+      information: Информация
+    pages:
+      title: Страницы
+    sites:
+      title: Сайты
+    images:
+      title: Изображения
+    options:
+      title: Характеристики
+    options_groups:
+      title: Групы характеристик
+        
+        
+
+  activerecord:
+    attributes:
+      active: Активный
+      priority: Приоритет
+
+      product:
+        title_ru: Имя рус.
+        description_ru: Описание рус.
+        url_ru: Ссылка рус.
+        title_uk: Имя укр.
+        description_uk: Описание укр.
+        url_uk: Ссылка укр.
+        title_en: Имя англ.
+        description_en: Описание англ.
+        url_en: Ссылка англ.
+        base_page_id: Базовая страница
+        page_ids: Страницы
+        site_ids: Сайты
+        retail_price: Розничная цена
+        retail_price_currency_id: Валюта розничной цены
+        wholesale_price: Оптовая цена
+        wholesale_price_currency_id: Валюта оптовой цены
+        special_price: Специальная цена
+        special_price_currency_id: Валюта специальной цены
+        special_link_id: Ссылка на акцию
+
+      page:
+        title_ru: Название страницы (РУ)
+        title_uk: Название страницы (УКР)
+        title_en: Название страницы (АНГ)
+        active: Активные сайты
+
+      site:
+        title_ru: Название сайта (РУ)
+        title_uk: Название сайта (УКР)
+        title_en: Название сайта (АНГ)
+
+      image:
+        image: Изображения
+        title_ru: Название изображения (РУ)
+        title_uk: Название изображения (УКР)
+        title_en: Название изображения (АНГ)
+        alt_ru: Альтернативный текст (РУ)
+        alt_uk: Альтернативный текст (УКР)
+        alt_en: Альтернативный текст (АНГ)
+
+      options_group:
+        title_ru: Название групы (Рос)
+        title_uk: Название групы (Укр)
+        title_en: Название групы (Анг)  
+        constant_name: Постоянное название
+
+      option:
+        options_group_id: Група характеристик
+        title_ru: Название характеристики (Рос)
+        title_uk: Название характеристики (Укр)
+        title_en: Название характеристики (Анг)
+        field_type: Тип поля
+        required: Обязательный
+        is_active: Активность
+        priority:  Приоритет
+  

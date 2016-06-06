@@ -1,0 +1,91 @@
+%ul.sidebar-menu
+  %li.header= t('admin.main_manu')
+  %li.treeview{class: controller_name == 'home' ? 'active' : ''}
+    = link_to admin_root_path do
+      %i.fa.fa-home
+      %span= t('admin.home.title')
+  %li.treeview{class: %w(products product_images).include?(controller_name) ? 'active' : ''}
+    = link_to admin_products_path do
+      %i.fa.fa-archive
+      %span= t('admin.products.title')
+  %li.treeview{class: controller_name == 'options_groups' ? 'active' : ''}
+    = link_to admin_options_groups_path do
+      %i.fa.fa-th
+      %span= t('admin.options_groups.title')    
+  %li.treeview{class: controller_name == 'options' ? 'active' : ''}
+    = link_to admin_options_path do
+      %i.fa.fa-building-o
+      %span= t('admin.options.title')     
+  %li.treeview{class: controller_name == 'pages' ? 'active' : ''}
+    = link_to admin_pages_path do
+      %i.fa.fa-folder
+      %span= t('admin.pages.title')
+  %li.treeview{class: controller_name == 'sites' ? 'active' : ''}
+    = link_to admin_sites_path do
+      %i.fa.fa-globe
+      %span= t('admin.sites.title')
+
+  %li.treeview
+    %a{href: '#'}
+      %i.fa.fa-dashboard
+      %span Dashboard
+      %i.fa.fa-angle-left.pull-right
+    %ul.treeview-menu
+      %li.active
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Dashboard v1
+      %li
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Dashboard v2
+  %li.treeview
+    %a{href: '#'}
+      %i.fa.fa-files-o
+      %span Layout Options
+      %span.label.label-primary.pull-right 4
+    %ul.treeview-menu
+      %li
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Top Navigation
+      %li
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Boxed
+      %li
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Fixed
+      %li
+        %a{href: '#'}
+          %i.fa.fa-circle-o
+          Collapsed Sidebar
+  %li
+    %a{href: '#'}
+      %i.fa.fa-th
+      %span Widgets
+      %small.label.pull-right.bg-green new
+  %li
+    %a{href: '#'}
+      %i.fa.fa-calendar
+      %span Calendar
+      %small.label.pull-right.bg-red 3
+  %li
+    %a{href: '#'}
+      %i.fa.fa-envelope
+      %span Mailbox
+      %small.label.pull-right.bg-yellow 12
+  %li.header LABELS
+  %li
+    %a{href: '#'}
+      %i.fa.fa-circle-o.text-red
+      %span Important
+  %li
+    %a{href: '#'}
+      %i.fa.fa-circle-o.text-yellow
+      %span Warning
+  %li
+    %a{href: '#'}
+      %i.fa.fa-circle-o.text-aqua
+      %span Information

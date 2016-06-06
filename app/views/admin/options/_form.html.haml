@@ -1,0 +1,12 @@
+=simple_form_for [:admin, @option], validate: true do |f|
+    = f.input :options_group_id, collection: OptionsGroup.all, label_method: :title_ru, input_html: { class: 'select2' }
+    = f.input :title_ru
+    = f.input :title_uk
+    = f.input :title_en
+    = f.input :field_type
+    = f.input :required
+    = f.input :is_active
+    = f.input :priority
+   
+
+

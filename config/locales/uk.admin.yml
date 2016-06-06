@@ -1,0 +1,88 @@
+uk:
+  admin:
+    create:
+      success: Успішно створено
+    update:
+      success: Успішно оновлено
+    destroy:
+      success: Успішно видалено
+    main_manu: ГОЛОВНЕ МЕНЮ
+    home:
+      title: Головна
+    products:
+      title: Товари
+      add_image: Додати зображення
+      information: Інформація
+    pages:
+      title: сторінки
+    sites:
+      title: Сайти
+    images:
+      title: Зображення
+    options:
+      title: Характеристики
+    options_groups:
+      title: Групи характеристик  
+
+  activerecord:
+    attributes:
+      active: Активний
+      priority: Пріоритет
+
+      product:
+        title_ru: Ім'я рос.
+        description_ru: Опис рос.
+        url_ru: Посилання рос.
+        title_uk: Ім'я укр.
+        description_uk: Опис укр.
+        url_uk: Посилання укр.
+        title_en: Ім'я англ.
+        description_en: Опис англ.
+        url_en: Посилання англ.
+        base_page_id: Базова сторінка
+        page_ids: Сторінки
+        site_ids: Сайти
+        retail_price: Роздрібна ціна
+        retail_price_currency_id: Валюта роздрібної ціни
+        wholesale_price: Оптова ціна
+        wholesale_price_currency_id: Валюта оптової ціни
+        special_price: Спеціальна ціна
+        special_price_currency_id: Валюта спеціальної ціни
+        special_link_id: Посилання на акцію
+
+
+      page:
+        title_ru: Назва сторінки
+        title_uk: Назва сторінки (Укр)
+        title_en: Назва сторінки (Анг)
+        active: Активні сайти
+
+      site:
+        title_ru: Назва сайту (Рос)
+        title_uk: Назва сайту (Укр)
+        title_en: Назва сайту (Анг)
+
+      image:
+        image: Зображення
+        title_ru: Назва зображення (Рос)
+        title_uk: Назва зображення (Укр)
+        title_en: Назва зображення (Анг)
+        alt_ru: Альтернативний текст (Рос)
+        alt_uk: Альтернативний текст (Укр)
+        alt_en: Альтернативнтй текст (Анг)
+
+      options_group:
+        title_ru: Назва групи (Рос)
+        title_uk: Назва групи (Укр)
+        title_en: Назва групи (Анг)  
+        constant_name: Постійна назва
+
+      option:
+        options_group_id: Група характеристик 
+        title_ru: Назва характеристики (Рос)
+        title_uk: Назва характеристики (Укр)
+        title_en: Назва характеристики (Анг)
+        field_type: Тип поля
+        required: Обов'язковий
+        is_active: Активність
+        priority:  Пріорітет

@@ -1,0 +1,8 @@
+%section.content-header
+  %h1
+    = t('admin.products.title')
+    %small= @product.try("title_#{locale}") || @product.title_ru
+
+%section.content
+  .box
+    .box-body

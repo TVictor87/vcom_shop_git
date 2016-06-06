@@ -1,0 +1,22 @@
+%section.content-header
+  %h1
+    = t('admin.options.title')
+    %small= @option.try('title_#{locale}') || @option.title_ru
+
+%section.content
+  .box
+    .box-body 
+      %ul
+        %li 
+          = @option.options_group_id       
+        %li 
+          = @option.title_uk
+        %li
+          = @option.title_en 
+        %li= @option.required ? t('activerecord.attributes.option.required') : t('activerecord.attributes.option.no_required')
+        %li= @option.required ? t('activerecord.attributes.option.active') : t('activerecord.attributes.option.no_active')
+        %li 
+          = @option.priority 
+  .box_footer
+    = link_to t('helpers.links.back'), admin_options_path, class:'btn btn-primary'
+    = link_to t('helpers.links.edit'), edit_admin_option_path(@option), class:'btn btn-primary'

@@ -1,0 +1,12 @@
+%section.content-header
+  %h1
+    =t('admin.options.title')
+    %small= t('helpers.links.edit')
+
+%section.conten
+  .box
+    .box-body
+      =render 'form'
+    .box_footer
+      = link_to t('helpers.links.back'), admin_options_path, class:'btn btn-primary'
+      = link_to t('helpers.links.edit'), 'javascript:', class: 'btn btn-primary', onclick: "$('.edit_options').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"  

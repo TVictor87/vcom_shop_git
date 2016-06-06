@@ -1,0 +1,26 @@
+.carousel
+  .mask
+    .slideset
+      .slide
+        .row
+          %h2.text-title= t('main_page.banner1.title')
+          .text-block
+            %p= t('main_page.banner1.text')
+          %a.button{:href => ''}
+            = t('main_page.show_new_products')
+      .slide{:style => "background: url(#{image_path 'images/bg-slide2.jpg'}) 50% 0 no-repeat;"}
+        .row
+          %h2.text-title= t('main_page.banner2.title')
+          .text-block
+            %p= t('main_page.banner2.text')
+          %a.button{:href => ''}
+            = t('main_page.show_new_products')
+      .slide{:style => "background: url(#{image_path 'images/bg-slide3.jpg'}) 50% 0 no-repeat;"}
+        .row
+          %h2.text-title= t('main_page.banner3.title')
+          .text-block
+            %p= t('main_page.banner3.text')
+          %a.button{:href => ''}
+            = t('pages.show_new_products')
+    %a.btn-prev{:href => ''}= t('back')
+    %a.btn-next{:href => ''}= t('forward')

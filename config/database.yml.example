@@ -1,0 +1,20 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+  username: vcom_shop
+  password:
+  host: localhost
+
+development:
+  <<: *default
+  database: vcom_shop_dev
+
+test:
+  <<: *default
+  database: vcom_shop_test
+
+production:
+  <<: *default
+  database: vcom_shop_prod

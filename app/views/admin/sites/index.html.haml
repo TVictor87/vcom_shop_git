@@ -1,0 +1,30 @@
+%section.content-header
+  %h1
+    = t('admin.sites.title')
+    .pull-right
+      = link_to new_admin_site_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    -#.box-header
+    -#  %h3.box-title Data Table With Full Features
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.site.title_ru')
+            %th= t('activerecord.attributes.site.title_uk')
+            %th= t('activerecord.attributes.site.title_en')
+
+            %th= t('helpers.actions')
+        %tbody
+          - @sites.each do |site|
+            %tr
+              %td= site.title_ru
+              %td= site.title_uk
+              %td= site.title_en
+
+              %td
+                = link_to t('helpers.links.show'), admin_site_path(site.id)
+                = link_to t('helpers.links.edit'), edit_admin_site_path(site.id)
+                = link_to t('helpers.links.destroy'), admin_site_path(site.id), method: :delete

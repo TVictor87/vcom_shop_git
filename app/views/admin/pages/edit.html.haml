@@ -1,0 +1,12 @@
+%section.content-header
+  %h1
+    = t('admin.pages.title')
+    %small= t('helpers.links.edit')
+
+%section.content
+  .box
+    .box-body
+      = render 'form'
+    .box-footer
+      = link_to t('helpers.links.edit'), 'javascript:', class: 'btn btn-primary', onclick: "$('.edit_page').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"
+      = link_to 'Back', admin_pages_path, class: 'btn btn-primary'

@@ -1,0 +1,45 @@
+%section.section-similar
+  .row
+    %h1.headline-center
+      %span.center= title
+    %ul.list-catalog
+      %li
+        %a.visual-link{'data-rel' => 'lightbox', href: "#{image_path 'images/img05.jpg'}"}
+          = image_tag 'images/img05.jpg'
+        %strong.title
+          %a{href: ''} Колготки Jazz 03 - 40 den
+        .item-row
+          %a.add-cart{href: ''}= t('in_cart')
+          %span.price
+            %strong 67.50
+            = t('currency_grn')
+      %li
+        %a.visual-link{'data-rel' => 'lightbox', href: "#{image_path 'images/img02.jpg'}"}
+          = image_tag 'images/img02.jpg'
+        %strong.title
+          %a{href: ''} Колготки Gisele 09 - 20 den
+        .item-row
+          %a.add-cart{href: ''}= t('in_cart')
+          %span.price
+            %strong 70.88
+            = t('currency_grn')
+      %li
+        %a.visual-link{'data-rel' => 'lightbox', href: "#{image_path 'images/img03.jpg'}"}
+          = image_tag 'images/img03.jpg'
+        %strong.title
+          %a{href: ''} Колготки Sweety 04 - 20 den
+        .item-row
+          %a.add-cart{href: ''}= t('in_cart')
+          %span.price
+            %strong 67.50
+            = t('currency_grn')
+      %li
+        %a.visual-link{'data-rel' => 'lightbox', href: "#{image_path 'images/img04.jpg'}"}
+          = image_tag 'images/img04.jpg'
+        %strong.title
+          %a{href: ''} Колготки Tancia 04 - 50 den
+        .item-row
+          %a.add-cart{href: ''}= t('in_cart')
+          %span.price
+            %strong 70.88
+            = t('currency_grn')

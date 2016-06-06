@@ -1,0 +1,51 @@
+%footer#footer
+  .row
+    .top-block
+      .container
+        .block-left
+          %a.button-sizes{href: ''}= t('pages.size_table')
+          %nav.sub-nav
+            %ul
+              %li
+                %a{href: ''}= t('pages.order_status')
+              %li
+                %a{href: ''}= t('pages.return_and_exchange')
+        %a.banner{href: ''}
+          = image_tag 'images/banner.gif'
+      .block-subscribe
+        = t('pages.subscribe_text')
+        %form.subscribe-form{action: '#'}
+          %fieldset
+            %input{placeholder: t('pages.email_placeholder'), type: 'text'}/
+            %input{type: 'submit', value: t('pages.email_send')}/
+    .bottom-block
+      .logo-footer
+        %a{href: ''}
+          = image_tag 'images/logo.png', alt: t('application_name')
+      .text-block
+        .footer-bar
+          %em.copyright
+            = "© 2015 - #{Time.now.year}"
+            %strong vkolgotkah.com.ua
+            = t('pages.rights_reserved')
+          %ul.social
+            %li
+              %a{href: ''}= t('pages.social.facebook')
+            %li
+              %a.twitter{href: ''}= t('pages.social.twitter')
+            %li
+              %a.vkontakte{href: ''}= t('pages.social.vkontakte')
+            %li
+              %a.instagram{href: ''}= t('pages.social.instagram')
+        %nav.footer-nav
+          %ul
+            %li
+              %a{href: ''}= t('pages.terms_of_use')
+            %li
+              %a{href: ''}= t('pages.shipping_and_payment')
+            %li
+              %a{href: ''}= t('pages.guarantees')
+            %li
+              %a{href: ''}= t('pages.reviews')
+            %li
+              %a{href: ''}= t('pages.contacts')

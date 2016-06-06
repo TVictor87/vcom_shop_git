@@ -1,0 +1,65 @@
+%section.content-header
+  %h1
+    = t('admin.products.title')
+    .pull-right
+      = link_to new_admin_product_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    -#.box-header
+    -#  %h3.box-title Data Table With Full Features
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.product.title_ru')
+            %th= t('activerecord.attributes.product.description_ru')
+            %th= t('activerecord.attributes.product.url_ru')
+            %th= t('activerecord.attributes.product.title_uk')
+            %th= t('activerecord.attributes.product.description_uk')
+            %th= t('activerecord.attributes.product.url_uk')
+            %th= t('activerecord.attributes.product.title_en')
+            %th= t('activerecord.attributes.product.description_en')
+            %th= t('activerecord.attributes.product.url_en')
+            %th= t('activerecord.attributes.priority')
+            %th= t('activerecord.attributes.product.base_page_id')
+            %th= t('activerecord.attributes.product.page_ids')
+            %th= t('activerecord.attributes.product.site_ids')
+            %th= t('activerecord.attributes.product.retail_price')
+            %th= t('activerecord.attributes.product.retail_price_currency_id')
+            %th= t('activerecord.attributes.product.wholesale_price')
+            %th= t('activerecord.attributes.product.wholesale_price_currency_id')
+            %th= t('activerecord.attributes.product.special_price')
+            %th= t('activerecord.attributes.product.special_price_currency_id')
+            %th= t('activerecord.attributes.product.special_link_id')
+            %th= t('activerecord.attributes.active')
+            %th= t('helpers.actions')
+        %tbody
+          - @products.each do |product|
+            %tr
+              %td= product.title_ru
+              %td= product.description_ru
+              %td= product.url_ru
+              %td= product.title_uk
+              %td= product.description_uk
+              %td= product.url_uk
+              %td= product.title_en
+              %td= product.description_en
+              %td= product.url_en
+              %td= product.priority
+              %td= product.base_page.title_ru
+              %td= product.pages.map { |pp| pp.title_ru }.join(', ')
+              %td= product.sites.map { |ps| ps.title_ru }.join(', ')
+              %td= product.retail_price
+              %td= product.retail_price_currency_id
+              %td= product.wholesale_price
+              %td= product.wholesale_price_currency_id
+              %td= product.special_price
+              %td= product.special_price_currency_id
+              %td= product.special_link_id
+              %td= product.active
+              %td
+                = link_to t('admin.products.add_image'), new_admin_product_product_image_path(product.id)
+                = link_to t('helpers.links.show'), admin_product_path(product.id)
+                = link_to t('helpers.links.edit'), edit_admin_product_path(product.id)
+                = link_to t('helpers.links.destroy'), admin_product_path(product.id), method: :delete

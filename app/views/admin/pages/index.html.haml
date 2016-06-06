@@ -1,0 +1,32 @@
+%section.content-header
+  %h1
+    = t('admin.pages.title')
+    .pull-right
+      = link_to new_admin_page_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    -#.box-header
+    -#  %h3.box-title Data Table With Full Features
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.page.title_ru')
+            %th= t('activerecord.attributes.page.title_uk')
+            %th= t('activerecord.attributes.page.title_en')
+
+            %th= t('activerecord.attributes.active')
+            %th= t('helpers.actions')
+        %tbody
+          - @pages.each do |page|
+            %tr
+              %td= page.title_ru
+              %td= page.title_uk
+              %td= page.title_en
+
+              %td= page.active
+              %td
+                = link_to t('helpers.links.show'), admin_page_path(page.id)
+                = link_to t('helpers.links.edit'), edit_admin_page_path(page.id)
+                = link_to t('helpers.links.destroy'), admin_page_path(page.id), method: :delete

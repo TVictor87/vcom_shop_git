@@ -1,0 +1,60 @@
+- unless @product.new_record?
+  %ul.nav.nav-tabs
+    %li.active
+      %a{ 'data-toggle': 'tab', href: '#inf' }= t('admin.products.information')
+    %li
+      %a{ 'data-toggle': 'tab', href: '#img' }= t('admin.images.title')
+
+.box-body.tab-content
+  #inf.tab-pane.active
+    = simple_form_for [:admin, @product], validate: true do |f|
+      = f.input :title_ru
+      = f.input :description_ru
+      = f.input :url_ru
+      = f.input :title_uk
+      = f.input :description_uk
+      = f.input :url_uk
+      = f.input :title_en
+      = f.input :description_en
+      = f.input :url_en
+      = f.input :priority, label: t('activerecord.attributes.priority')
+      = f.input :base_page_id, collection: Page.all, label_method: :title_ru, input_html: { class: 'select2' }
+      = f.input :page_ids, collection: Page.all, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
+      = f.input :site_ids, collection: Site.all, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
+      = f.input :retail_price
+      = f.input :retail_price_currency_id
+      = f.input :wholesale_price
+      = f.input :wholesale_price_currency_id
+      = f.input :special_price
+      = f.input :special_price_currency_id
+      = f.input :special_link_id
+      = f.input :active, label: t('activerecord.attributes.active')
+
+  - unless @product.new_record?
+    #img.tab-pane
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.image.image')
+            %th= t('activerecord.attributes.image.title_ru')
+            %th= t('activerecord.attributes.image.alt_ru')
+            %th= t('activerecord.attributes.image.title_uk')
+            %th= t('activerecord.attributes.image.alt_uk')
+            %th= t('activerecord.attributes.image.title_en')
+            %th= t('activerecord.attributes.image.alt_en')
+            %th= t('activerecord.attributes.priority')
+            %th= t('helpers.actions')
+
+        %tbody
+          - @product.images.each do |product_image|
+            %tr
+              %td= image_tag product_image.image_url, class: 'medium_img'
+              %td= product_image.title_ru
+              %td= product_image.alt_ru
+              %td= product_image.title_uk
+              %td= product_image.alt_uk
+              %td= product_image.title_en
+              %td= product_image.alt_en
+              %td= product_image.priority
+              %td
+                = link_to t('helpers.links.destroy'), admin_product_product_image_path(@product.id, product_image.id), method: :delete
