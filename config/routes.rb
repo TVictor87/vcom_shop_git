@@ -77,6 +77,6 @@ Rails.application.routes.draw do
   #   end
 
   # Dynamic Pages route
-  get ':base_page(/:page_name)' => 'pages#show'
+  get '*urls' => 'pages#show'
   # match '*path', to: 'pages#show', via: [:get, :post]
 end
