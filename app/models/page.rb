@@ -1,6 +1,9 @@
 class Page < ActiveRecord::Base
-  title = "title_#{I18n.locale}"
-  description = "description_#{I18n.locale}"
+  key = I18n.locale.to_s
+  title = 'title_' + key
+  description = 'description_' + key
+  url = 'url_' + key
+
   default_scope { where(active: true).select title, description }
 
   has_many :site_pages, dependent: :destroy
@@ -17,7 +20,8 @@ class Page < ActiveRecord::Base
   #           :url_en, length: { minimum: 2, :allow_nil => true }
   validates :constant_name, presence: true
 
+  find_by_url = 'find_by_url_' + key
   def self.find_by_url url
-    send "find_by_url_#{I18n.locale}", url
+    send find_by_url, url
   end
 end

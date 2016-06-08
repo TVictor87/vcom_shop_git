@@ -5,7 +5,8 @@ class PagesController < ApplicationController
 		urls = params[:urls].split '/'
 		urls_size = urls.size
 		if urls_size > 1
-			pages = Page.unscope(:select).select(:id, :parent_page_id).where("url_#{I18n.locale}" => urls)
+			key = "url_#{I18n.locale}"
+			pages = Page.unscope(:select).select(:id, key, :parent_page_id).where(key => urls)
 			pages.each_with_index do |page, index|
 				if parent_page_id = page.parent_page_id
 					return render_404 unless pages.find { |page| page.id == parent_page_id }
