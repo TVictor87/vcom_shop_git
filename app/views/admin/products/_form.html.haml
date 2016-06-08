@@ -5,6 +5,8 @@
     %li
       %a{ 'data-toggle': 'tab', href: '#img' }= t('admin.images.title')
 
+- pages = Page.select :id, :title_ru
+
 .box-body.tab-content
   #inf.tab-pane.active
     = simple_form_for [:admin, @product], validate: true do |f|
@@ -18,9 +20,9 @@
       = f.input :description_en
       = f.input :url_en
       = f.input :priority, label: t('activerecord.attributes.priority')
-      = f.input :base_page_id, collection: Page.all, label_method: :title_ru, input_html: { class: 'select2' }
-      = f.input :page_ids, collection: Page.all, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
-      = f.input :site_ids, collection: Site.all, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
+      = f.input :base_page_id, collection: pages, label_method: :title_ru, input_html: { class: 'select2' }
+      = f.input :page_ids, collection: pages, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
+      = f.input :site_ids, collection: Site.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :retail_price
       = f.input :retail_price_currency_id
       = f.input :wholesale_price

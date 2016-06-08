@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028192935) do
+ActiveRecord::Schema.define(version: 20160608210610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,10 @@ ActiveRecord::Schema.define(version: 20151028192935) do
     t.integer  "priority",   default: 0, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "product_id"
   end
+
+  add_index "images", ["product_id"], name: "index_images_on_product_id", using: :btree
 
   create_table "options", force: :cascade do |t|
     t.integer  "options_group_id",                null: false
@@ -60,11 +63,6 @@ ActiveRecord::Schema.define(version: 20151028192935) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "page_products", force: :cascade do |t|
-    t.integer "page_id"
-    t.integer "product_id"
-  end
-
   create_table "pages", force: :cascade do |t|
     t.string  "title_ru"
     t.text    "description_ru"
@@ -80,10 +78,13 @@ ActiveRecord::Schema.define(version: 20151028192935) do
     t.boolean "active",         default: true, null: false
   end
 
-  create_table "product_images", force: :cascade do |t|
+  create_table "pages_products", force: :cascade do |t|
+    t.integer "page_id"
     t.integer "product_id"
-    t.integer "image_id"
   end
+
+  add_index "pages_products", ["page_id"], name: "index_pages_products_on_page_id", using: :btree
+  add_index "pages_products", ["product_id"], name: "index_pages_products_on_product_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "title_ru"
@@ -108,6 +109,8 @@ ActiveRecord::Schema.define(version: 20151028192935) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
+
+  add_index "products", ["base_page_id"], name: "index_products_on_base_page_id", using: :btree
 
   create_table "site_pages", force: :cascade do |t|
     t.integer "site_id"

@@ -19,7 +19,7 @@ class PagesController < ApplicationController
 
 		@page = Page.local.find_by_url urls.last
 
-		rend "pages/show"
+		rend 'pages/show'
 
 		# render_404
 	    # if @product = is_product(params.try(:page_name))
