@@ -1,14 +1,18 @@
-= render 'vkolgotkah/pages/main_slider'
-= render 'vkolgotkah/pages/promotions'
-= render 'vkolgotkah/pages/collections'
-= render partial: 'vkolgotkah/layouts/products', locals: { title: t('bestsellers')}
+/= render 'vkolgotkah/pages/main_slider'
+/= render 'vkolgotkah/pages/promotions'
+/= render 'vkolgotkah/pages/collections'
+/= render partial: 'vkolgotkah/layouts/products', locals: { title: t('bestsellers')}
 
-%section.section-about
-  .row
-    .text-box
-      .holder
-        %h2
-          %span.center= t('about_shop')
-        = safe_translate(@page, :description)
+/ %section.section-about
+/  .row
+/    .text-box
+/      .holder
+/        %h2
+/          %span.center= t('about_shop')
+/        = safe_translate(@page, :description)
 
-= render partial: 'vkolgotkah/layouts/brands'
+/= render partial: 'vkolgotkah/layouts/brands'
+
+
+.row
+	= raw @page.description

@@ -6,11 +6,14 @@ class PagesController < ApplicationController
 		urls_size = urls.size
 		if urls_size > 1
 			key = "url_#{I18n.locale}"
-			pages = Page.unscope(:select).select(:id, key, :parent_page_id).where(key => urls)
-			pages.each_with_index do |page, index|
-				if parent_page_id = page.parent_page_id
-					return render_404 unless pages.find { |page| page.id == parent_page_id }
-				end
+
+			pages = Page.unscope(:select)
+				.select(:id, key, :parent_page_id)
+				.where(key => urls)
+				.order(urls.map{ |url| key + ' = ' + Page.sanitize(url) }.join(', '))
+
+			pages[0...-1].each_with_index do |page, index|
+				return render_404 unless pages[index + 1].id == page.parent_page_id
 			end
 		end
 
@@ -42,7 +45,7 @@ class PagesController < ApplicationController
 
   def index
     @page = Page.where(constant_name: "MAIN_PAGE").first
-    render "vkolgotkah/home/index"
+    rend "home/index"
   end
 
   private

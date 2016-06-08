@@ -1,10 +1,11 @@
 class Page < ActiveRecord::Base
-  key = I18n.locale.to_s
-  title = 'title_' + key
-  description = 'description_' + key
-  url = 'url_' + key
+  @@key = I18n.locale.to_s
+  @@title = 'title_' + @@key
+  @@description = 'description_' + @@key
+  @@url = 'url_' + @@key
+  @@find_by_url = 'find_by_' + @@url
 
-  default_scope { where(active: true).select title, description }
+  default_scope { where(active: true).select @@title, @@description }
 
   has_many :site_pages, dependent: :destroy
   has_many :sites, through: :site_pages
@@ -20,8 +21,11 @@ class Page < ActiveRecord::Base
   #           :url_en, length: { minimum: 2, :allow_nil => true }
   validates :constant_name, presence: true
 
-  find_by_url = 'find_by_url_' + key
   def self.find_by_url url
-    send find_by_url, url
+    send @@find_by_url, url
+  end
+
+  def description
+    self[@@description] or description_ru
   end
 end
