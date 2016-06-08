@@ -7,7 +7,7 @@ class PagesController < ApplicationController
 		if urls_size > 1
 			key = "url_#{I18n.locale}"
 
-			pages = Page.unscope(:select)
+			pages = Page.active
 				.select(:id, key, :parent_page_id)
 				.where(key => urls)
 				.order(urls.map{ |url| key + ' = ' + Page.sanitize(url) }.join(', '))
@@ -17,7 +17,7 @@ class PagesController < ApplicationController
 			end
 		end
 
-		@page = Page.find_by_url urls.last
+		@page = Page.local.find_by_url urls.last
 
 		rend "pages/show"
 
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
 	end
 
   def index
-    @page = Page.where(constant_name: "MAIN_PAGE").first
+    @page = Page.local.where(constant_name: "MAIN_PAGE").first
     rend "home/index"
   end
 

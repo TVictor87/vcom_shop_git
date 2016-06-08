@@ -5,7 +5,8 @@ class Page < ActiveRecord::Base
   @@url = 'url_' + @@key
   @@find_by_url = 'find_by_' + @@url
 
-  default_scope { where(active: true).select @@title, @@description }
+  scope :active, -> { where(active: true) }
+  scope :local, -> { where(active: true).select @@title, @@description }
 
   has_many :site_pages, dependent: :destroy
   has_many :sites, through: :site_pages
