@@ -6,7 +6,10 @@ class Product < ActiveRecord::Base
   # :special_price, :special_price_currency_id,
   # :special_link_id, :active
 
+  default_scope { where(active: true).order(:priority) }
+
   belongs_to :base_page, class_name: 'Page'
+  belongs_to :category
 
   has_and_belongs_to_many :pages
   has_many :site_products, dependent: :destroy
@@ -20,5 +23,9 @@ class Product < ActiveRecord::Base
 
   def title
     self["title_#{I18n.locale.to_s}"] or title_ru
+  end
+
+  def price
+    ('%.2f' % retail_price).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
   end
 end

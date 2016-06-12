@@ -55,8 +55,40 @@ class PagesController < ApplicationController
 
   def catalog
   	@parent = Category.find_by(params[:column] => params[:url])
-  	@category = Category.find_by(params[:column] => params[:categoty_url])
+  	@category = Category.find_by(params[:column] => params[:category_url])
+  	products = @category.products
+  	count = products.count
+  	if count == 0
+  		@totalPage = 1
+  	else
+  		@totalPage = (count / 12.0).ceil
+  	end
+  	@products = products.limit(12)
     rend "pages/catalog"
+  end
+
+  def catalog_json
+	if show = params[:show]
+		show = show.to_i
+	else
+		show = 12
+	end
+  	records = Product
+		.where(category_id: params[:id])
+		.select(:id, "title_#{I18n.locale}", :retail_price)
+		.limit(show)
+
+	if page = params[:pageNumber]
+		records = records.offset (page - 1) * show
+	end
+
+	case params[:sort]
+	when 'priceAsc' then records = records.unscope(:order).order('retail_price ASC')
+	when 'priceDesc' then records = records.unscope(:order).order('retail_price DESC')
+	when 'popular' then records = records.unscope(:order).order('RANDOM()')
+	end
+
+	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(records.count.to_f / show).ceil}}"
   end
 
   private

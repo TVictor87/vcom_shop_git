@@ -861,6 +861,7 @@ jcf.addModule({
 		}
 	},
 	onChange: function() {
+		filter(this);
 		this.refreshState();
 	},
 	onKeyDown: function(e){

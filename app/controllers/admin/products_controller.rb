@@ -3,7 +3,7 @@ module Admin
     before_action :set_product, only: [:show, :edit, :update, :destroy]
 
     def index
-      @products = Product.all
+      @products = Product.unscope :where
     end
 
     def new
@@ -46,14 +46,17 @@ module Admin
     end
 
     def product_params
-      params.require(:product).permit(:title_ru, :description_ru, :url_ru,
-                                      :title_uk, :description_uk, :url_uk,
-                                      :title_en, :description_en, :url_en,
-                                      :retail_price, :retail_price_currency_id,
-                                      :wholesale_price, :wholesale_price_currency_id,
-                                      :special_price, :special_price_currency_id,
-                                      :special_link_id, :active, :base_page_id, :priority,
-                                      site_ids: [], page_ids: [])
+      params.require(:product).permit(
+        :category_id,
+        :title_ru, :description_ru, :url_ru,
+        :title_uk, :description_uk, :url_uk,
+        :title_en, :description_en, :url_en,
+        :retail_price, :retail_price_currency_id,
+        :wholesale_price, :wholesale_price_currency_id,
+        :special_price, :special_price_currency_id,
+        :special_link_id, :active, :base_page_id, :priority,
+        site_ids: [], page_ids: []
+      )
     end
   end
 end

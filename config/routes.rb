@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     resources :pages
   end
 
+  post 'catalog', to: 'pages#catalog_json'
+
   devise_for :users
   root 'pages#index'
 

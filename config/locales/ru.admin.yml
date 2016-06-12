@@ -35,6 +35,7 @@ ru:
       priority: Приоритет
 
       product:
+        category_id: Категория
         title_ru: Имя рус.
         description_ru: Описание рус.
         url_ru: Ссылка рус.

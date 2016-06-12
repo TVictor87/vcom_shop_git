@@ -460,19 +460,19 @@
     <div id="content">
         <div class="content-holder">
             <ul class="breadcrumbs">
-                <li><a href="">Главная</a></li>
-                <li>Женские колготки</li>
+                <li><a href="/">Главная</a></li>
+                <li><%= @parent.name %></li>
             </ul>
-            <h1 class="headline">Колготки</h1>
+            <h1 class="headline"><%= @category.name %></h1>
             <form class="form-sort" action="#">
                 <fieldset>
                     <div class="select-block">
                         <label for="sort">Сортировка</label>
                         <select id="sort">
-                            <option>По умолчанию</option>
-                            <option>от дешевых к дорогим</option>
-                            <option>от дорогих к дешевым</option>
-                            <option>популярные</option>
+                            <option value="default">По умолчанию</option>
+                            <option value="priceAsc">от дешевых к дорогим</option>
+                            <option value="priceDesc">от дорогих к дешевым</option>
+                            <option value="popular">популярные</option>
                         </select>
                     </div>
                     <div class="select-block">
@@ -483,153 +483,33 @@
                             <option>36</option>
                         </select>
                     </div>
-                    <ul class="paging">
-                        <li class="active"><a href="">1</a></li>
-                        <li><a href="">2</a></li>
-                        <li><a href="">3</a></li>
-                        <li>...</li>
-                        <li><a href="">8</a></li>
-                    </ul>
+                    <% if @totalPage == 1 %>
+                        <% paging = '' %>
+                    <% else %>
+                        <% paging = '<li class="active"><a onclick="paging(this)">1</a></li>
+                            <li><a onclick="paging(this)">2</a></li>' %>
+                        <% paging += '<li>...</li>' if @totalPage > 2 %>
+                        <% paging += '<li><a onclick="paging(this)">' + @totalPage + '</a></li>' if @totalPage > 3 %>
+                    <% end %>
+                    <ul class="paging"><%= raw paging %></ul>
                 </fieldset>
             </form>
-            <ul class="list-catalog">
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img02.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Gisele 09 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img03.jpg">
-                        <img src="/images/img03.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Sweety 04 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>67.50</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img04.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Tancia 04 - 50 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img04.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Tancia 04 - 50 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img05.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Jazz 03 - 40 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>67.50</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img02.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Gisele 09 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img03.jpg">
-                        <img src="/images/img03.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Sweety 04 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>67.50</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img02.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Gisele 09 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img04.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Tancia 04 - 50 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img05.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Jazz 03 - 40 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>67.50</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img02.jpg">
-                        <img src="/images/img04.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Sweety 04 - 20 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>67.50</strong> грн</span>
-                    </div>
-                </li>
-                <li>
-                    <a data-rel="lightbox" class="visual-link" href="images/img03.jpg">
-                        <img src="/images/img03.jpg" alt=""/>
-                    </a>
-                    <strong class="title"><a href="">Колготки Tancia 04 - 50 den</a></strong>
-                    <div class="item-row">
-                        <a class="add-cart" href="">В корзину</a>
-                        <span class="price"><strong>70.88</strong> грн</span>
-                    </div>
-                </li>
+            <ul class="list-catalog" id="products">
+                <%= render 'vkolgotkah/products/product', collection: @products %>
             </ul>
             <form class="form-sort bottom" action="#">
                 <fieldset>
-                    <ul class="paging">
-                        <li class="active"><a href="">1</a></li>
-                        <li><a href="">2</a></li>
-                        <li><a href="">3</a></li>
-                        <li>...</li>
-                        <li><a href="">8</a></li>
-                    </ul>
+                    <ul class="paging"><%= raw paging %></ul>
                 </fieldset>
             </form>
             <article class="catalog-article">
-                <h3>КОЛГОТКИ</h3>
-                <p>В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь. </p>
-                <p>Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.</p>
+                <h3><%= @category.name %></h3>
+                <%= sanitize @category.text %>
             </article>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>"}
+    lang = "<%= I18n.locale %>"
+</script>
