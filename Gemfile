@@ -6,6 +6,8 @@ gem 'rails', '4.2.4'
 gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+gem 'stylus'
+gem 'tilt'
 # Use LESS for stylesheets
 gem 'less-rails', '~> 2.7.0'
 # Embed the V8 JavaScript interpreter into Ruby.

@@ -8,6 +8,10 @@
     = link_to admin_products_path do
       %i.fa.fa-archive
       %span= t('admin.products.title')
+  %li.treeview{class: %w(categories category_images).include?(controller_name) ? 'active' : ''}
+    = link_to admin_categories_path do
+      %i.fa.fa-tag
+      %span= t('admin.categories.title')
   %li.treeview{class: controller_name == 'options_groups' ? 'active' : ''}
     = link_to admin_options_groups_path do
       %i.fa.fa-th
@@ -71,11 +75,6 @@
       %i.fa.fa-calendar
       %span Calendar
       %small.label.pull-right.bg-red 3
-  %li
-    %a{href: '#'}
-      %i.fa.fa-envelope
-      %span Mailbox
-      %small.label.pull-right.bg-yellow 12
   %li.header LABELS
   %li
     %a{href: '#'}

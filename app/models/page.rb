@@ -2,6 +2,7 @@ class Page < ActiveRecord::Base
 
   scope :active, -> { where(active: true) }
   scope :local, -> { where(active: true).select :id, "title_#{I18n.locale.to_s}", "description_#{I18n.locale.to_s}" }
+  scope :with_products, -> { includes(products: :images) }
 
   has_many :site_pages, dependent: :destroy
   has_many :sites, through: :site_pages

@@ -17,7 +17,7 @@ class PagesController < ApplicationController
 			end
 		end
 
-		@page = Page.local.find_by_url urls.last
+		@page = Page.local.with_products.find_by_url urls.last
 
 		rend 'pages/show'
 
@@ -46,6 +46,17 @@ class PagesController < ApplicationController
   def index
     @page = Page.local.where(constant_name: "MAIN_PAGE").first
     rend "home/index"
+  end
+
+  def categories
+  	@category = Category.find_by(params[:column] => params[:url])
+    rend "pages/categories"
+  end
+
+  def catalog
+  	@parent = Category.find_by(params[:column] => params[:url])
+  	@category = Category.find_by(params[:column] => params[:categoty_url])
+    rend "pages/catalog"
   end
 
   private

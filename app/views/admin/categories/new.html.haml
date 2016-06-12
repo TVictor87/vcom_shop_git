@@ -1,0 +1,11 @@
+%section.content-header
+  %h1
+    = t('admin.categories.title')
+    %small= t('helpers.links.new')
+
+%section.content
+  .box
+    .box-body
+      = render 'form'
+    .box-footer
+      = link_to t('helpers.links.create'), 'javascript:', class: 'btn btn-primary', onclick: "$('.new_category').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"

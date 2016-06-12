@@ -11,10 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608210610) do
+ActiveRecord::Schema.define(version: 20160612022803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.integer  "category_id"
+    t.integer  "priority",       default: 0
+    t.string   "image"
+    t.string   "alt_ru"
+    t.string   "title_ru"
+    t.string   "alt_uk"
+    t.string   "title_uk"
+    t.string   "alt_en"
+    t.string   "title_en"
+    t.string   "name_ru"
+    t.string   "name_uk"
+    t.string   "name_en"
+    t.string   "keywords_ru"
+    t.string   "keywords_uk"
+    t.string   "keywords_en"
+    t.text     "description_ru"
+    t.text     "description_uk"
+    t.text     "description_en"
+    t.text     "text_ru"
+    t.text     "text_uk"
+    t.text     "text_en"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "url_ru"
+    t.string   "url_uk"
+    t.string   "url_en"
+  end
+
+  add_index "categories", ["category_id"], name: "index_categories_on_category_id", using: :btree
 
   create_table "images", force: :cascade do |t|
     t.string   "image"
@@ -108,6 +139,7 @@ ActiveRecord::Schema.define(version: 20160608210610) do
     t.boolean  "active",                      default: true, null: false
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
+    t.integer  "category_id"
   end
 
   add_index "products", ["base_page_id"], name: "index_products_on_base_page_id", using: :btree
