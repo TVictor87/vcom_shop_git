@@ -489,7 +489,7 @@
                         <% paging = '<li class="active"><a onclick="paging(this)">1</a></li>
                             <li><a onclick="paging(this)">2</a></li>' %>
                         <% paging += '<li>...</li>' if @totalPage > 2 %>
-                        <% paging += '<li><a onclick="paging(this)">' + @totalPage + '</a></li>' if @totalPage > 3 %>
+                        <% paging += "<li><a onclick='paging(this)'>#{@totalPage}</a></li>" if @totalPage > 3 %>
                     <% end %>
                     <ul class="paging"><%= raw paging %></ul>
                 </fieldset>

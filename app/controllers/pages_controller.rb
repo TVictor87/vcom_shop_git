@@ -73,10 +73,11 @@ class PagesController < ApplicationController
 	else
 		show = 12
 	end
-  	records = Product
-		.where(category_id: params[:id])
-		.select(:id, "title_#{I18n.locale}", :retail_price)
-		.limit(show)
+  	records = Product.where(category_id: params[:id])
+		
+	count = records.count
+
+	records = records.select(:id, "title_#{I18n.locale}", :retail_price).limit(show)
 
 	if page = params[:pageNumber]
 		records = records.offset (page - 1) * show
@@ -88,7 +89,7 @@ class PagesController < ApplicationController
 	when 'popular' then records = records.unscope(:order).order('RANDOM()')
 	end
 
-	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(records.count.to_f / show).ceil}}"
+	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(count.to_f / show).ceil}}"
   end
 
   private
