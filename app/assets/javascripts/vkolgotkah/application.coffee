@@ -33,6 +33,14 @@
 
 #= require jquery.turbolinks
 
+ready = ->
+	$('.grayscale').gray();
+
+
+$(document).ready ready
+$(document).on 'page:load', ready
+
+
 Number.prototype.toCurrency = ->
 	(""+@toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
 
