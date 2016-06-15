@@ -4,12 +4,13 @@ gem 'rubocop', '~> 0.34.2'
 gem 'rails', '4.2.4'
 # Use MySql2 as the database for Active Record
 gem 'pg'
-# Use SCSS for stylesheets
+
+# Стили
 gem 'sass-rails', '~> 5.0'
 gem 'stylus'
 gem 'tilt'
-# Use LESS for stylesheets
 gem 'less-rails', '~> 2.7.0'
+
 # Embed the V8 JavaScript interpreter into Ruby.
 gem 'therubyracer'
 # Use Uglifier as compressor for JavaScript assets
@@ -70,6 +71,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   # Use factory_girl for fixtures replacement with a straightforward definition syntax
   gem 'factory_girl_rails'
+  
+  gem 'populator'
+  gem 'faker'
 end
 
 group :development do
@@ -89,6 +93,4 @@ group :test do
   gem 'simplecov', require: false
   # Use shoulda-matchers for provide Test::Unit- and RSpec-compatible one-liners that test common Rails functionality
   gem 'shoulda-matchers'
-  # Use Faker for generate fake data
-  gem 'faker'
 end

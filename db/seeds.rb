@@ -9,6 +9,9 @@
 # TODO: Create base pages: Main page with description
 # TODO: Create base pages: Wholesale_customers, Bestsellers, Sale
 
+require 'populator'
+require 'faker'
+
 User.delete_all
 Site.delete_all
 Category.delete_all
@@ -48,7 +51,7 @@ Category.create(
 	name_uk: 'Для дітей'
 )
 
-category = Category.create(
+category_id = Category.create(
 	url_ru: 'kolgotki',
 	url_en: 'tights',
 	url_uk: 'panchohy',
@@ -56,17 +59,19 @@ category = Category.create(
 	name_en: 'Tights',
 	name_uk: 'Панчохи',
 	category: women
-)
+).id
 
-(1..100).each do |i|
-	product = Product.create(
-		title_ru: "Товар #{i}",
-		url_ru: "product-#{i}",
-		description_ru: "Описание #{i}",
-		retail_price: rand(1000),
-		priority: rand(100),
-		category: category
-	)
+Product.populate 100 do |product, i|
+	product.title_ru = Faker::Commerce.product_name
+	product.url_ru = "product-#{i}"
+	product.description_ru = Faker::Lorem.sentences(3)
+	product.retail_price = Faker::Commerce.price
+	product.priority = rand(100)
+	product.category_id = category_id
+	product.active = true
+end
+
+Product.all.each do |product|
 	product.images.create(
 		image: Rails.root.join("public/images/img0#{rand(5) + 1}.jpg").open,
 		title_ru: "title_ru",
