@@ -25,11 +25,11 @@
     .slide-block
       %ul
         %li
-          %a{href: for_women_path}= t('main_menu.for_women')
+          %a{href: send("women_#{I18n.locale}_path")}= t('main_menu.for_women')
         %li
-          %a{href: '#'}= t('main_menu.for_men')
+          %a{href: send("men_#{I18n.locale}_path")}= t('main_menu.for_men')
         %li
-          %a{href: '#'}= t('main_menu.for_children')
+          %a{href: send("child_#{I18n.locale}_path")}= t('main_menu.for_children')
       %ul
         %li
           %a{href: '#'}= t('main_menu.wholesale_customers')
