@@ -11,148 +11,178 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_151_029_143_203) do
-  create_table 'currencies', force: :cascade do |t|
-    t.string 'name',       limit: 255
-    t.string 'short_name', limit: 255
-    t.string 'sign',       limit: 255
-    t.float 'value', limit: 24
-    t.boolean 'is_base'
-    t.datetime 'created_at',             null: false
-    t.datetime 'updated_at',             null: false
+ActiveRecord::Schema.define(version: 20160612022803) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.integer  "category_id"
+    t.integer  "priority",       default: 0
+    t.string   "image"
+    t.string   "alt_ru"
+    t.string   "title_ru"
+    t.string   "alt_uk"
+    t.string   "title_uk"
+    t.string   "alt_en"
+    t.string   "title_en"
+    t.string   "name_ru"
+    t.string   "name_uk"
+    t.string   "name_en"
+    t.string   "keywords_ru"
+    t.string   "keywords_uk"
+    t.string   "keywords_en"
+    t.text     "description_ru"
+    t.text     "description_uk"
+    t.text     "description_en"
+    t.text     "text_ru"
+    t.text     "text_uk"
+    t.text     "text_en"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "url_ru"
+    t.string   "url_uk"
+    t.string   "url_en"
   end
 
-  create_table 'images', force: :cascade do |t|
-    t.string 'image',      limit: 255
-    t.string 'alt_ru',     limit: 255
-    t.string 'title_ru',   limit: 255
-    t.string 'alt_uk',     limit: 255
-    t.string 'title_uk',   limit: 255
-    t.string 'alt_en',     limit: 255
-    t.string 'title_en',   limit: 255
-    t.integer 'priority', limit: 4, default: 0, null: false
-    t.datetime 'created_at',                         null: false
-    t.datetime 'updated_at',                         null: false
+  add_index "categories", ["category_id"], name: "index_categories_on_category_id", using: :btree
+
+  create_table "images", force: :cascade do |t|
+    t.string   "image"
+    t.string   "alt_ru"
+    t.string   "title_ru"
+    t.string   "alt_uk"
+    t.string   "title_uk"
+    t.string   "alt_en"
+    t.string   "title_en"
+    t.integer  "priority",   default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "product_id"
   end
 
-  create_table 'options', force: :cascade do |t|
-    t.integer 'options_group_id', limit: 4, null: false
-    t.string 'title_ru',         limit: 255
-    t.string 'title_uk',         limit: 255
-    t.string 'title_en',         limit: 255
-    t.string 'field_type',       limit: 255
-    t.boolean 'required',                     default: true, null: false
-    t.boolean 'is_active',                    default: true, null: false
-    t.integer 'priority', limit: 4
-    t.datetime 'created_at',                                  null: false
-    t.datetime 'updated_at',                                  null: false
+  add_index "images", ["product_id"], name: "index_images_on_product_id", using: :btree
+
+  create_table "options", force: :cascade do |t|
+    t.integer  "options_group_id",                null: false
+    t.string   "title_ru"
+    t.string   "title_uk"
+    t.string   "title_en"
+    t.string   "field_type"
+    t.boolean  "required",         default: true, null: false
+    t.boolean  "is_active",        default: true, null: false
+    t.integer  "priority"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
-  create_table 'options_groups', force: :cascade do |t|
-    t.string 'title_ru',      limit: 255
-    t.string 'title_uk',      limit: 255
-    t.string 'title_en',      limit: 255
-    t.string 'constant_name', limit: 255
-    t.datetime 'created_at',                null: false
-    t.datetime 'updated_at',                null: false
+  create_table "options_groups", force: :cascade do |t|
+    t.string   "title_ru"
+    t.string   "title_uk"
+    t.string   "title_en"
+    t.string   "constant_name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
-  create_table 'options_values', force: :cascade do |t|
-    t.integer 'option_id', limit: 4, null: false
-    t.string 'title_ru',   limit: 255
-    t.string 'title_uk',   limit: 255
-    t.string 'title_en',   limit: 255
-    t.datetime 'created_at',             null: false
-    t.datetime 'updated_at',             null: false
+  create_table "options_values", force: :cascade do |t|
+    t.integer  "option_id",  null: false
+    t.string   "title_ru"
+    t.string   "title_uk"
+    t.string   "title_en"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table 'page_products', force: :cascade do |t|
-    t.integer 'page_id',    limit: 4
-    t.integer 'product_id', limit: 4
+  create_table "pages", force: :cascade do |t|
+    t.string  "title_ru"
+    t.text    "description_ru"
+    t.string  "url_ru"
+    t.string  "title_uk"
+    t.text    "description_uk"
+    t.string  "url_uk"
+    t.string  "title_en"
+    t.text    "description_en"
+    t.string  "url_en"
+    t.string  "constant_name"
+    t.integer "parent_page_id"
+    t.boolean "active",         default: true, null: false
   end
 
-  create_table 'pages', force: :cascade do |t|
-    t.string 'title_ru',       limit: 255
-    t.text 'description_ru', limit: 65_535
-    t.string 'url_ru',         limit: 255
-    t.string 'title_uk',       limit: 255
-    t.text 'description_uk', limit: 65_535
-    t.string 'url_uk',         limit: 255
-    t.string 'title_en',       limit: 255
-    t.text 'description_en', limit: 65_535
-    t.string 'url_en',         limit: 255
-    t.string 'constant_name',  limit: 255
-    t.integer 'parent_page_id', limit: 4
-    t.boolean 'active', default: true, null: false
+  create_table "pages_products", force: :cascade do |t|
+    t.integer "page_id"
+    t.integer "product_id"
   end
 
-  create_table 'product_images', force: :cascade do |t|
-    t.integer 'product_id', limit: 4
-    t.integer 'image_id',   limit: 4
+  add_index "pages_products", ["page_id"], name: "index_pages_products_on_page_id", using: :btree
+  add_index "pages_products", ["product_id"], name: "index_pages_products_on_product_id", using: :btree
+
+  create_table "products", force: :cascade do |t|
+    t.string   "title_ru"
+    t.text     "description_ru"
+    t.string   "url_ru"
+    t.string   "title_uk"
+    t.text     "description_uk"
+    t.string   "url_uk"
+    t.string   "title_en"
+    t.text     "description_en"
+    t.string   "url_en"
+    t.integer  "priority",                    default: 0,    null: false
+    t.integer  "base_page_id"
+    t.float    "retail_price"
+    t.integer  "retail_price_currency_id"
+    t.float    "wholesale_price"
+    t.integer  "wholesale_price_currency_id"
+    t.float    "special_price"
+    t.integer  "special_price_currency_id"
+    t.integer  "special_link_id"
+    t.boolean  "active",                      default: true, null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "category_id"
   end
 
-  create_table 'products', force: :cascade do |t|
-    t.string 'title_ru', limit: 255
-    t.text 'description_ru', limit: 65_535
-    t.string 'url_ru',                      limit: 255
-    t.string 'title_uk',                    limit: 255
-    t.text 'description_uk', limit: 65_535
-    t.string 'url_uk',                      limit: 255
-    t.string 'title_en',                    limit: 255
-    t.text 'description_en', limit: 65_535
-    t.string 'url_en', limit: 255
-    t.integer 'priority',                    limit: 4, default: 0, null: false
-    t.integer 'base_page_id',                limit: 4
-    t.float 'retail_price', limit: 24
-    t.integer 'retail_price_currency_id', limit: 4
-    t.float 'wholesale_price', limit: 24
-    t.integer 'wholesale_price_currency_id', limit: 4
-    t.float 'special_price', limit: 24
-    t.integer 'special_price_currency_id',   limit: 4
-    t.integer 'special_link_id',             limit: 4
-    t.boolean 'active', default: true, null: false
-    t.datetime 'created_at',                                               null: false
-    t.datetime 'updated_at',                                               null: false
+  add_index "products", ["base_page_id"], name: "index_products_on_base_page_id", using: :btree
+
+  create_table "site_pages", force: :cascade do |t|
+    t.integer "site_id"
+    t.integer "page_id"
   end
 
-  create_table 'site_pages', force: :cascade do |t|
-    t.integer 'site_id', limit: 4
-    t.integer 'page_id', limit: 4
+  create_table "site_products", force: :cascade do |t|
+    t.integer "site_id"
+    t.integer "product_id"
   end
 
-  create_table 'site_products', force: :cascade do |t|
-    t.integer 'site_id',    limit: 4
-    t.integer 'product_id', limit: 4
+  create_table "sites", force: :cascade do |t|
+    t.string "title_ru"
+    t.string "title_uk"
+    t.string "title_en"
+    t.string "constant_name"
   end
 
-  create_table 'sites', force: :cascade do |t|
-    t.string 'title_ru',      limit: 255
-    t.string 'title_uk',      limit: 255
-    t.string 'title_en',      limit: 255
-    t.string 'constant_name', limit: 255
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "first_name",             default: "", null: false
+    t.string   "last_name",              default: "", null: false
+    t.integer  "city_id"
+    t.string   "address"
+    t.string   "phone"
+    t.string   "role"
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
-  create_table 'users', force: :cascade do |t|
-    t.string 'email',                  limit: 255, default: '', null: false
-    t.string 'first_name',             limit: 255, default: '', null: false
-    t.string 'last_name',              limit: 255, default: '', null: false
-    t.integer 'city_id', limit: 4
-    t.string 'address',                limit: 255
-    t.string 'phone',                  limit: 255
-    t.string 'role',                   limit: 255
-    t.string 'encrypted_password',     limit: 255, default: '', null: false
-    t.string 'reset_password_token',   limit: 255
-    t.datetime 'reset_password_sent_at'
-    t.datetime 'remember_created_at'
-    t.integer 'sign_in_count', limit: 4, default: 0, null: false
-    t.datetime 'current_sign_in_at'
-    t.datetime 'last_sign_in_at'
-    t.string 'current_sign_in_ip',     limit: 255
-    t.string 'last_sign_in_ip',        limit: 255
-    t.datetime 'created_at',                                      null: false
-    t.datetime 'updated_at',                                      null: false
-  end
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_index 'users', ['email'], name: 'index_users_on_email', unique: true, using: :btree
-  add_index 'users', ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true, using: :btree
 end

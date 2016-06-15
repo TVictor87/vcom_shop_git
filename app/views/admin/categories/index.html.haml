@@ -1,0 +1,69 @@
+%section.content-header
+  %h1
+    = t('admin.categories.title')
+    .pull-right
+      = link_to new_admin_category_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    -#.box-header
+    -#  %h3.box-title Data Table With Full Features
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('helpers.actions')
+            %th= t('activerecord.attributes.image.image')
+            %th= t('activerecord.attributes.category.parent')
+            %th= t('activerecord.attributes.category.url_ru')
+            %th= t('activerecord.attributes.category.url_uk')
+            %th= t('activerecord.attributes.category.url_en')
+            %th= t('activerecord.attributes.category.name_ru')
+            %th= t('activerecord.attributes.category.name_uk')
+            %th= t('activerecord.attributes.category.name_en')
+            %th= t('activerecord.attributes.category.title_ru')
+            %th= t('activerecord.attributes.category.title_uk')
+            %th= t('activerecord.attributes.category.title_en')
+            %th= t('activerecord.attributes.category.keywords_ru')
+            %th= t('activerecord.attributes.category.keywords_uk')
+            %th= t('activerecord.attributes.category.keywords_en')
+            %th= t('activerecord.attributes.category.description_ru')
+            %th= t('activerecord.attributes.category.description_uk')
+            %th= t('activerecord.attributes.category.description_en')
+            %th= t('activerecord.attributes.category.text_ru')
+            %th= t('activerecord.attributes.category.text_uk')
+            %th= t('activerecord.attributes.category.text_en')
+            %th= t('activerecord.attributes.priority')
+        %tbody
+          - @categories.each do |category|
+            %tr
+              %td
+                = link_to t('helpers.links.show'), admin_category_path(category.id)
+                = link_to t('helpers.links.edit'), edit_admin_category_path(category.id)
+                = link_to t('helpers.links.destroy'), admin_category_path(category.id), method: :delete
+              - if category.image?
+                %td= image_tag category.image.url, class: 'medium_img'
+              - else
+                %td
+              - if category_id = category.category_id
+                - parent = @categories.find{|c| c.id == category_id}
+              %td= (if parent then parent.name_ru else '' end)
+              %td= category.url_ru
+              %td= category.url_uk
+              %td= category.url_en
+              %td= category.name_ru
+              %td= category.name_uk
+              %td= category.name_en
+              %td= category.title_ru
+              %td= category.title_uk
+              %td= category.title_en
+              %td= category.keywords_ru
+              %td= category.keywords_uk
+              %td= category.keywords_en
+              %td= raw category.description_ru
+              %td= raw category.description_uk
+              %td= raw category.description_en
+              %td= raw category.text_ru.truncate 50
+              %td= raw category.text_uk.truncate 50
+              %td= raw category.text_en.truncate 50
+              %td= category.priority

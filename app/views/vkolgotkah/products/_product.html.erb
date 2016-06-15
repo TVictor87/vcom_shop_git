@@ -1,0 +1,15 @@
+<% collection.each do |p| %>
+	<li>
+		<% if record = p.images.first
+			image = record.image %>
+			<a data-rel="lightbox" class="visual-link" href="<%= image.url %>" rel="lightbox">
+				<img src="<%= image.url :medium %>" title="<%= record.title %>" alt="<%= record.alt %>">
+			</a>
+		<% end %>
+		<strong class="title"><a href=""><%= p.title %></a></strong>
+		<div class="item-row">
+			<a class="add-cart" href="">В корзину</a>
+			<span class="price"><strong><%= p.price %></strong> грн</span>
+		</div>
+	</li>
+<% end %>

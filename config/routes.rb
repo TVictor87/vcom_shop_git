@@ -11,72 +11,43 @@ Rails.application.routes.draw do
       # delete :delete_image
     end
 
+    resources :categories
+
     resources :options_groups
     resources :options
     resources :sites
     resources :pages
   end
 
+  post 'catalog', to: 'pages#catalog_json'
+
   devise_for :users
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
   root 'pages#index'
 
   resources :pages, olny: [:index, :show]
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  get 'zhenshchinam', to: 'pages#categories', as: 'women_ru', defaults: { url: 'zhenshchinam', column: 'url_ru' }
+  get 'zhenshchinam/:category_url', to: 'pages#catalog', defaults: { url: 'zhenshchinam', column: 'url_ru' }
+  get 'women', to: 'pages#categories', as: 'women_en', defaults: { url: 'women', column: 'url_en' }
+  get 'women/:category_url', to: 'pages#catalog', defaults: { url: 'women', column: 'url_en' }
+  get 'zhinkam', to: 'pages#categories', as: 'women_uk', defaults: { url: 'zhinkam', column: 'url_en' }
+  get 'zhinkam/:category_url', to: 'pages#catalog', defaults: { url: 'zhinkam', column: 'url_en' }
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+  get 'muzhchinam', to: 'pages#categories', as: 'men_ru', defaults: { url: 'muzhchinam', column: 'url_ru' }
+  get 'muzhchinam/:category_url', to: 'pages#catalog', defaults: { url: 'muzhchinam', column: 'url_ru' }
+  get 'men', to: 'pages#categories', as: 'men_en', defaults: { url: 'men', column: 'url_ru' }
+  get 'men/:category_url', to: 'pages#catalog', defaults: { url: 'men', column: 'url_ru' }
+  get 'cholovikam', to: 'pages#categories', as: 'men_uk', defaults: { url: 'cholovikam', column: 'url_ru' }
+  get 'cholovikam/:category_url', to: 'pages#catalog', defaults: { url: 'cholovikam', column: 'url_ru' }
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  get 'detyam', to: 'pages#categories', as: 'child_ru', defaults: { url: 'detyam', column: 'url_ru' }
+  get 'detyam/:category_url', to: 'pages#catalog', defaults: { url: 'detyam', column: 'url_ru' }
+  get 'child', to: 'pages#categories', as: 'child_en', defaults: { url: 'child', column: 'url_ru' }
+  get 'child/:category_url', to: 'pages#catalog', defaults: { url: 'child', column: 'url_ru' }
+  get 'dityam', to: 'pages#categories', as: 'child_uk', defaults: { url: 'dityam', column: 'url_ru' }
+  get 'dityam/:category_url', to: 'pages#catalog', defaults: { url: 'dityam', column: 'url_ru' }
 
   # Dynamic Pages route
-  get ':base_page(/:page_name)' => 'pages#show'
+  get '*urls' => 'pages#show'
   # match '*path', to: 'pages#show', via: [:get, :post]
 end

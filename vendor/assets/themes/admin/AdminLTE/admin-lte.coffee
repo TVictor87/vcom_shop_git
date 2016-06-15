@@ -51,7 +51,7 @@ jQuery ->
 
   # Bootstrap-Wysihtml5 text editor for textarea
   $ ->
-    $('textarea').wysihtml5();
+    $('textarea').wysihtml5 toolbar: html: true
 
   # DataTable fot tables
   $ ->

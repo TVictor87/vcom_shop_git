@@ -1,0 +1,41 @@
+- if @category.new_record?
+  - categories = Category.select(:id, :name_ru)
+- else
+  - categories = Category.select(:id, :name_ru).where.not(id: @category.id)
+
+.box-body.tab-content
+  #inf.tab-pane.active
+    = simple_form_for [:admin, @category], validate: true do |f|
+      = f.input :category_id, collection: categories, label_method: :name_ru, input_html: { class: 'select2' }
+      = f.input :name_ru
+      = f.input :name_uk
+      = f.input :name_en
+      = f.input :url_ru
+      = f.input :url_uk
+      = f.input :url_en
+      = f.input :title_ru
+      = f.input :title_uk
+      = f.input :title_en
+
+      %div{style: "padding: 10px 20px; border: 1px dashed #aaa; margin: 20px 0"}
+        %h2 Картинка
+        - if @category.image?
+          = image_tag @category.image.url, class: 'medium_img'
+        = f.input :image, input_html: { class: 'btn btn-default' }
+        = f.input :title_ru
+        = f.input :alt_ru
+        = f.input :title_uk
+        = f.input :alt_uk
+        = f.input :title_en
+        = f.input :alt_en
+
+      = f.input :text_ru
+      = f.input :text_uk
+      = f.input :text_en
+      = f.input :keywords_ru
+      = f.input :keywords_uk
+      = f.input :keywords_en
+      = f.input :description_ru
+      = f.input :description_uk
+      = f.input :description_en
+      = f.input :priority, label: t('activerecord.attributes.priority')

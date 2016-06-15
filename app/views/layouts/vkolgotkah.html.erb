@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>В колготках</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag 'vkolgotkah/application', media: 'all', 'data-turbolinks-track': true %>
+    <%= javascript_include_tag 'vkolgotkah/application', 'data-turbolinks-track': true %>
+    <!--[if IE]><script src="/ie.js"></script><![endif]-->
+</head>
+<body>
+    <div id="wrapper">
+        <%= render 'vkolgotkah/layouts/top_menu' %>
+        <%= yield %>
+        <%= render partial: 'vkolgotkah/layouts/footer' %>
+    </div>
+</body>
+</html>

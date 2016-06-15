@@ -1,11 +1,12 @@
 default: &default
-  adapter: mysql2
-  encoding: utf8
-  pool: 5
-  timeout: 5000
-  username: vcom_shop
-  password:
+  adapter: postgresql
+  encoding: unicode
   host: localhost
+  user: vcom_shop
+  password: 
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: 5
 
 development:
   <<: *default

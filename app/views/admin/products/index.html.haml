@@ -12,6 +12,7 @@
       %table.table.table-bordered.table-striped.dataTable
         %thead
           %tr
+            %th= t('helpers.actions')
             %th= t('activerecord.attributes.product.title_ru')
             %th= t('activerecord.attributes.product.description_ru')
             %th= t('activerecord.attributes.product.url_ru')
@@ -33,18 +34,22 @@
             %th= t('activerecord.attributes.product.special_price_currency_id')
             %th= t('activerecord.attributes.product.special_link_id')
             %th= t('activerecord.attributes.active')
-            %th= t('helpers.actions')
         %tbody
           - @products.each do |product|
             %tr
+              %td
+                = link_to t('admin.products.add_image'), new_admin_product_product_image_path(product.id)
+                = link_to t('helpers.links.show'), admin_product_path(product.id)
+                = link_to t('helpers.links.edit'), edit_admin_product_path(product.id)
+                = link_to t('helpers.links.destroy'), admin_product_path(product.id), method: :delete
               %td= product.title_ru
-              %td= product.description_ru
+              %td= raw product.description_ru
               %td= product.url_ru
               %td= product.title_uk
-              %td= product.description_uk
+              %td= raw product.description_uk
               %td= product.url_uk
               %td= product.title_en
-              %td= product.description_en
+              %td= raw product.description_en
               %td= product.url_en
               %td= product.priority
               %td= product.base_page.title_ru
@@ -58,8 +63,3 @@
               %td= product.special_price_currency_id
               %td= product.special_link_id
               %td= product.active
-              %td
-                = link_to t('admin.products.add_image'), new_admin_product_product_image_path(product.id)
-                = link_to t('helpers.links.show'), admin_product_path(product.id)
-                = link_to t('helpers.links.edit'), edit_admin_product_path(product.id)
-                = link_to t('helpers.links.destroy'), admin_product_path(product.id), method: :delete

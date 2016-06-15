@@ -13,6 +13,10 @@ ru:
       title: Товары
       add_image: Добавить изображение
       information: Информация
+    categories:
+      title: Категории
+      add_image: Добавить изображение
+      information: Информация
     pages:
       title: Страницы
     sites:
@@ -23,8 +27,7 @@ ru:
       title: Характеристики
     options_groups:
       title: Групы характеристик
-        
-        
+
 
   activerecord:
     attributes:
@@ -32,6 +35,7 @@ ru:
       priority: Приоритет
 
       product:
+        category_id: Категория
         title_ru: Имя рус.
         description_ru: Описание рус.
         url_ru: Ссылка рус.
@@ -51,6 +55,27 @@ ru:
         special_price: Специальная цена
         special_price_currency_id: Валюта специальной цены
         special_link_id: Ссылка на акцию
+
+      category:
+        parent: Родительская категория
+        name_ru: Имя рус.
+        name_uk: Имя укр.
+        name_en: Имя англ.
+        text_ru: Текст рус.
+        text_uk: Текст укр.
+        text_en: Текст англ.
+        title_ru: Title рус.
+        title_uk: Title укр.
+        title_en: Title англ.
+        keywords_ru: Ключевые рус.
+        keywords_uk: Ключевые укр.
+        keywords_en: Ключевые англ.
+        description_ru: description рус.
+        description_uk: description укр.
+        description_en: description англ.
+        url_ru: Ссылка рус.
+        url_uk: Ссылка укр.
+        url_en: Ссылка англ.
 
       page:
         title_ru: Название страницы (РУ)

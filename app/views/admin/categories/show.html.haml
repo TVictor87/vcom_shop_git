@@ -1,0 +1,67 @@
+%section.content-header
+	%h1
+		= t('admin.categories.title')
+		%small= @category.try("title_#{locale}") || @category.title_ru
+
+%section.content
+	.box
+		.box-body
+			%form{ class: 'show_form'}
+				%p
+					%b Картинка
+				- if @category.image?
+					%td= image_tag @category.image.url, class: 'medium_img'
+				- else
+					%td -
+				%p
+					%b name_ru
+					= @category.name_ru
+				%p
+					%b name_uk
+					= @category.name_uk
+				%p
+					%b name_en
+					= @category.name_en
+				%p
+					%b title_ru
+					= @category.title_ru
+				%p
+					%b title_uk
+					= @category.title_uk
+				%p
+					%b title_en
+					= @category.title_en
+				%p
+					%b keywords_ru
+					= @category.keywords_ru
+				%p
+					%b keywords_uk
+					= @category.keywords_uk
+				%p
+					%b keywords_en
+					= @category.keywords_en
+				%p
+					%b description_ru
+					= raw @category.description_ru
+				%p
+					%b description_uk
+					= raw @category.description_uk
+				%p
+					%b description_en
+					= raw @category.description_en
+				%p
+					%b text_ru
+					= raw @category.text_ru
+				%p
+					%b text_uk
+					= raw @category.text_uk
+				%p
+					%b text_en
+					= raw @category.text_en
+				%p
+					%b priority
+					= @category.priority
+
+			.editor_actions
+				= link_to 'Edit', edit_admin_category_path(@category), class: 'btn btn-primary'
+				= link_to 'Back', admin_categories_path, class: 'btn btn-primary'
