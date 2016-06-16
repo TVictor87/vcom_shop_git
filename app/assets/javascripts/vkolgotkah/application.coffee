@@ -86,9 +86,12 @@ loadProducts = ->
 				ret += "<li>"
 				if record = p.images[0]
 					image = record.image
-					ret += "<a data-rel='lightbox' class='visual-link' href='#{image.url}' rel='lightbox'>
-						<img src='#{image.medium.url}' title='#{record.title}' alt='#{record.alt}'>
-					</a>"
+					ret += "<div class='image'>
+						<a href=''>
+							<img src='#{image.medium.url}' title='#{record.title or ''}' alt='#{record.alt or ''}'>
+						</a>
+						<a data-rel='lightbox' class='visual-icon' href='#{image.url}' rel='lightbox'></a>
+					</div>"
 				ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
 					<div class='item-row'>
 						<a class='add-cart' href=''>В корзину</a>
@@ -97,6 +100,8 @@ loadProducts = ->
 				</li>\n"
 			products.innerHTML = ret
 			setPaging res.totalPage
+
+			$("[rel='lightbox']").fancybox()
 
 		xhr.send JSON.stringify filterOptions
 

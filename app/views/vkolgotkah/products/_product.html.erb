@@ -2,9 +2,12 @@
 	<li>
 		<% if record = p.images.first
 			image = record.image %>
-			<a data-rel="lightbox" class="visual-link" href="<%= image.url %>" rel="lightbox">
-				<img src="<%= image.url :medium %>" title="<%= record.title %>" alt="<%= record.alt %>">
-			</a>
+			<div class="image">
+				<a href="">
+					<img src="<%= image.url :medium %>" title="<%= record.title %>" alt="<%= record.alt %>">
+				</a>
+				<a data-rel="lightbox" class="visual-icon" href="<%= image.url %>" rel="lightbox"></a>
+			</div>
 		<% end %>
 		<strong class="title"><a href=""><%= p.title %></a></strong>
 		<div class="item-row">
