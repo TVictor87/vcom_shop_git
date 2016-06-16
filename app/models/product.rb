@@ -7,8 +7,11 @@ class Product < ActiveRecord::Base
   # :special_link_id, :active
 
   default_scope { where(active: true).order(:priority) }
+  scope :short, -> { select("products.id, retail_price * value as retail_price, products.title_ru").joins(:retail_price_currency) }
 
   belongs_to :category
+
+  belongs_to :retail_price_currency, class_name: "Currency"
 
   has_and_belongs_to_many :pages
   has_many :site_products, dependent: :destroy
@@ -24,6 +27,11 @@ class Product < ActiveRecord::Base
   end
 
   def price
-    ('%.2f' % retail_price).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
+    case $currency
+    when 'UAH'
+      ('<b>%.2f</b> грн' % (retail_price / $course)).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
+    when 'USD'
+      ('$<b>%.2f</b>' % (retail_price / $course)).gsub(/\B(?=(\d{3})+(?!\d))/, ',')
+    end
   end
 end

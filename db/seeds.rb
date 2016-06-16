@@ -17,6 +17,7 @@ Site.delete_all
 Category.delete_all
 Product.delete_all
 Image.delete_all
+Currency.delete_all
 
 # Create admin user
 User.create(email: 'admin@gmail.com', password: '1q2w3e4r', first_name: 'Admin', last_name: 'Admin', role: 'admin')
@@ -51,6 +52,24 @@ Category.create(
 	name_uk: 'Для дітей'
 )
 
+Currency.create(
+	value: 1,
+	title_ru: 'Грн',
+	title_uk: 'Грн',
+	title_en: 'UAH',
+	constant_name: 'UAH'
+)
+
+Currency.create(
+	value: 25,
+	title_ru: 'Дол',
+	title_uk: 'Дол',
+	title_en: 'USD',
+	constant_name: 'USD'
+)
+
+currencies = Currency.pluck :id
+
 category_id = Category.create(
 	url_ru: 'kolgotki',
 	url_en: 'tights',
@@ -61,14 +80,16 @@ category_id = Category.create(
 	category: women
 ).id
 
-Product.populate 100 do |product, i|
+i = 0
+Product.populate 100 do |product|
 	product.title_ru = Faker::Commerce.product_name
-	product.url_ru = "product-#{i}"
+	product.url_ru = "product-#{i += 1}"
 	product.description_ru = Faker::Lorem.sentences(3)
 	product.retail_price = Faker::Commerce.price
 	product.priority = rand(100)
 	product.category_id = category_id
 	product.active = true
+	product.retail_price_currency_id = currencies.sample
 end
 
 Product.all.each do |product|

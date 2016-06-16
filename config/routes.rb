@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
 
     resources :categories
-
+    resources :currencies
     resources :options_groups
     resources :options
     resources :sites

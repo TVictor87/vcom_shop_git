@@ -44,6 +44,13 @@ $(document).on 'page:load', ready
 Number.prototype.toCurrency = ->
 	(""+@toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
 
+Number.prototype.productPrice = ->
+	switch currency
+		when 'UAH'
+			"<b>#{(""+(@ / course).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</b> грн"
+		when 'USD'
+			"$<b>#{(""+(@ / course).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</b>"
+
 @setPaging = (totalPage = 1) ->
 	ret = ''
 	unless totalPage is 1
@@ -95,7 +102,7 @@ loadProducts = ->
 				ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
 					<div class='item-row'>
 						<a class='add-cart' href=''>В корзину</a>
-						<span class='price'><strong>#{p.retail_price.toCurrency()}</strong> грн</span>
+						<span class='price'>#{p.retail_price.productPrice()}</span>
 					</div>
 				</li>\n"
 			products.innerHTML = ret
@@ -109,16 +116,20 @@ loadProducts = ->
 	else
 		location.search = query
 
-@filter = (res) ->
+@selectChange = (res) ->
 	el = res.realElement
 	value = el.value
-	if value is 'default'
-		delete filterOptions[el.id]
-	else filterOptions[el.id] = value
-	delete filterOptions.pageNumber
-	window.curPage = 1
-
-	loadProducts()
+	switch el.id
+		when 'sort', 'show'
+			if value is 'default'
+				delete filterOptions[el.id]
+			else filterOptions[el.id] = value
+			delete filterOptions.pageNumber
+			window.curPage = 1
+			loadProducts()
+		when 'setCurrency'
+			document.cookie = "currency_id=#{value}"
+			location.reload()
 
 @paging = (a) ->
 	window.curPage = +a.innerHTML

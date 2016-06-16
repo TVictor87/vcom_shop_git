@@ -1,0 +1,11 @@
+%section.content-header
+  %h1
+    = t('admin.currencies.title')
+    %small= t('helpers.links.edit')
+
+%section.content
+  .box
+    .box-body
+      = render 'form'
+    .box-footer
+      = link_to t('helpers.links.edit'), 'javascript:', class: 'btn btn-primary', onclick: "$('.edit_currency').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"

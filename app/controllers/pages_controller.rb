@@ -1,5 +1,18 @@
 class PagesController < ApplicationController
 	ROOT_PAGES = ['MAIN_PAGE', 'CATALOG']
+	
+	before_action do
+		c = Currency.select("title_#{I18n.locale.to_s}", :value, :constant_name)
+		if id = cookies[:currency_id]
+			$currency_id = id.to_i
+			c = c.select(:constant_name, :value).find(id)
+		else
+			c = c.select(:id, :constant_name, :value).take
+			$currency_id = c.id
+		end
+		$course = c.value
+		$currency = c.constant_name
+	end
 
 	def show
 		urls = params[:urls].split '/'
@@ -79,7 +92,7 @@ class PagesController < ApplicationController
   	else
   		@totalPage = (count.to_f / @show).ceil
   	end
-  	@products = records.limit(@show).offset((@curPage - 1) * @show)
+  	@products = records.short.limit(@show).offset((@curPage - 1) * @show)
     rend "pages/catalog"
   end
 

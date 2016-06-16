@@ -12,7 +12,7 @@
 		<strong class="title"><a href=""><%= p.title %></a></strong>
 		<div class="item-row">
 			<a class="add-cart" href="">В корзину</a>
-			<span class="price"><strong><%= p.price %></strong> грн</span>
+			<span class="price"><%= raw p.price %></span>
 		</div>
 	</li>
 <% end %>
