@@ -12,7 +12,7 @@
 		<strong class="title"><a href=""><%= p.title %></a></strong>
 		<div class="item-row">
 			<a class="add-cart" href="">В корзину</a>
-			<span class="price"><%= raw p.price %></span>
+			<span class="price" data-price="<%= p.retail_price %>"><%= raw p.price %></span>
 		</div>
 	</li>
 <% end %>

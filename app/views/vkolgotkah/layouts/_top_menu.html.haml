@@ -14,9 +14,9 @@
           %form{action: '#'}
             %fieldset
               %select#setCurrency.currency-select
-                - Currency.select("title_#{I18n.locale}", :id).each do |currency|
+                - Currency.select("title_#{I18n.locale}", :constant_name, :id, :value).each do |currency|
                   - id = currency.id
-                  - h = {value: id}
+                  - h = {value: "#{currency.value},#{currency.constant_name},#{id}"}
                   - h[:selected] = true if id == $currency_id
                   %option{h}= currency.title
         %li

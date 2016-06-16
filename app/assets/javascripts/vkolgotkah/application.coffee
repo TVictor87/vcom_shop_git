@@ -102,7 +102,7 @@ loadProducts = ->
 				ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
 					<div class='item-row'>
 						<a class='add-cart' href=''>В корзину</a>
-						<span class='price'>#{p.retail_price.productPrice()}</span>
+						<span class='price' data-price=#{p.retail_price}>#{p.retail_price.productPrice()}</span>
 					</div>
 				</li>\n"
 			products.innerHTML = ret
@@ -128,8 +128,12 @@ loadProducts = ->
 			window.curPage = 1
 			loadProducts()
 		when 'setCurrency'
-			document.cookie = "currency_id=#{value}"
-			location.reload()
+			split = value.split ','
+			window.course = split[0]
+			window.currency = split[1]
+			document.cookie = "currency_id=#{split[2]}"
+			for el in document.querySelectorAll("[data-price]")
+				el.innerHTML = (+el.getAttribute("data-price")).productPrice()
 
 @paging = (a) ->
 	window.curPage = +a.innerHTML

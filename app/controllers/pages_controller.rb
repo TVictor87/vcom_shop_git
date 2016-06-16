@@ -3,9 +3,9 @@ class PagesController < ApplicationController
 	
 	before_action do
 		c = Currency.select("title_#{I18n.locale.to_s}", :value, :constant_name)
-		if id = cookies[:currency_id]
+		if id = cookies[:currency_id] and find = c.select(:constant_name, :value).find_by_id(id)
 			$currency_id = id.to_i
-			c = c.select(:constant_name, :value).find(id)
+			c = find
 		else
 			c = c.select(:id, :constant_name, :value).take
 			$currency_id = c.id
