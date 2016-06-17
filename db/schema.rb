@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160612022803) do
+ActiveRecord::Schema.define(version: 20160614193914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(version: 20160612022803) do
     t.text     "description_en"
     t.string   "url_en"
     t.integer  "priority",                    default: 0,    null: false
-    t.integer  "base_page_id"
     t.float    "retail_price"
     t.integer  "retail_price_currency_id"
     t.float    "wholesale_price"
@@ -141,8 +140,6 @@ ActiveRecord::Schema.define(version: 20160612022803) do
     t.datetime "updated_at",                                 null: false
     t.integer  "category_id"
   end
-
-  add_index "products", ["base_page_id"], name: "index_products_on_base_page_id", using: :btree
 
   create_table "site_pages", force: :cascade do |t|
     t.integer "site_id"

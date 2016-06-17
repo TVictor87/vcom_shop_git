@@ -13,7 +13,6 @@ class Page < ActiveRecord::Base
   # belongs_to :page
 
   has_and_belongs_to_many :products
-  has_many :base_products, foreign_key: :base_page_id, class_name: 'Product'
   # validates :title_ru, :url_ru, :title_uk, :url_uk, :title_en,
   #           :url_en, length: { minimum: 2, :allow_nil => true }
   validates :constant_name, presence: true

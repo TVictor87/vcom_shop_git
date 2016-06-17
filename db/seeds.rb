@@ -6,9 +6,14 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# TODO: Create base pages: Main page with description
+# TODO: Create base pages: Wholesale_customers, Bestsellers, Sale
+
 User.delete_all
 Site.delete_all
 Category.delete_all
+Product.delete_all
+Image.delete_all
 
 # Create admin user
 User.create(email: 'admin@gmail.com', password: '1q2w3e4r', first_name: 'Admin', last_name: 'Admin', role: 'admin')
@@ -18,7 +23,7 @@ Site.create(title_ru: 'Vkolgotkah.com', title_uk: 'Vkolgotkah.com', title_en: 'V
 Site.create(title_ru: 'Панчохи.укр', title_uk: 'Панчохи.укр', title_en: 'Панчохи.укр', constant_name: 'Panchohy')
 
 
-Category.create(
+women = Category.create(
 	url_ru: 'zhenshchinam',
 	url_en: 'women',
 	url_uk: 'zhinkam',
@@ -43,7 +48,28 @@ Category.create(
 	name_uk: 'Для дітей'
 )
 
-# TODO: Create base pages: Main page with description
-# TODO: Create base pages: For Mans, For womans, For Children
-# TODO: Create base pages: Wholesale_customers, Bestsellers, Sale
-# TODO: Create base pages: Catalog
+category = Category.create(
+	url_ru: 'kolgotki',
+	url_en: 'tights',
+	url_uk: 'panchohy',
+	name_ru: 'Колготки',
+	name_en: 'Tights',
+	name_uk: 'Панчохи',
+	category: women
+)
+
+(1..100).each do |i|
+	product = Product.create(
+		title_ru: "Товар #{i}",
+		url_ru: "product-#{i}",
+		description_ru: "Описание #{i}",
+		retail_price: rand(1000),
+		priority: rand(100),
+		category: category
+	)
+	product.images.create(
+		image: Rails.root.join("public/images/img0#{rand(5) + 1}.jpg").open,
+		title_ru: "title_ru",
+		alt_ru: "alt_ru"
+	)
+end

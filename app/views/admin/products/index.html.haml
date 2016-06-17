@@ -23,7 +23,6 @@
             %th= t('activerecord.attributes.product.description_en')
             %th= t('activerecord.attributes.product.url_en')
             %th= t('activerecord.attributes.priority')
-            %th= t('activerecord.attributes.product.base_page_id')
             %th= t('activerecord.attributes.product.page_ids')
             %th= t('activerecord.attributes.product.site_ids')
             %th= t('activerecord.attributes.product.retail_price')
@@ -52,7 +51,6 @@
               %td= raw product.description_en
               %td= product.url_en
               %td= product.priority
-              %td= product.base_page.title_ru
               %td= product.pages.map { |pp| pp.title_ru }.join(', ')
               %td= product.sites.map { |ps| ps.title_ru }.join(', ')
               %td= product.retail_price
