@@ -29,4 +29,4 @@
               %td
                 = link_to t('helpers.links.show'), admin_page_path(page.id)
                 = link_to t('helpers.links.edit'), edit_admin_page_path(page.id)
-                = link_to t('helpers.links.destroy'), admin_page_path(page.id), method: :delete
+                = link_to t('helpers.links.destroy'), admin_page_path(page.id), method: :delete, "data-confirm" => "Точно?"

@@ -24,7 +24,7 @@
               %td
                 = link_to t('helpers.links.show'), admin_currency_path(currency.id)
                 = link_to t('helpers.links.edit'), edit_admin_currency_path(currency.id)
-                = link_to t('helpers.links.destroy'), admin_currency_path(currency.id), method: :delete
+                = link_to t('helpers.links.destroy'), admin_currency_path(currency.id), method: :delete, "data-confirm" => "Точно?"
               %td= currency.value
               %td= currency.constant_name
               %td= currency.title_ru

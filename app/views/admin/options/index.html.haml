@@ -35,4 +35,4 @@
               %td
                 = link_to t('helpers.links.show'), admin_option_path(option.id), class:'btn btn-default'
                 = link_to t('helpers.links.edit'), edit_admin_option_path(option.id), class:'btn btn-default'
-                = link_to t('helpers.links.destroy'), admin_option_path(option.id), method: :delete, class:'btn btn-default'
+                = link_to t('helpers.links.destroy'), admin_option_path(option.id), method: :delete, class:'btn btn-default', "data-confirm" => "Точно?"
