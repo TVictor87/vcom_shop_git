@@ -79,6 +79,18 @@ class PagesController < ApplicationController
   	@category = Category.find_by(params[:column] => params[:category_url])
   	records = @category.products.includes(:images)
 
+  	count = records.count
+  	if count == 0
+  		@totalPage = 1
+  	else
+  		@totalPage = (count.to_f / @show).ceil
+  	end
+
+  	@min = records.unscope(:order).select("min(retail_price * value) as retail_price").joins(:retail_price_currency)
+  	@min = @min[0] ? @min[0].retail_price.floor : 0
+  	@max = records.unscope(:order).select("max(retail_price * value) as retail_price").joins(:retail_price_currency)
+  	@max = @max[0] ? @max[0].retail_price.ceil : 0
+
 	case @sort
 	when 'priceAsc' then records = records.unscope(:order).order('retail_price ASC')
 	when 'priceDesc' then records = records.unscope(:order).order('retail_price DESC')
@@ -86,13 +98,8 @@ class PagesController < ApplicationController
 	else @sort = 'default'
 	end
 
-  	count = records.count
-  	if count == 0
-  		@totalPage = 1
-  	else
-  		@totalPage = (count.to_f / @show).ceil
-  	end
   	@products = records.short.limit(@show).offset((@curPage - 1) * @show)
+
     rend "pages/catalog"
   end
 

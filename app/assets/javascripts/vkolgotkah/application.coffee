@@ -143,3 +143,14 @@ loadProducts = ->
 	else filterOptions.pageNumber = curPage
 
 	loadProducts()
+
+@sliderPrice = (from, to) ->
+	$( "#slider_price" ).slider
+		range: true
+		min: from
+		step: 1
+		max: to
+		values: [ from, to ]
+		slide: ( event, ui ) ->
+			$('#price').val ui.values[0].toFixed 0
+			$('#price2').val ui.values[1].toFixed 0

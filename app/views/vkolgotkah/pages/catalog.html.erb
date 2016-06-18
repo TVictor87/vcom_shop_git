@@ -32,8 +32,8 @@
                             <div class="slide-holder">
                                 <div class="price-slider">
                                     <div class="input-box">
-                                        <input id="price" type="text" value="50" />
-                                        <input id="price2" type="text" value="300" />
+                                        <input id="price" type="text" value="<%= @min %>" />
+                                        <input id="price2" type="text" value="<%= @max %>" />
                                     </div>
                                     <div id="slider_price"></div>
                                 </div>
@@ -510,4 +510,5 @@
     lang = "<%= I18n.locale %>"
     curPage = <%= @curPage %>
     setPaging(<%= @totalPage %>)
+    sliderPrice(<%= @min %>, <%= @max %>)
 </script>
