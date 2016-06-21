@@ -7,7 +7,18 @@ class Product < ActiveRecord::Base
   # :special_link_id, :active
 
   default_scope { where(active: true).order(:priority) }
-  scope :short, -> { select("products.id, retail_price * value as retail_price, products.title_ru").joins(:retail_price_currency) }
+  scope :join_price, -> { joins(:retail_price_currency) }
+  scope :min, -> {
+    min = unscope(:order).select("min(retail_price * value) as retail_price")
+    min[0] ? (min[0].retail_price / $course).floor : 0
+  }
+  scope :max, -> {
+    max = unscope(:order).select("max(retail_price * value) as retail_price")
+    max[0] ? (max[0].retail_price / $course).ceil : 0
+  }
+  scope :select_few, -> { select("products.id, retail_price * value as retail_price, products.title_#{I18n.locale}") }
+  scope :price_from, -> (min) { where("retail_price * value >= ?", min.to_f / $course) }
+  scope :price_to, -> (max) { where("retail_price * value <= ?", max.to_f / $course) }
 
   belongs_to :category
 

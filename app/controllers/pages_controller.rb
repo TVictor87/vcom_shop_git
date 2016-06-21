@@ -77,7 +77,18 @@ class PagesController < ApplicationController
 
   	@parent = Category.find_by(params[:column] => params[:url])
   	@category = Category.find_by(params[:column] => params[:category_url])
-  	records = @category.products.includes(:images)
+  	records = @category.products.includes(:images).join_price
+
+  	@from = records.min
+  	@to = records.max
+
+	if min = params[:min]
+		records = records.price_from min
+	end
+
+	if max = params[:max]
+		records = records.price_to max
+	end
 
   	count = records.count
   	if count == 0
@@ -86,10 +97,7 @@ class PagesController < ApplicationController
   		@totalPage = (count.to_f / @show).ceil
   	end
 
-  	@min = records.unscope(:order).select("min(retail_price * value) as retail_price").joins(:retail_price_currency)
-  	@min = @min[0] ? @min[0].retail_price.floor : 0
-  	@max = records.unscope(:order).select("max(retail_price * value) as retail_price").joins(:retail_price_currency)
-  	@max = @max[0] ? @max[0].retail_price.ceil : 0
+  	records = records.select_few
 
 	case @sort
 	when 'priceAsc' then records = records.unscope(:order).order('retail_price ASC')
@@ -98,7 +106,7 @@ class PagesController < ApplicationController
 	else @sort = 'default'
 	end
 
-  	@products = records.short.limit(@show).offset((@curPage - 1) * @show)
+  	@products = records.limit(@show).offset((@curPage - 1) * @show)
 
     rend "pages/catalog"
   end
@@ -109,15 +117,22 @@ class PagesController < ApplicationController
 	else
 		show = 12
 	end
-  	records = Product.where(category_id: params[:id])
+  	records = Product.where(category_id: params[:id]).join_price
+
+  	min = records.min
+  	max = records.max
+
+	if m = params[:min]
+		records = records.price_from m
+	end
+
+	if m = params[:max]
+		records = records.price_to m
+	end
 		
 	count = records.count
 
-	records = records.select(:id, "title_#{I18n.locale}", :retail_price).limit(show)
-
-	if page = params[:pageNumber]
-		records = records.offset (page - 1) * show
-	end
+	records = records.select("products.id, retail_price * value as retail_price, products.title_#{I18n.locale}")
 
 	case params[:sort]
 	when 'priceAsc' then records = records.unscope(:order).order('retail_price ASC')
@@ -125,7 +140,16 @@ class PagesController < ApplicationController
 	when 'popular' then records = records.unscope(:order).order('RANDOM()')
 	end
 
-	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(count.to_f / show).ceil}}"
+	if page = params[:pageNumber]
+		records = records.offset (page - 1) * show
+	end
+
+	render json: "{"\
+		"\"records\":#{records.limit(show).includes(:images).to_json(include: :images)},"\
+		"\"totalPage\":#{(count.to_f / show).ceil},"\
+		"\"min\":#{min},"\
+		"\"max\":#{max}"\
+		"}"
   end
 
   private

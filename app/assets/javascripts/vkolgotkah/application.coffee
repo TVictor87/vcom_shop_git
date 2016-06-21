@@ -69,16 +69,17 @@ Number.prototype.productPrice = ->
 	for ul in document.querySelectorAll '.paging'
 		ul.innerHTML = ret
 
+loading = false
+
 loadProducts = ->
+	loading = true
+
 	query = ''
-	if filterOptions.pageNumber
-		query += 'page=' + filterOptions.pageNumber
-	if filterOptions.show
-		query += '&' if query
-		query += 'show=' + filterOptions.show
-	if filterOptions.sort
-		query += '&' if query
-		query += 'sort=' + filterOptions.sort
+	for key in ['page', 'show', 'sort', 'min', 'max']
+		if val = filterOptions[key]
+			query += '&' if query
+			query += key + '=' + val
+
 	query = '?' + query if query
 
 	if history and history.pushState
@@ -108,7 +109,11 @@ loadProducts = ->
 			products.innerHTML = ret
 			setPaging res.totalPage
 
+			sliderPrice res.min, res.max
+
 			$("[rel='lightbox']").fancybox()
+
+			loading = false
 
 		xhr.send JSON.stringify filterOptions
 
@@ -124,7 +129,7 @@ loadProducts = ->
 			if value is 'default'
 				delete filterOptions[el.id]
 			else filterOptions[el.id] = value
-			delete filterOptions.pageNumber
+			delete filterOptions.page
 			window.curPage = 1
 			loadProducts()
 		when 'setCurrency'
@@ -139,18 +144,34 @@ loadProducts = ->
 	window.curPage = +a.innerHTML
 
 	if curPage is 1
-		delete filterOptions.pageNumber
-	else filterOptions.pageNumber = curPage
+		delete filterOptions.page
+	else filterOptions.page = curPage
 
 	loadProducts()
 
 @sliderPrice = (from, to) ->
-	$( "#slider_price" ).slider
+	s = $ "#slider_price"
+	min = filterOptions.min or from
+	max = filterOptions.max or to
+	s.slider
 		range: true
 		min: from
 		step: 1
 		max: to
-		values: [ from, to ]
+		values: [ min, max ]
 		slide: ( event, ui ) ->
 			$('#price').val ui.values[0].toFixed 0
 			$('#price2').val ui.values[1].toFixed 0
+		change: ( e, ui ) ->
+			unless loading
+				min = ui.values[0]
+				max = ui.values[1]
+				if min is from
+					delete filterOptions.min
+				else filterOptions.min = min
+				if max is to
+					delete filterOptions.max
+				else filterOptions.max = max
+				loadProducts()
+	price.value = min
+	price2.value = max
