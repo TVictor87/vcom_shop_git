@@ -1,0 +1,24 @@
+%section.content-header
+	%h1
+		= t('admin.currencies.title')
+		%small= @currency.try("title_#{locale}") || @currency.title_ru
+
+%section.content
+	.box
+		.box-body
+			%form{ class: 'show_form'}
+				%p
+					%b= t('admin.activerecord.currency.value')
+					= @currency.value
+				%p
+					%b= t('admin.activerecord.currency.constant_name')
+					= @currency.constant_name
+				%p
+					%b= t('admin.activerecord.currency.title_ru')
+					= @currency.title_ru
+				%p
+					%b= t('admin.activerecord.currency.title_uk')
+					= @currency.title_uk
+				%p
+					%b= t('admin.activerecord.currency.title_en')
+					= @currency.title_en

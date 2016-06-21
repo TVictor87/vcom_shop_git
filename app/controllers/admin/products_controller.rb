@@ -3,7 +3,7 @@ module Admin
     before_action :set_product, only: [:show, :edit, :update, :destroy]
 
     def index
-      @products = Product.unscope :where
+      @products = Product.unscope(:where).includes(:pages, :sites).references(:pages, :sites)
     end
 
     def new

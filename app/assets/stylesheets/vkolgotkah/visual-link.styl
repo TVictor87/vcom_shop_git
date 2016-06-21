@@ -1,0 +1,25 @@
+@import 'mixins'
+
+.visual-link
+    display block
+    margin-bottom 16px
+    position relative
+    img
+        width 100%
+        max-width 230px
+        display block
+
+.visual-link:before, .visual-icon
+    content ""
+    position absolute
+    right 10px
+    bottom 10px
+    width 30px
+    height 30px
+    border solid 1px #c42940
+    opacity 0
+    background url(../images/icons.png) -64px -21px no-repeat
+    transition(opacity .3s ease)
+
+.visual-link:hover:before
+    opacity 1

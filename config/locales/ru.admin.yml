@@ -17,6 +17,8 @@ ru:
       title: Категории
       add_image: Добавить изображение
       information: Информация
+    currencies:
+      title: Валюты
     pages:
       title: Страницы
     sites:
@@ -55,6 +57,13 @@ ru:
         special_price: Специальная цена
         special_price_currency_id: Валюта специальной цены
         special_link_id: Ссылка на акцию
+
+      currency:
+        value: Курс
+        title_ru: Название рус.
+        title_uk: Название укр.
+        title_en: Название англ.
+        constant_name: Постоянное название
 
       category:
         parent: Родительская категория
@@ -100,7 +109,7 @@ ru:
       options_group:
         title_ru: Название групы (Рос)
         title_uk: Название групы (Укр)
-        title_en: Название групы (Анг)  
+        title_en: Название групы (Анг)
         constant_name: Постоянное название
 
       option:

@@ -32,8 +32,8 @@
                             <div class="slide-holder">
                                 <div class="price-slider">
                                     <div class="input-box">
-                                        <input id="price" type="text" value="50" />
-                                        <input id="price2" type="text" value="300" />
+                                        <input id="price" type="text" />
+                                        <input id="price2" type="text" />
                                     </div>
                                     <div id="slider_price"></div>
                                 </div>
@@ -469,29 +469,25 @@
                     <div class="select-block">
                         <label for="sort">Сортировка</label>
                         <select id="sort">
-                            <option value="default">По умолчанию</option>
-                            <option value="priceAsc">от дешевых к дорогим</option>
-                            <option value="priceDesc">от дорогих к дешевым</option>
-                            <option value="popular">популярные</option>
+                            <option<%= @sort == 'default' and ' selected' or '' %> value="default">По умолчанию</option>
+                            <option<%= @sort == 'priceAsc' and ' selected' or '' %> value="priceAsc">от дешевых к дорогим</option>
+                            <option<%= @sort == 'priceDesc' and ' selected' or '' %> value="priceDesc">от дорогих к дешевым</option>
+                            <option<%= @sort == 'popular' and ' selected' or '' %> value="popular">популярные</option>
                         </select>
                     </div>
                     <div class="select-block">
                         <label for="show">Показать</label>
                         <select id="show">
-                            <option>12</option>
-                            <option>24</option>
-                            <option>36</option>
+                            <% [12, 24, 36].each do |value| %>
+                                <option
+                                    <% if value == @show %>
+                                        selected
+                                    <% end %>
+                                ><%= value %></option>
+                            <% end %>
                         </select>
                     </div>
-                    <% if @totalPage == 1 %>
-                        <% paging = '' %>
-                    <% else %>
-                        <% paging = '<li class="active"><a onclick="paging(this)">1</a></li>
-                            <li><a onclick="paging(this)">2</a></li>' %>
-                        <% paging += '<li>...</li>' if @totalPage > 2 %>
-                        <% paging += "<li><a onclick='paging(this)'>#{@totalPage}</a></li>" if @totalPage > 3 %>
-                    <% end %>
-                    <ul class="paging"><%= raw paging %></ul>
+                    <ul class="paging"></ul>
                 </fieldset>
             </form>
             <ul class="list-catalog" id="products">
@@ -499,7 +495,7 @@
             </ul>
             <form class="form-sort bottom" action="#">
                 <fieldset>
-                    <ul class="paging"><%= raw paging %></ul>
+                    <ul class="paging"></ul>
                 </fieldset>
             </form>
             <article class="catalog-article">
@@ -512,4 +508,13 @@
 <script type="text/javascript">
     filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>"}
     lang = "<%= I18n.locale %>"
+    curPage = <%= @curPage %>
+    setPaging(<%= @totalPage %>)
+    <% if params[:min] %>
+    filterOptions.min = <%= params[:min] %>
+    <% end %>
+    <% if params[:max] %>
+    filterOptions.max = <%= params[:max] %>
+    <% end %>
+    sliderPrice(<%= @from %>, <%= @to %>)
 </script>

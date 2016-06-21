@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160614193914) do
+ActiveRecord::Schema.define(version: 20160616142303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(version: 20160614193914) do
   end
 
   add_index "categories", ["category_id"], name: "index_categories_on_category_id", using: :btree
+
+  create_table "currencies", force: :cascade do |t|
+    t.string  "title_ru"
+    t.string  "title_uk"
+    t.string  "title_en"
+    t.decimal "value",         precision: 8, scale: 6
+    t.string  "constant_name"
+  end
 
   create_table "images", force: :cascade do |t|
     t.string   "image"
@@ -140,6 +148,10 @@ ActiveRecord::Schema.define(version: 20160614193914) do
     t.datetime "updated_at",                                 null: false
     t.integer  "category_id"
   end
+
+  add_index "products", ["retail_price_currency_id"], name: "index_products_on_retail_price_currency_id", using: :btree
+  add_index "products", ["special_price_currency_id"], name: "index_products_on_special_price_currency_id", using: :btree
+  add_index "products", ["wholesale_price_currency_id"], name: "index_products_on_wholesale_price_currency_id", using: :btree
 
   create_table "site_pages", force: :cascade do |t|
     t.integer "site_id"

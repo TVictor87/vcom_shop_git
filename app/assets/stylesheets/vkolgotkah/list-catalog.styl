@@ -1,0 +1,55 @@
+@import 'mixins'
+
+.list-catalog
+	margin 0 -19px -11px -7px
+	padding 0
+	list-style none
+	font-size 16px
+	line-height 19px
+	li
+		display inline-block
+		vertical-align top
+		padding 8px 9px 25px
+		border solid 2px transparent
+		margin 0 7px 32px 0
+		width 32%
+		max-width 248px
+		border-radius(2px)
+		transition(border-color .3s ease)
+		box-sizing(border-box)
+		&:hover
+			border-color #c42940
+			.visual-icon
+				opacity 1
+	.image
+		position relative			
+	.title
+		display block
+		margin 0 0 9px
+		a
+			color #666
+			text-decoration none
+			&:hover
+				color #ea8b0f
+	.price
+		border-left 1px solid #cdcdcd
+		color #c42940
+		padding-left 9px
+
+@media only screen and (max-width 1100px)
+	.list-catalog li
+		width 31%
+
+@media only screen and (max-width 639px)
+	.list-catalog
+		text-align center
+		li
+			width 47%
+			text-align left
+
+@media only screen and (max-width 479px)
+	.list-catalog
+		margin 0
+	.list-catalog li
+		width auto
+		margin 0 0 10px
