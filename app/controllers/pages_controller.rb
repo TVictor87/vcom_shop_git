@@ -54,16 +54,32 @@ class PagesController < ApplicationController
   end
 
   def catalog
+  	@curPage = params[:page].to_i
+  	@curPage = 1 if @curPage == 0
+
+  	@show = params[:show].to_i
+  	@show = 12 if @show != 24 and @show != 36
+
+  	@sort = params[:sort]
+
   	@parent = Category.find_by(params[:column] => params[:url])
   	@category = Category.find_by(params[:column] => params[:category_url])
-  	products = @category.products
-  	count = products.count
+  	records = @category.products.includes(:images)
+
+	case @sort
+	when 'priceAsc' then records = records.unscope(:order).order('retail_price ASC')
+	when 'priceDesc' then records = records.unscope(:order).order('retail_price DESC')
+	when 'popular' then records = records.unscope(:order).order('RANDOM()')
+	else @sort = 'default'
+	end
+
+  	count = records.count
   	if count == 0
   		@totalPage = 1
   	else
-  		@totalPage = (count / 12.0).ceil
+  		@totalPage = (count.to_f / @show).ceil
   	end
-  	@products = products.limit(12)
+  	@products = records.limit(@show).offset((@curPage - 1) * @show)
     rend "pages/catalog"
   end
 
@@ -73,10 +89,11 @@ class PagesController < ApplicationController
 	else
 		show = 12
 	end
-  	records = Product
-		.where(category_id: params[:id])
-		.select(:id, "title_#{I18n.locale}", :retail_price)
-		.limit(show)
+  	records = Product.where(category_id: params[:id])
+		
+	count = records.count
+
+	records = records.select(:id, "title_#{I18n.locale}", :retail_price).limit(show)
 
 	if page = params[:pageNumber]
 		records = records.offset (page - 1) * show
@@ -88,7 +105,7 @@ class PagesController < ApplicationController
 	when 'popular' then records = records.unscope(:order).order('RANDOM()')
 	end
 
-	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(records.count.to_f / show).ceil}}"
+	render plain: "{\"records\":#{records.includes(:images).to_json(include: :images)},\"totalPage\":#{(count.to_f / show).ceil}}"
   end
 
   private
