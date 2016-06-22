@@ -333,6 +333,7 @@ DEPENDENCIES
   jquery-turbolinks
   less-rails (~> 2.7.0)
   meta_request
+  nokogiri
   pg
   populator
   pry-byebug

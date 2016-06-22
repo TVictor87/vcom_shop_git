@@ -93,4 +93,5 @@ group :test do
   gem 'simplecov', require: false
   # Use shoulda-matchers for provide Test::Unit- and RSpec-compatible one-liners that test common Rails functionality
   gem 'shoulda-matchers'
+  gem 'nokogiri'
 end
