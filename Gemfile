@@ -5,7 +5,7 @@ gem 'rails', '4.2.4'
 # Use MySql2 as the database for Active Record
 gem 'pg'
 
-# Стили
+# Styles
 gem 'sass-rails', '~> 5.0'
 gem 'stylus'
 gem 'tilt'
@@ -71,7 +71,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   # Use factory_girl for fixtures replacement with a straightforward definition syntax
   gem 'factory_girl_rails'
-  
+
   gem 'populator'
   gem 'faker'
 end

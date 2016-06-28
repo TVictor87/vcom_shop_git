@@ -508,8 +508,8 @@
 <script type="text/javascript">
     filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>"}
     lang = "<%= I18n.locale %>"
-    curPage = <%= @curPage %>
-    setPaging(<%= @totalPage %>)
+    curPage = <%= @page %>
+    setPaging(<%= @total_page %>)
     <% if params[:min] %>
     filterOptions.min = <%= params[:min] %>
     <% end %>

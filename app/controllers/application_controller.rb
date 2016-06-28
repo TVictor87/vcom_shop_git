@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     render file: 'public/404.html', status: 404
   end
 
-  def rend page, *args
+  def rend(page, *args)
     render 'vkolgotkah/' + page, *args, layout: 'vkolgotkah'
   end
 end

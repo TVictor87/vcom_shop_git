@@ -22,11 +22,10 @@ module Admin
     def authenticate_admin!
       authenticate_admin_user!
 
-      unless current_admin_user && current_admin_user.admin?
-        sign_out current_admin_user
+      return if current_admin_user && current_admin_user.admin?
 
-        redirect_to(new_admin_user_session_path) && return
-      end
+      sign_out current_admin_user
+      redirect_to new_admin_user_session_path
     end
   end
 end
