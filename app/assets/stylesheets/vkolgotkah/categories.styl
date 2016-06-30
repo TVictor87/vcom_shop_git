@@ -1,15 +1,30 @@
+@import 'mixins'
+
 #categories-blocks
 	font-size 0
 	.category-block
 		display inline-block
-		width 47%
+		width 30%
+		margin-right 5%
 		margin-bottom 40px
 		position relative
 		text-align center
-		&:nth-child(odd)
-			margin-right 6%
+		background-color black
+		&:nth-child(3n+3)
+			margin-right 0
 		img
 			display block
 			width 100%
 		.button
 			margin-top -96px
+			position relative
+			z-index 1
+		.grayscale
+			position absolute
+			top 0
+			left 0
+			right 0
+			bottom 0
+			transition(.3s)
+		&:hover .grayscale
+			opacity 0

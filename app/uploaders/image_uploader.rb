@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'rmagick'
 
 class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
@@ -10,14 +11,14 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   version :small do
-    process resize_to_fit: [70, 97]
+    process resize_to_fill: [70, 97]
   end
 
   version :medium do
-    process resize_to_fit: [226, 311]
+    process resize_to_fill: [226, 311]
   end
 
   version :big do
-    process resize_to_fit: [312, 436]
+    process resize_to_fill: [312, 436]
   end
 end

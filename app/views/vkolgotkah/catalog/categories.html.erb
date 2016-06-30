@@ -4,12 +4,14 @@
     <article class="post" id="categories-blocks">
     	<% url = @category.url %>
     	<% for cat in @category.categories %>
-    		<div class="category-block">
+    		<a href="/<%= url %>/<%= cat.url %>" class="category-block">
     			<% if cat.image? %>
-    				<img src="<%= cat.image.url %>">
+                    <img src="<%= cat.image.main.url %>">
+    				<img class="grayscale" src="<%= cat.image.main.url %>">
     			<% end %>
-    			<a href="/<%= url %>/<%= cat.url %>" class="button"><%= cat.name %></a>
-    		</div>
+    			<div class="button"><%= cat.name %></div>
+    		</a>
     	<% end %>
     </article>
+    <%= sanitize @category.text %>
 </div>

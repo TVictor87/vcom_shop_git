@@ -7,9 +7,22 @@ class Product < ActiveRecord::Base
   # :special_link_id, :active
 
   default_scope { where(active: true).order(:priority) }
+  scope :join_price, -> { joins(:retail_price_currency) }
+  scope :min, lambda {
+    min = unscope(:order).select('min(retail_price * value) as retail_price')
+    min[0] ? (min[0].retail_price / Currency.course).floor : 0
+  }
+  scope :max, lambda {
+    max = unscope(:order).select('max(retail_price * value) as retail_price')
+    max[0] ? (max[0].retail_price / Currency.course).ceil : 0
+  }
+  scope :select_few, -> { select("products.id, retail_price * value as retail_price, products.title_#{I18n.locale}") }
+  scope :price_from, -> (min) { where('retail_price * value >= ?', min.to_f / Currency.course) }
+  scope :price_to, -> (max) { where('retail_price * value <= ?', max.to_f / Currency.course) }
 
-  belongs_to :base_page, class_name: 'Page'
   belongs_to :category
+
+  belongs_to :retail_price_currency, class_name: 'Currency'
 
   has_and_belongs_to_many :pages
   has_many :site_products, dependent: :destroy
@@ -19,13 +32,17 @@ class Product < ActiveRecord::Base
   validates :title_ru, presence: true, length: { minimum: 2 }
   # validates :description_ru, presence: true, length: { minimum: 5 }
   validates :url_ru, presence: true, uniqueness: true
-  validates :base_page_id, :site_ids, :page_ids, presence: true
 
   def title
-    self["title_#{I18n.locale.to_s}"] or title_ru
+    self["title_#{I18n.locale}"] || title_ru
   end
 
   def price
-    ('%.2f' % retail_price).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
+    case Currency.currency
+    when 'UAH'
+      format('<b>%.2f</b> грн', (retail_price / Currency.course)).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
+    when 'USD'
+      format('$<b>%.2f</b>', (retail_price / Currency.course)).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
+    end
   end
 end

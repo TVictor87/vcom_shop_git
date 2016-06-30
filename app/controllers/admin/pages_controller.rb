@@ -30,8 +30,7 @@ module Admin
         redirect_to admin_pages_path, alert: @page.errors.messages
       end
 
-      # TODO: Make in model
-      params[:active_sites].each { |site_id| SitePage.find_or_create_by(page_id: @page.id, site_id: site_id) } if params[:active_sites]
+      find_or_create_site_pages
     end
 
     # PATCH/PUT /pages/1
@@ -46,7 +45,7 @@ module Admin
 
       # TODO: Analyze it in future
       SitePage.delete_all(page_id: @page.id)
-      params[:active_sites].each { |site_id| SitePage.find_or_create_by(page_id: @page.id, site_id: site_id) } if params[:active_sites]
+      find_or_create_site_pages
     end
 
     # DELETE /pages/1
@@ -66,5 +65,12 @@ module Admin
     def page_params
       params.require(:page).permit(:title_ru, :description_ru, :url_ru, :title_uk, :description_uk, :url_uk, :title_en, :description_en, :url_en, :constant_name, :parent_page_id, :active)
     end
+  end
+
+  protected
+
+  def find_or_create_site_pages
+    # TODO: Make in model
+    params[:active_sites].each { |site_id| SitePage.find_or_create_by(page_id: @page.id, site_id: site_id) } if params[:active_sites]
   end
 end

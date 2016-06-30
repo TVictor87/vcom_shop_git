@@ -33,41 +33,29 @@
 
 #= require jquery.turbolinks
 
+ready = ->
+	$('.grayscale').gray();
+
+
+$(document).ready ready
+$(document).on 'page:load', ready
+
+
 Number.prototype.toCurrency = ->
 	(""+@toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
 
-curPage = undefined
+Number.prototype.productPrice = ->
+	switch currency
+		when 'UAH'
+			"<b>#{(""+(@ / course).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</b> грн"
+		when 'USD'
+			"$<b>#{(""+(@ / course).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</b>"
 
-loadProducts = ->
-	xhr = new XMLHttpRequest()
-	xhr.open 'POST', "/catalog.json"
-	xhr.setRequestHeader "Content-Type", "application/json;charset=UTF-8"
-	xhr.onload = ->
-		ret = ''
-		title = "title_#{lang}"
-		res = JSON.parse @response
-		for p in res.records
-			ret += "<li>"
-			if record = p.images[0]
-				image = record.image
-				ret += "<a data-rel='lightbox' class='visual-link' href='#{image.url}' rel='lightbox'>
-					<img src='#{image.medium.url}' title='#{record.title}' alt='#{record.alt}'>
-				</a>"
-			ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
-				<div class='item-row'>
-					<a class='add-cart' href=''>В корзину</a>
-					<span class='price'><strong>#{p.retail_price.toCurrency()}</strong> грн</span>
-				</div>
-			</li>\n"
-		products.innerHTML = ret
-
-		totalPage = res.totalPage or 1
-
-		ret = ''
-		startPage = curPage is 1 and 1 or curPage - 1
-		endPage = curPage is totalPage and totalPage or curPage + 1
-		endPage += 1 if curPage is 1 and endPage < totalPage
-		startPage -= 1 if curPage is totalPage and startPage > 1
+@setPaging = (totalPage = 1) ->
+	ret = ''
+	unless totalPage is 1
+		startPage = curPage < 3 and 1 or curPage is totalPage and curPage - 2 or curPage - 1
+		endPage = totalPage - curPage < 2 and totalPage or curPage is 1 and 3 or curPage + 1
 
 		if startPage > 1
 			ret += "<li#{curPage is 1 and " class='active'" or ''}><a onclick='paging(this)'>1</a></li>"
@@ -78,26 +66,112 @@ loadProducts = ->
 			ret += "<li>...</li>" unless endPage is totalPage - 1
 			ret += "<li#{curPage is totalPage and " class='active'" or ''}><a onclick='paging(this)'>#{totalPage}</a></li>"
 
-		for ul in document.querySelectorAll '.paging'
-			ul.innerHTML = ret
+	for ul in document.querySelectorAll '.paging'
+		ul.innerHTML = ret
 
-	xhr.send JSON.stringify filterOptions
+loading = false
 
-@filter = (res) ->
+loadProducts = ->
+	loading = true
+
+	query = ''
+	for key in ['page', 'show', 'sort', 'min', 'max']
+		if val = filterOptions[key]
+			query += '&' if query
+			query += key + '=' + val
+
+	query = '?' + query if query
+
+	if history and history.pushState
+		xhr = new XMLHttpRequest()
+		xhr.open 'POST', "/catalog.json"
+		xhr.setRequestHeader "Content-Type", "application/json;charset=UTF-8"
+		xhr.onload = ->
+			ret = ''
+			title = "title_#{lang}"
+			res = JSON.parse @response
+			for p in res.records
+				ret += "<li>"
+				if record = p.images[0]
+					image = record.image
+					ret += "<div class='image'>
+						<a href=''>
+							<img src='#{image.medium.url}' title='#{record.title or ''}' alt='#{record.alt or ''}'>
+						</a>
+						<a data-rel='lightbox' class='visual-icon' href='#{image.url}' rel='lightbox'></a>
+					</div>"
+				ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
+					<div class='item-row'>
+						<a class='add-cart' href=''>В корзину</a>
+						<span class='price' data-price=#{p.retail_price}>#{p.retail_price.productPrice()}</span>
+					</div>
+				</li>\n"
+			products.innerHTML = ret
+			setPaging res.totalPage
+
+			sliderPrice res.min, res.max
+
+			$("[rel='lightbox']").fancybox()
+
+			loading = false
+
+		xhr.send JSON.stringify filterOptions
+
+		history.pushState {}, '', query or location.pathname
+	else
+		location.search = query
+
+@selectChange = (res) ->
 	el = res.realElement
 	value = el.value
-	if value is 'default'
-		delete filterOptions[el.id]
-	else filterOptions[el.id] = value
-	delete filterOptions.pageNumber
-
-	loadProducts()
+	switch el.id
+		when 'sort', 'show'
+			if value is 'default'
+				delete filterOptions[el.id]
+			else filterOptions[el.id] = value
+			delete filterOptions.page
+			window.curPage = 1
+			loadProducts()
+		when 'setCurrency'
+			split = value.split ','
+			window.course = split[0]
+			window.currency = split[1]
+			document.cookie = "currency_id=#{split[2]}"
+			for el in document.querySelectorAll("[data-price]")
+				el.innerHTML = (+el.getAttribute("data-price")).productPrice()
 
 @paging = (a) ->
-	curPage = +a.innerHTML
+	window.curPage = +a.innerHTML
 
 	if curPage is 1
-		delete filterOptions.pageNumber
-	else filterOptions.pageNumber = curPage
+		delete filterOptions.page
+	else filterOptions.page = curPage
 
 	loadProducts()
+
+@sliderPrice = (from, to) ->
+	s = $ "#slider_price"
+	min = filterOptions.min or from
+	max = filterOptions.max or to
+	s.slider
+		range: true
+		min: from
+		step: 1
+		max: to
+		values: [ min, max ]
+		slide: ( event, ui ) ->
+			$('#price').val ui.values[0].toFixed 0
+			$('#price2').val ui.values[1].toFixed 0
+		change: ( e, ui ) ->
+			unless loading
+				min = ui.values[0]
+				max = ui.values[1]
+				if min is from
+					delete filterOptions.min
+				else filterOptions.min = min
+				if max is to
+					delete filterOptions.max
+				else filterOptions.max = max
+				loadProducts()
+	price.value = min
+	price2.value = max

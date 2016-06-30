@@ -1,5 +1,7 @@
 module Admin
   class OptionsController < BaseController
+    before_action :set_option, only: [:show, :edit, :update, :destroy]
+
     def index
       @options = Option.all
     end
@@ -18,25 +20,21 @@ module Admin
     end
 
     def destroy
-      @option = Option.find(params[:id])
       @option.destroy
       redirect_to admin_options_path, notice: t('options.destroy.success')
     end
 
     def show
-      @option = Option.find(params[:id])
     end
 
     def edit
-      @option = Option.find(params[:id])
     end
 
     def update
-      option = Option.find(params[:id])
-      if option.try(:update, option_params)
+      if @option.try(:update, option_params)
         redirect_to admin_options_path, notice: t('admin.update.success')
       else
-        redirect_to edit_options_path(options.id), alert: options.errors.messages
+        redirect_to edit_options_path(@option.id), alert: @option.errors.messages
       end
     end
 
@@ -44,6 +42,10 @@ module Admin
 
     def option_params
       params.require(:option).permit(:options_group_id, :title_uk, :title_en, :title_ru, :field_type, :required, :is_active, :priority)
+    end
+
+    def set_option
+      @option = Option.find(params[:id])
     end
   end
 end

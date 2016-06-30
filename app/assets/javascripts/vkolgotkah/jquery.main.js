@@ -60,17 +60,6 @@ jQuery(function(){
         var val2 = $(this).val();
         $('#slider_price').slider("values",1,val2);
     });
-    $( "#slider_price" ).slider({
-        range: true,
-        min: 0,
-        step:50,
-        max: 400,
-        values: [ 50, 300 ],
-        slide: function( event, ui ) {
-            $('#price').val(ui.values[0]);
-            $('#price2').val(ui.values[1]);
-        }
-    });
 });
 
 function checkSize(){

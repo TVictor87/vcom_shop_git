@@ -6,6 +6,8 @@
       %a{ 'data-toggle': 'tab', href: '#img' }= t('admin.images.title')
 
 - pages = Page.select :id, :title_ru
+- currencies = Currency.select :id, :title_ru
+- currency_id = currencies.first.id
 
 .box-body.tab-content
   #inf.tab-pane.active
@@ -21,15 +23,14 @@
       = f.input :url_en
       = f.input :priority, label: t('activerecord.attributes.priority')
       = f.input :category_id, collection: Category.select(:id, :name_ru), label_method: :name_ru, input_html: { class: 'select2' }
-      = f.input :base_page_id, collection: pages, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :page_ids, collection: pages, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :site_ids, collection: Site.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :retail_price
-      = f.input :retail_price_currency_id
+      = f.input :retail_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :wholesale_price
-      = f.input :wholesale_price_currency_id
+      = f.input :wholesale_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_price
-      = f.input :special_price_currency_id
+      = f.input :special_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_link_id
       = f.input :active, label: t('activerecord.attributes.active')
 

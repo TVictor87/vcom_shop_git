@@ -1,0 +1,8 @@
+.box-body.tab-content
+	#inf.tab-pane.active
+		= simple_form_for [:admin, @currency], validate: true do |f|
+			= f.input :value
+			= f.input :constant_name
+			= f.input :title_ru
+			= f.input :title_uk
+			= f.input :title_en

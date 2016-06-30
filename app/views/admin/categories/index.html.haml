@@ -40,7 +40,7 @@
               %td
                 = link_to t('helpers.links.show'), admin_category_path(category.id)
                 = link_to t('helpers.links.edit'), edit_admin_category_path(category.id)
-                = link_to t('helpers.links.destroy'), admin_category_path(category.id), method: :delete
+                = link_to t('helpers.links.destroy'), admin_category_path(category.id), method: :delete, "data-confirm" => "Точно?"
               - if category.image?
                 %td= image_tag category.image.url, class: 'medium_img'
               - else
@@ -63,7 +63,7 @@
               %td= raw category.description_ru
               %td= raw category.description_uk
               %td= raw category.description_en
-              %td= raw category.text_ru.truncate 50
-              %td= raw category.text_uk.truncate 50
-              %td= raw category.text_en.truncate 50
+              %td= raw category.text_ru.try(:truncate, 50)
+              %td= raw category.text_uk.try(:truncate, 50)
+              %td= raw category.text_en.try(:truncate, 50)
               %td= category.priority

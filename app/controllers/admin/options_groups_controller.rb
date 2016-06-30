@@ -1,5 +1,7 @@
 module Admin
   class OptionsGroupsController < BaseController
+    before_action :set_option_group, only: [:show, :edit, :update, :destroy]
+
     def index
       @options_groups = OptionsGroup.all
     end
@@ -18,26 +20,21 @@ module Admin
     end
 
     def destroy
-      @options_group = OptionsGroup.find(params[:id])
       @options_group.destroy
       redirect_to admin_options_groups_path, notice: t('options_groups.destroy.success')
     end
 
     def show
-      @options_group = OptionsGroup.find(params[:id])
     end
 
     def edit
-      @options_group = OptionsGroup.find(params[:id])
     end
 
     def update
-      options_group = OptionsGroup.find(params[:id])
-
-      if options_group.try(:update, options_group_params)
+      if @options_group.try(:update, options_group_params)
         redirect_to admin_options_groups_path, notice: t('admin.update.success')
       else
-        redirect_to edit_options_groups_path(options_groups.id), alert: options_groups.errors.messages
+        redirect_to edit_options_groups_path(@options_group.id), alert: @options_group.errors.messages
       end
     end
 
@@ -45,6 +42,10 @@ module Admin
 
     def options_group_params
       params.require(:options_group).permit(:title_uk, :title_en, :title_ru, :constant_name)
+    end
+
+    def set_option_group
+      @option = OptionsGroup.find(params[:id])
     end
   end
 end
