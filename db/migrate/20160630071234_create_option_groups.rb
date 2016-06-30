@@ -4,6 +4,8 @@ class CreateOptionGroups < ActiveRecord::Migration
       t.string :title_ru
       t.string :title_uk
       t.string :title_en
+      t.string :field_type
+      t.boolean :required
       t.boolean :active
     end
   end

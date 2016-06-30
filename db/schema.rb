@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630071704) do
+ActiveRecord::Schema.define(version: 20160630074212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,8 @@ ActiveRecord::Schema.define(version: 20160630071704) do
     t.string  "title_ru"
     t.string  "title_uk"
     t.string  "title_en"
+    t.string  "field_type"
+    t.boolean "required"
     t.boolean "active"
   end
 
@@ -138,6 +140,15 @@ ActiveRecord::Schema.define(version: 20160630071704) do
 
   add_index "pages_products", ["page_id"], name: "index_pages_products_on_page_id", using: :btree
   add_index "pages_products", ["product_id"], name: "index_pages_products_on_product_id", using: :btree
+
+  create_table "product_options", force: :cascade do |t|
+    t.integer "option_group_id"
+    t.integer "product_id"
+    t.string  "value"
+  end
+
+  add_index "product_options", ["option_group_id"], name: "index_product_options_on_option_group_id", using: :btree
+  add_index "product_options", ["product_id"], name: "index_product_options_on_product_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "title_ru"
