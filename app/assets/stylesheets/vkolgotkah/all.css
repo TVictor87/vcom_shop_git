@@ -94,6 +94,9 @@ a:hover{
     text-decoration:none;
     color: #ea8b0f;
 }
+.nowrap{
+    white-space: nowrap;
+}
 input,
 textarea,
 select {
@@ -854,7 +857,8 @@ select{
     display: block;
     margin: 5px 0;
 }
-input[type="reset"]{
+.reset{
+    text-align: center;
     color: #797979;
     font-size: 15px;
     width: 153px;
@@ -868,10 +872,10 @@ input[type="reset"]{
     padding: 0 15px 1px;
     height: 26px;
 }
-#sidebar input[type="reset"]{
+#sidebar .reset{
     margin: 0 auto;
 }
-input[type="reset"]:hover{
+.reset:hover{
     border-color: #b97274;
     color: #b97274;
     cursor: pointer;
@@ -1087,13 +1091,20 @@ input.ui-spinner-input:focus,
     cursor:pointer;
 }
 .block-chosen{
+    display: none;
     color: #797979;
     margin-bottom: 10px;
     padding: 14px 0 22px 11px;
     border-bottom: 1px solid #dadada;
 }
-.block-chosen .title{
+.block-chosen.with-options, .block-chosen.with-price{
     display: block;
+}
+.block-chosen.with-options .list-chosen, .block-chosen.with-options .title{
+    display: block;
+}
+.block-chosen .title{
+    display: none;
     margin: 0 0 6px 14px;
 }
 .delete{
@@ -1114,6 +1125,7 @@ input.ui-spinner-input:focus,
     float: right;
 }
 .list-chosen{
+    display: none;
     margin: 0 0 2px;
     padding: 0;
     list-style: none;

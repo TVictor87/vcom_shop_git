@@ -1,31 +1,35 @@
 <div class="row" id="main">
     <aside class="slide-holder" id="sidebar">
         <h2 class="headline opener">Фильтр</h2>
-        <form onchange="filterChange(event)" class="form-filter slide-block" action="#">
-            <div class="block-chosen">
+        <form onchange="filterChange()" class="form-filter slide-block" action="#">
+            <div id="blockChosen" class="block-chosen<% if @checked_options.any? %> with-options<% end %><% if @price_from or @price_to %> with-price<% end %>">
                 <span class="title">вы выбрали</span>
-                <ul class="list-chosen">
-                    <li>
-                        <a class="delete" href="">Удалить</a>
-                        <span class="red">Бренды:</span>
-                        <span>Gatta</span>
-                    </li>
-                    <li>
-                        <a class="delete" href="">Удалить</a>
-                        <span class="red">Цвет: </span>
-                        <span class="square flesh"></span>
-                        <span>Телесный</span>
-                    </li>
-                    <li>
-                        <a class="delete" href="">Удалить</a>
-                        <span class="red">Состав:</span>
-                        <span>Нейлон</span>
-                    </li>
+                <ul class="list-chosen" id="listChosen">
+                    <% @option_groups.each_with_index do |option_group, index| %>
+                        <% options = @options[index].sort!{|a, b| a.priority <=> b.priority} %>
+                        <% checked = options.map(&:id) & @checked_options %>
+                        <% if checked.any? %>
+                            <li>
+                                <a onclick='uncheckOptionGroup(<%= option_group.id %>)' class="delete">Удалить</a>
+                                <span class="red"><%= option_group.title %>:</span>
+                                <% if option_group.field_type == 'string' %>
+                                    <%= raw options.find_all{|o| checked.include? o.id }.map{|option| %>
+                                        <% "<span>#{option.value}</span>" %>
+                                    <% }.join(', ') %>
+                                <% else %>
+                                    <%= raw options.find_all{|o| checked.include? o.id }.map{|option| %>
+                                        <% value = option.value %>
+                                        <% "<span class='nowrap'><span><span class='square' style='background:##{value[0..5]}'></span><span> #{value[6..-1]}</span></span></span>" %>
+                                    <% }.join(', ') %>
+                                <% end %>
+                            </li>
+                        <% end %>
+                    <% end %>
                 </ul>
-                <input value="очистить фильтр" type="reset"/>
+                <div onclick="filterReset()" class="reset">очистить фильтр</div>
             </div>
             <fieldset>
-                <ul class="accordion">
+                <ul class="accordion" id="optionsList">
                     <li class="active">
                         <a class="opener" href="">Цена <span class="small">(грн)</span></a>
                         <div class="slide">
@@ -41,25 +45,30 @@
                         </div>
                     </li>
                     <% @option_groups.each_with_index do |option_group, index| %>
+                        <% title = option_group.title %>
+                        <% priority = option_group.priority %>
+                        <% group_id = option_group.id %>
                         <li<% if option_group.visible %> class="active"<% end %>>
-                            <a class="opener" href=""><%= option_group.title %></a>
+                            <a class="opener" href=""><%= title %></a>
                             <div class="slide">
                                 <div class="slide-holder">
                                     <% if option_group.field_type == 'string' %>
                                         <% if option_group.columns == 1 %>
-                                            <% @options[index].sort{|a, b| a.priority <=> b.priority}.each do |option| %>
+                                            <% @options[index].each do |option| %>
+                                                <% value = option.value %>
                                                 <div class="form-row check-row">
-                                                    <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= option.value %></label>
+                                                    <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='string'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= value %></label>
                                                 </div>
                                             <% end %>
                                         <% else %>
-                                            <% options = @options[index].sort{|a, b| a.priority <=> b.priority} %>
+                                            <% options = @options[index] %>
                                             <div class="sizes-columns">
                                                 <% (1..option_group.columns).each do |column| %>
                                                     <div class="sizes-column">
                                                         <% options.find_all{|o| o.column == column}.each do |option| %>
+                                                            <% value = option.value %>
                                                             <div class="form-row check-row">
-                                                                <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= option.value %></label>
+                                                                <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='<%= column %>' data-type='string'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= value %></label>
                                                             </div>
                                                         <% end %>
                                                     </div>
@@ -72,7 +81,7 @@
                                                 <% value = option.value %>
                                                 <% color = value[0..5] %>
                                                 <li>
-                                                    <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
+                                                    <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='color'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
                                                     <div class="tooltip">
                                                         <span class="square" style="background:#<%= color %>"></span>
                                                         <%= value[6..-1] %>
@@ -138,15 +147,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>", options: <%= @checked_options.to_json %>}
+    filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>", options: []}
     lang = "<%= I18n.locale %>"
     curPage = <%= @page %>
     setPaging(<%= @total_page %>)
-    <% if params[:min] %>
-    filterOptions.min = <%= params[:min] %>
+    <% if @price_from %>
+    filterOptions.min = <%= @price_from %>
     <% end %>
-    <% if params[:max] %>
-    filterOptions.max = <%= params[:max] %>
+    <% if @price_to %>
+    filterOptions.max = <%= @price_to %>
     <% end %>
     sliderPrice(<%= @from %>, <%= @to %>)
 </script>

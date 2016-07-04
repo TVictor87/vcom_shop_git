@@ -74,14 +74,21 @@ loading = false
 loadProducts = ->
 	loading = true
 
+	blockChosenClass = ['block-chosen']
+	blockChosenClass.push 'with-price' if filterOptions.min or filterOptions.max
+
 	query = []
 	for key in ['page', 'show', 'sort', 'min', 'max']
 		if val = filterOptions[key]
 			query.push key + '=' + val
+	
 	options = filterOptions.options
 	if options.length
+		blockChosenClass.push 'with-options'
 		for id in options
 			query.push 'options[]=' + id
+
+	blockChosen.className = blockChosenClass.join ' '
 
 	query = query.join '&'
 	query = '?' + query if query
@@ -180,10 +187,72 @@ loadProducts = ->
 	price.value = min
 	price2.value = max
 
-@filterChange = (e) ->
-	input = e.target
-	return unless input.type is 'checkbox'
-	if input.checked
-		filterOptions.options.push input.value
-	else filterOptions.options.splice filterOptions.options.indexOf(input.value), 1
+priorityAsc = (a, b) -> a.priority > b.priority
+
+freezeFilter = false
+
+@filterChange = ->
+	return if freezeFilter
+	options = []
+	for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
+		if input.checked
+			groupId = +input.getAttribute 'data-group-id'
+			group = null
+			for g in options
+				if g.id is groupId
+					group = g
+					break
+			unless group
+				group =
+					id: groupId
+					title: input.getAttribute 'data-group'
+					priority: +input.getAttribute 'data-group-priority'
+					type: input.getAttribute 'data-type'
+					options: []
+				options.push group
+			group.options.push
+				priority: +input.getAttribute 'data-priority'
+				value: input.getAttribute 'data-value'
+				column: input.getAttribute 'data-column'
+				id: +input.value
+	for group, g in options
+		group.options.sort priorityAsc
+	ids = []
+	ret = ''
+	for group in options
+		values = []
+		string = group.type is 'string'
+		for option in group.options
+			value = option.value
+			values.push string and "<span class='nowrap'>#{value}</span>" or "<span class='nowrap'><span class='square' style='background:##{value.substr 0, 6}'></span><span> #{value.substr 6}</span></span>"
+			ids.push option.id
+		ret += "<li>
+            <a onclick='uncheckOptionGroup(#{group.id})' class='delete'>Удалить</a>
+            <span class='red'>#{group.title}:</span>
+            #{values.join ', '}
+        </li>"
+	listChosen.innerHTML = ret
+	filterOptions.options = ids
 	loadProducts()
+
+@uncheckOptionGroup = (id) ->
+	freezeFilter = true
+	for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
+		if input.checked and id is +input.getAttribute 'data-group-id'
+			input.checked = false
+			input.parentNode.className = ''
+			input.previousElementSibling.className = 'chk-area chk-unchecked'
+	freezeFilter = false
+	filterChange()
+
+@filterReset = ->
+	freezeFilter = true
+	for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
+		if input.checked
+			input.checked = false
+			input.parentNode.className = ''
+			input.previousElementSibling.className = 'chk-area chk-unchecked'
+	freezeFilter = false
+	delete filterOptions.min
+	delete filterOptions.max
+	filterChange()

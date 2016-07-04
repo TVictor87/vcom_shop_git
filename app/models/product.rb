@@ -17,8 +17,8 @@ class Product < ActiveRecord::Base
     max[0] ? (max[0].retail_price / Currency.course).ceil : 0
   }
   scope :select_few, -> { select("products.id, products.retail_price * currencies.value as retail_price, products.title_#{I18n.locale}") }
-  scope :price_from, -> (min) { where('retail_price * value >= ?', min.to_f / Currency.course) }
-  scope :price_to, -> (max) { where('retail_price * value <= ?', max.to_f / Currency.course) }
+  scope :price_from, -> (min) { where('products.retail_price * value >= ?', min.to_f / Currency.course) }
+  scope :price_to, -> (max) { where('products.retail_price * value <= ?', max.to_f / Currency.course) }
 
   belongs_to :category
 

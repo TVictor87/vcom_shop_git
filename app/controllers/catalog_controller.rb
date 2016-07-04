@@ -83,10 +83,10 @@ class CatalogController < PagesController
   end
 
   def set_min_max
-    min = params[:min]
-    @products = @products.price_from min if min
-    max = params[:max]
-    @products = @products.price_to max if max
+    @price_from = params[:min]
+    @products = @products.price_from @price_from if @price_from
+    @price_to = params[:max]
+    @products = @products.price_to @price_to if @price_to
   end
 
   def set_total_page
