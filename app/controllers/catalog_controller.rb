@@ -11,6 +11,8 @@ class CatalogController < PagesController
 
   def catalog
     @products = @category.products.join_price
+    
+    filter_by_options
 
     set_from_to
     set_min_max
@@ -20,12 +22,18 @@ class CatalogController < PagesController
 
     sort
     set_products
+    set_options
 
     rend 'catalog/catalog'
   end
 
   def catalog_json
     @products = Product.where(category_id: params[:id]).join_price
+    
+    filter_by_options
+    p '--------'
+    p @products.size
+    p '--------'
 
     set_from_to
     set_min_max
@@ -90,7 +98,23 @@ class CatalogController < PagesController
     end
   end
 
+  def filter_by_options
+    @checked_options = params[:options]
+    if @checked_options
+      @checked_options.map!(&:to_i)
+      @products = @products.joins(:options).where(options: {id: params[:options]})
+    else
+      @checked_options = []
+    end
+  end
+
   def set_products
     @products = @products.limit(@show).offset((@page - 1) * @show).includes(:images)
+  end
+
+  def set_options
+    options = Option.select(:id, :option_group_id, "value_#{locale}", :column, :priority).joins(:option_group, :products).where(option_groups: {active: false}, products: {id: @category.products.select(:id)}).uniq
+    @option_groups = OptionGroup.where id: options.map(&:option_group_id)
+    @options = @option_groups.map{|g| options.find_all{|o| o.option_group_id == g.id}}
   end
 end

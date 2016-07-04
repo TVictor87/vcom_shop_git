@@ -1,7 +1,5 @@
 module Admin
   class SessionsController < Devise::SessionsController
-    before_action :get_user
-
     layout 'admin_sign_in'
 
     def create

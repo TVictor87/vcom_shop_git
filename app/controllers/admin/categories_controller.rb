@@ -56,7 +56,7 @@ module Admin
     # Never trust parameters from the internet, only allow the white list through.
     def category_params
       params.require(:category).permit(
-        :category_id, :priority, :image, :alt_ru, :title_ru, :alt_uk, :title_uk, :alt_en, :title_en, :name_ru, :name_uk, :name_en, :title_ru, :title_uk, :title_en, :keywords_ru, :keywords_uk, :keywords_en, :description_ru, :description_uk, :description_en, :text_ru, :text_uk, :text_en, :url_ru, :url_uk, :url_en
+        :category_id, :priority, :image, :alt_ru, :title_ru, :alt_uk, :title_uk, :alt_en, :title_en, :name_ru, :name_uk, :name_en, :title_ru, :title_uk, :title_en, :keywords_ru, :keywords_uk, :keywords_en, :description_ru, :description_uk, :description_en, :text_ru, :text_uk, :text_en, :url_ru, :url_uk, :url_en, option_group_ids: []
       )
     end
   end

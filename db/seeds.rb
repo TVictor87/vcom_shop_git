@@ -33,3 +33,7 @@ Currency.create(
   title_en: 'USD',
   constant_name: 'USD'
 )
+
+Page.create(
+  constant_name: 'MAIN_PAGE'
+)

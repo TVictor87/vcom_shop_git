@@ -5,8 +5,11 @@ class CreateOptionGroups < ActiveRecord::Migration
       t.string :title_uk
       t.string :title_en
       t.string :field_type
-      t.boolean :required
-      t.boolean :active
+      t.boolean :required, null: false, default: false
+      t.boolean :active, null: false, default: false
+      t.integer :columns, default: 1
+      t.integer :priority, null: false, default: 0
+      t.boolean :visible, null: false, default: true
     end
   end
 end

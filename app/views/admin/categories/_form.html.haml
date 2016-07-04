@@ -17,6 +17,8 @@
       = f.input :title_uk
       = f.input :title_en
 
+      = f.input :option_group_ids, collection: OptionGroup.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2', multiple: true }
+
       %div{style: "padding: 10px 20px; border: 1px dashed #aaa; margin: 20px 0"}
         %h2 Картинка
         - if @category.image?

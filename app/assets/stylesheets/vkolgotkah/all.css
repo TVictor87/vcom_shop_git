@@ -1209,10 +1209,13 @@ input.ui-spinner-input:focus,
     cursor: pointer;
     position: relative;
 }
-.list-colors a{
+.list-colors label{
     display: block;
     position: relative;
     border: 2px solid #afafaf;
+}
+.list-colors input, .list-colors .chk-area{
+    display: none !important;
 }
 .list-colors .tooltip{
     position: absolute;

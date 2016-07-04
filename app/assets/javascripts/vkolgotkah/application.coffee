@@ -74,12 +74,16 @@ loading = false
 loadProducts = ->
 	loading = true
 
-	query = ''
+	query = []
 	for key in ['page', 'show', 'sort', 'min', 'max']
 		if val = filterOptions[key]
-			query += '&' if query
-			query += key + '=' + val
+			query.push key + '=' + val
+	options = filterOptions.options
+	if options.length
+		for id in options
+			query.push 'options[]=' + id
 
+	query = query.join '&'
 	query = '?' + query if query
 
 	if history and history.pushState
@@ -175,3 +179,11 @@ loadProducts = ->
 				loadProducts()
 	price.value = min
 	price2.value = max
+
+@filterChange = (e) ->
+	input = e.target
+	return unless input.type is 'checkbox'
+	if input.checked
+		filterOptions.options.push input.value
+	else filterOptions.options.splice filterOptions.options.indexOf(input.value), 1
+	loadProducts()

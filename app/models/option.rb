@@ -1,7 +1,8 @@
 class Option < ActiveRecord::Base
-  belongs_to :options_group
-  has_many :options_values, dependent: :destroy
+  belongs_to :option_group
+  has_and_belongs_to_many :products
 
-  validates :title_ru, presence: true, length: { minimum: 2 }
-  validates :options_group_id, :field_type, presence: true
+  def value
+    self["value_#{I18n.locale}"] || value_ru
+  end
 end

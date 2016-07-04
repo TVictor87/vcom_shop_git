@@ -1,0 +1,14 @@
+%section.content-header
+  %h1
+    = t('admin.option_groups.title')
+    %small= t('helpers.links.edit')
+
+%section.content
+  .box
+    .box-body
+      = render 'form'
+      = link_to t('helpers.links.back'), admin_option_groups_path, class:'btn btn-primary'
+    .box-footer
+      = link_to t('helpers.links.edit'), 'javascript:', class: 'btn btn-primary', onclick: "$('.edit_option_group').submit(); $('body').animate({scrollTop: $('.has-error').offset().top});"
+
+

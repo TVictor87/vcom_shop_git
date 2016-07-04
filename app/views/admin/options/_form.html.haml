@@ -1,12 +1,11 @@
 =simple_form_for [:admin, @option], validate: true do |f|
-    = f.input :options_group_id, collection: OptionsGroup.all, label_method: :title_ru, input_html: { class: 'select2' }
-    = f.input :title_ru
-    = f.input :title_uk
-    = f.input :title_en
-    = f.input :field_type
-    = f.input :required
-    = f.input :is_active
+    = f.input :option_group_id, collection: OptionGroup.all, label_method: :title_ru, input_html: { class: 'select2' }
+    = f.input :value_ru
+    = f.input :value_uk
+    = f.input :value_en
+    = f.input :column
+    = f.input :retail_price
+    = f.input :retail_price_currency_id
     = f.input :priority
    
-
 

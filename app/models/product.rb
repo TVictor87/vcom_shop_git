@@ -9,14 +9,14 @@ class Product < ActiveRecord::Base
   default_scope { where(active: true).order(:priority) }
   scope :join_price, -> { joins(:retail_price_currency) }
   scope :min, lambda {
-    min = unscope(:order).select('min(retail_price * value) as retail_price')
+    min = unscope(:order).select('min(products.retail_price * currencies.value) as retail_price')
     min[0] ? (min[0].retail_price / Currency.course).floor : 0
   }
   scope :max, lambda {
-    max = unscope(:order).select('max(retail_price * value) as retail_price')
+    max = unscope(:order).select('max(products.retail_price * currencies.value) as retail_price')
     max[0] ? (max[0].retail_price / Currency.course).ceil : 0
   }
-  scope :select_few, -> { select("products.id, retail_price * value as retail_price, products.title_#{I18n.locale}") }
+  scope :select_few, -> { select("products.id, products.retail_price * currencies.value as retail_price, products.title_#{I18n.locale}") }
   scope :price_from, -> (min) { where('retail_price * value >= ?', min.to_f / Currency.course) }
   scope :price_to, -> (max) { where('retail_price * value <= ?', max.to_f / Currency.course) }
 
@@ -28,6 +28,7 @@ class Product < ActiveRecord::Base
   has_many :site_products, dependent: :destroy
   has_many :sites, through: :site_products
   has_many :images, dependent: :destroy
+  has_and_belongs_to_many :options
 
   validates :title_ru, presence: true, length: { minimum: 2 }
   # validates :description_ru, presence: true, length: { minimum: 5 }

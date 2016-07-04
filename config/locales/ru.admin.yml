@@ -1,4 +1,8 @@
 ru:
+  bool:
+    'true': Да
+    'false': Нет
+
   admin:
     create:
       success: Успешно создано
@@ -13,6 +17,7 @@ ru:
       title: Товары
       add_image: Добавить изображение
       information: Информация
+      options: Характеристики
     categories:
       title: Категории
       add_image: Добавить изображение
@@ -27,7 +32,7 @@ ru:
       title: Изображения
     options:
       title: Характеристики
-    options_groups:
+    option_groups:
       title: Групы характеристик
 
 
@@ -85,6 +90,7 @@ ru:
         url_ru: Ссылка рус.
         url_uk: Ссылка укр.
         url_en: Ссылка англ.
+        option_group_ids: Группы характеристик
 
       page:
         title_ru: Название страницы (РУ)
@@ -106,19 +112,21 @@ ru:
         alt_uk: Альтернативный текст (УКР)
         alt_en: Альтернативный текст (АНГ)
 
-      options_group:
+      option_group:
         title_ru: Название групы (Рос)
         title_uk: Название групы (Укр)
         title_en: Название групы (Анг)
-        constant_name: Постоянное название
+        field_type: Тип поля
+        columns: Количество колонок
+        required: Обязательный
+        active: Можно выбрать в товаре
 
       option:
-        options_group_id: Група характеристик
-        title_ru: Название характеристики (Рос)
-        title_uk: Название характеристики (Укр)
-        title_en: Название характеристики (Анг)
-        field_type: Тип поля
-        required: Обязательный
-        is_active: Активность
-        priority:  Приоритет
-  
+        option_group_id: Група характеристик
+        value_ru: Значение (Рос)
+        value_uk: Значение (Укр)
+        value_en: Значение (Анг)
+        priority: Приоритет
+        retail_price: Цена
+        retail_price_currency_id: Валюта
+        column: Колонка

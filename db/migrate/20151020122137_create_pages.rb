@@ -7,6 +7,7 @@ class CreatePages < ActiveRecord::Migration
       t.string :title_uk
       t.text :description_uk
       t.string :url_uk
+      part(t)
     end
   end
 

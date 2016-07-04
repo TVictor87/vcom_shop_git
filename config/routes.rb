@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
     resources :categories
     resources :currencies
-    resources :options_groups
+    resources :option_groups
     resources :options
     resources :sites
     resources :pages

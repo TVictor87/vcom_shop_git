@@ -16,18 +16,18 @@
     = link_to admin_categories_path do
       %i.fa.fa-tag
       %span= t('admin.categories.title')
-  %li.treeview{class: controller_name == 'options_groups' ? 'active' : ''}
-    = link_to admin_options_groups_path do
+  %li.treeview{class: controller_name == 'option_groups' ? 'active' : ''}
+    = link_to admin_option_groups_path do
       %i.fa.fa-th
-      %span= t('admin.options_groups.title')    
+      %span= t('admin.option_groups.title')
   %li.treeview{class: controller_name == 'options' ? 'active' : ''}
     = link_to admin_options_path do
       %i.fa.fa-building-o
-      %span= t('admin.options.title')     
+      %span= t('admin.options.title') 
   %li.treeview{class: controller_name == 'pages' ? 'active' : ''}
     = link_to admin_pages_path do
       %i.fa.fa-folder
-      %span= t('admin.pages.title')
+      %span= t('admin.pages.title')  
   %li.treeview{class: controller_name == 'sites' ? 'active' : ''}
     = link_to admin_sites_path do
       %i.fa.fa-globe

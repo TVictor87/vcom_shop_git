@@ -1,0 +1,33 @@
+%section.content-header
+  %h1
+    = t('admin.option_groups.title')
+    .pull-right
+      = link_to new_admin_option_group_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.option_group.title_ru')
+            %th= t('activerecord.attributes.option_group.title_uk')
+            %th= t('activerecord.attributes.option_group.title_en')
+            %th= t('activerecord.attributes.option_group.field_type')
+            %th= t('activerecord.attributes.option_group.columns')
+            %th= t('activerecord.attributes.option_group.required')
+            %th= t('activerecord.attributes.option_group.active')
+        %tbody
+          - @option_groups.each do |option_group|
+            %tr
+              %td= option_group.title_ru
+              %td= option_group.title_uk
+              %td= option_group.title_en
+              %td= option_group.field_type
+              %td= option_group.columns
+              %td= t("bool.#{option_group.required}")
+              %td= t("bool.#{option_group.active}")
+              %td
+                = link_to t('helpers.links.show'), admin_option_group_path(option_group.id), class:'btn btn-default'
+                = link_to t('helpers.links.edit'), edit_admin_option_group_path(option_group.id), class:'btn btn-default'
+                = link_to t('helpers.links.destroy'), admin_option_group_path(option_group.id), method: :delete, class:'btn btn-default', "data-confirm" => "Точно?"

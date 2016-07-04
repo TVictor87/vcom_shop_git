@@ -10,28 +10,26 @@
       %table.table.table-bordered.table-striped.dataTable
         %thead
           %tr
-            %th= t('activerecord.attributes.option.options_group_id')
-            %th= t('activerecord.attributes.option.title_ru')            
-            %th= t('activerecord.attributes.option.title_uk')
-            %th= t('activerecord.attributes.option.title_en')
-            %th= t('activerecord.attributes.option.field_type')
-            %th= t('activerecord.attributes.option.required')
-            %th= t('activerecord.attributes.option.is_active')
+            %th= t('activerecord.attributes.option.option_group_id')
+            %th= t('activerecord.attributes.option.value_ru')
+            %th= t('activerecord.attributes.option.value_uk')
+            %th= t('activerecord.attributes.option.value_en')
+            %th= t('activerecord.attributes.option.column')
+            %th= t('activerecord.attributes.option.retail_price')
+            %th= t('activerecord.attributes.option.retail_price_currency_id')
             %th= t('activerecord.attributes.option.priority')
-            %th= t('helpers.actions') 
-
+            %th= t('helpers.actions')
         %tbody
           - @options.each do |option|
             %tr
-              %td= option.options_group.title_ru
-              %td= option.title_ru
-              %td= option.title_uk
-              %td= option.title_en
-              %td= option.field_type
-              %td= option.required ? t('activerecord.attributes.option.required') : t('activerecord.attributes.option.no_required')
-              %td= option.required ? t('activerecord.attributes.option.active') : t('activerecord.attributes.option.no_active')
+              %td= option.option_group.title_ru
+              %td= option.value_ru
+              %td= option.value_uk
+              %td= option.value_en
+              %td= option.column
+              %td= option.retail_price
+              %td= option.retail_price_currency_id
               %td= option.priority
-              
               %td
                 = link_to t('helpers.links.show'), admin_option_path(option.id), class:'btn btn-default'
                 = link_to t('helpers.links.edit'), edit_admin_option_path(option.id), class:'btn btn-default'

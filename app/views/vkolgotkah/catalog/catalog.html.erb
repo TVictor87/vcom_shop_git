@@ -1,7 +1,7 @@
 <div class="row" id="main">
     <aside class="slide-holder" id="sidebar">
         <h2 class="headline opener">Фильтр</h2>
-        <form class="form-filter slide-block" action="#">
+        <form onchange="filterChange(event)" class="form-filter slide-block" action="#">
             <div class="block-chosen">
                 <span class="title">вы выбрали</span>
                 <ul class="list-chosen">
@@ -40,419 +40,51 @@
                             </div>
                         </div>
                     </li>
-                    <li class="active">
-                        <a class="opener" href="">Бренды</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <div class="form-row check-row">
-                                    <input id="Ballerina" type="checkbox"/>
-                                    <label for="Ballerina">Ballerina</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Charmante" type="checkbox"/>
-                                    <label for="Charmante">Charmante</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Falke" type="checkbox"/>
-                                    <label for="Falke">Falke</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Filodoro" type="checkbox"/>
-                                    <label for="Filodoro">Filodoro</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Gatta" type="checkbox"/>
-                                    <label for="Gatta">Gatta</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Giulietta" type="checkbox"/>
-                                    <label for="Giulietta">Giulietta</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Glamour" type="checkbox"/>
-                                    <label for="Glamour">Glamour</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Golden-Lady" type="checkbox"/>
-                                    <label for="Golden-Lady">Golden Lady</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Innamore" type="checkbox"/>
-                                    <label for="Innamore">Innamore</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Jadea" type="checkbox"/>
-                                    <label for="Jadea">Jadea</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="LORA-GRIG" type="checkbox"/>
-                                    <label for="LORA-GRIG">LORA GRIG</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Marilyn" type="checkbox"/>
-                                    <label for="Marilyn">Marilyn</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="MiNiMi" type="checkbox"/>
-                                    <label for="MiNiMi">MiNiMi</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Omsa" type="checkbox"/>
-                                    <label for="Omsa">Omsa</label>
+                    <% @option_groups.each_with_index do |option_group, index| %>
+                        <li<% if option_group.visible %> class="active"<% end %>>
+                            <a class="opener" href=""><%= option_group.title %></a>
+                            <div class="slide">
+                                <div class="slide-holder">
+                                    <% if option_group.field_type == 'string' %>
+                                        <% if option_group.columns == 1 %>
+                                            <% @options[index].sort{|a, b| a.priority <=> b.priority}.each do |option| %>
+                                                <div class="form-row check-row">
+                                                    <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= option.value %></label>
+                                                </div>
+                                            <% end %>
+                                        <% else %>
+                                            <% options = @options[index].sort{|a, b| a.priority <=> b.priority} %>
+                                            <div class="sizes-columns">
+                                                <% (1..option_group.columns).each do |column| %>
+                                                    <div class="sizes-column">
+                                                        <% options.find_all{|o| o.column == column}.each do |option| %>
+                                                            <div class="form-row check-row">
+                                                                <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= option.value %></label>
+                                                            </div>
+                                                        <% end %>
+                                                    </div>
+                                                <% end %>
+                                            </div>
+                                        <% end %>
+                                    <% else %>
+                                        <ul class="list-colors">
+                                            <% @options[index].each do |option| %>
+                                                <% value = option.value %>
+                                                <% color = value[0..5] %>
+                                                <li>
+                                                    <label><input<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
+                                                    <div class="tooltip">
+                                                        <span class="square" style="background:#<%= color %>"></span>
+                                                        <%= value[6..-1] %>
+                                                    </div>
+                                                </li>
+                                            <% end %>
+                                        </ul>
+                                    <% end %>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="active">
-                        <a class="opener" href="">Цвет</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <ul class="list-colors">
-                                    <li>
-                                        <a href=""><span class="square"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square"></span>
-                                            белый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square yellow"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square yellow"></span>
-                                            жёлтый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square cream"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square cream"></span>
-                                            кремовый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square red"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square red"></span>
-                                            красный
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square flesh"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square flesh"></span>
-                                            телесный
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square beige1"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square beige1"></span>
-                                            бежевый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square orange"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square orange"></span>
-                                            оранжевый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square lavender"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square lavender"></span>
-                                            лаванда
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square beige2"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square beige2"></span>
-                                            бежевый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square lilac"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square lilac"></span>
-                                            сиреневый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square mint"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square mint"></span>
-                                            мятный
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square beige3"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square beige3"></span>
-                                            бежевый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square dark-red"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square dark-red"></span>
-                                            красный
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square beige4"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square beige4"></span>
-                                            бежевый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square gray"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square gray"></span>
-                                            серый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square brown"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square brown"></span>
-                                            коричневый
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square light-blue"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square light-blue"></span>
-                                            голубой
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square blue"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square blue"></span>
-                                            синий
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href=""><span class="square black"></span></a>
-                                        <div class="tooltip">
-                                            <span class="square black"></span>
-                                            чёрный
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a class="opener" href="">Состав</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <div class="form-row check-row">
-                                    <input id="nylon" type="checkbox"/>
-                                    <label for="nylon">Нейлон</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Polyamide" type="checkbox"/>
-                                    <label for="Polyamide">Полiамiд</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Cotton" type="checkbox"/>
-                                    <label for="Cotton">Хлопок</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="Wool" type="checkbox"/>
-                                    <label for="Wool">Шерсть</label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="active">
-                        <a class="opener" href="">Плотность</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <div class="form-row check-row">
-                                    <input id="density1" type="checkbox"/>
-                                    <label for="density1">05 - 15 den</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="density2" type="checkbox"/>
-                                    <label for="density2">20 - 40 den</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="density3" type="checkbox"/>
-                                    <label for="density3">50 - 100 den</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="density4" type="checkbox"/>
-                                    <label for="density4">Больше 100 den</label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="active">
-                        <a class="opener" href="">Размеры</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <div class="sizes-columns">
-                                    <div class="sizes-column">
-                                        <div class="form-row check-row">
-                                            <input id="size-XS" type="checkbox"/>
-                                            <label for="size-XS">XS</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-S" type="checkbox"/>
-                                            <label for="size-S">S</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-S/M" type="checkbox"/>
-                                            <label for="size-S/M">S/M</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-M" type="checkbox"/>
-                                            <label for="size-M">M</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-ML" type="checkbox"/>
-                                            <label for="size-ML">ML</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-L" type="checkbox"/>
-                                            <label for="size-L">L</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-XL" type="checkbox"/>
-                                            <label for="size-XL">XL</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-2XL" type="checkbox"/>
-                                            <label for="size-2XL">2XL</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-3XL" type="checkbox"/>
-                                            <label for="size-3XL">3XL</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-4XL" type="checkbox"/>
-                                            <label for="size-4XL">4XL</label>
-                                        </div>
-                                    </div>
-                                    <div class="sizes-column">
-                                        <div class="form-row check-row">
-                                            <input id="size-T1" type="checkbox"/>
-                                            <label for="size-T1">T1</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-T2" type="checkbox"/>
-                                            <label for="size-T2">T2</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-T3" type="checkbox"/>
-                                            <label for="size-T3">T3</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-T4" type="checkbox"/>
-                                            <label for="size-T4">T4</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-T5" type="checkbox"/>
-                                            <label for="size-T5">T5</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-T6" type="checkbox"/>
-                                            <label for="size-T6">T6</label>
-                                        </div>
-                                    </div>
-                                    <div class="sizes-column">
-                                        <div class="form-row check-row">
-                                            <input id="one-size" type="checkbox"/>
-                                            <label for="one-size">One Size</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-1" type="checkbox"/>
-                                            <label for="size-1">1</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-2" type="checkbox"/>
-                                            <label for="size-2">2</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-3" type="checkbox"/>
-                                            <label for="size-3">3</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-4" type="checkbox"/>
-                                            <label for="size-4">4</label>
-                                        </div>
-                                        <div class="form-row check-row">
-                                            <input id="size-5" type="checkbox"/>
-                                            <label for="size-5">5</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="active">
-                        <a class="opener" href="">Категории</a>
-                        <div class="slide">
-                            <div class="slide-holder">
-                                <div class="form-row check-row">
-                                    <input id="seamless" type="checkbox"/>
-                                    <label for="seamless">Бесшовные</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="stockings" type="checkbox"/>
-                                    <label for="stockings">Имитация чулков</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="jackboot" type="checkbox"/>
-                                    <label for="jackboot">Имитация ботфорт</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="corrective" type="checkbox"/>
-                                    <label for="corrective">Корректирующие</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="no-shorts" type="checkbox"/>
-                                    <label for="no-shorts">Без шортиков</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="pregnant" type="checkbox"/>
-                                    <label for="pregnant">Для берменных</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="shorts" type="checkbox"/>
-                                    <label for="shorts">С шортиками</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="low-waist" type="checkbox"/>
-                                    <label for="low-waist">Низкая талия</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="wedding" type="checkbox"/>
-                                    <label for="wedding">На свадьбу</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="with-panties" type="checkbox"/>
-                                    <label for="with-panties">С трусиками</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="big-sizes" type="checkbox"/>
-                                    <label for="big-sizes">Большие размеры</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="opened-fingers" type="checkbox"/>
-                                    <label for="opened-fingers">С открытыми пальчиками</label>
-                                </div>
-                                <div class="form-row check-row">
-                                    <input id="fishnet" type="checkbox"/>
-                                    <label for="fishnet">Сеточка</label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+                    <% end %>
                 </ul>
             </fieldset>
         </form>
@@ -506,7 +138,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>"}
+    filterOptions = {id: <%= @category.id %>, authenticity_token: "<%= form_authenticity_token %>", options: <%= @checked_options.to_json %>}
     lang = "<%= I18n.locale %>"
     curPage = <%= @page %>
     setPaging(<%= @total_page %>)

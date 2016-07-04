@@ -4,6 +4,8 @@ class Category < ActiveRecord::Base
 
   has_many :products
 
+  has_and_belongs_to_many :option_groups
+
   mount_uploader :image, CategoryUploader
 
   def url

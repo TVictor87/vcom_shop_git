@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630074212) do
+ActiveRecord::Schema.define(version: 20160701115401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,22 +89,26 @@ ActiveRecord::Schema.define(version: 20160630074212) do
     t.string  "title_uk"
     t.string  "title_en"
     t.string  "field_type"
-    t.boolean "required"
-    t.boolean "active"
+    t.boolean "required",   default: false, null: false
+    t.boolean "active",     default: false, null: false
+    t.integer "columns",    default: 1
+    t.integer "priority",   default: 0,     null: false
+    t.boolean "visible",    default: true,  null: false
   end
 
   create_table "options", force: :cascade do |t|
-    t.integer  "options_group_id",                null: false
-    t.string   "title_ru"
-    t.string   "title_uk"
-    t.string   "title_en"
-    t.string   "field_type"
-    t.boolean  "required",         default: true, null: false
-    t.boolean  "is_active",        default: true, null: false
-    t.integer  "priority"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.integer "option_group_id"
+    t.string  "value_ru"
+    t.string  "value_uk"
+    t.string  "value_en"
+    t.decimal "retail_price",             precision: 8, scale: 2
+    t.integer "retail_price_currency_id"
+    t.integer "column",                                           default: 1
+    t.integer "priority",                                         default: 0, null: false
   end
+
+  add_index "options", ["option_group_id"], name: "index_options_on_option_group_id", using: :btree
+  add_index "options", ["retail_price_currency_id"], name: "index_options_on_retail_price_currency_id", using: :btree
 
   create_table "options_groups", force: :cascade do |t|
     t.string   "title_ru"
@@ -114,6 +118,14 @@ ActiveRecord::Schema.define(version: 20160630074212) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  create_table "options_products", id: false, force: :cascade do |t|
+    t.integer "option_id",  null: false
+    t.integer "product_id", null: false
+  end
+
+  add_index "options_products", ["option_id", "product_id"], name: "o_p_index", using: :btree
+  add_index "options_products", ["product_id", "option_id"], name: "p_o_index", using: :btree
 
   create_table "options_values", force: :cascade do |t|
     t.integer  "option_id",  null: false
@@ -125,12 +137,18 @@ ActiveRecord::Schema.define(version: 20160630074212) do
   end
 
   create_table "pages", force: :cascade do |t|
-    t.string "title_ru"
-    t.text   "description_ru"
-    t.string "url_ru"
-    t.string "title_uk"
-    t.text   "description_uk"
-    t.string "url_uk"
+    t.string  "title_ru"
+    t.text    "description_ru"
+    t.string  "url_ru"
+    t.string  "title_uk"
+    t.text    "description_uk"
+    t.string  "url_uk"
+    t.string  "title_en"
+    t.text    "description_en"
+    t.string  "url_en"
+    t.string  "constant_name"
+    t.integer "parent_page_id"
+    t.boolean "active",         default: true, null: false
   end
 
   create_table "pages_products", force: :cascade do |t|
@@ -145,10 +163,13 @@ ActiveRecord::Schema.define(version: 20160630074212) do
     t.integer "option_group_id"
     t.integer "product_id"
     t.string  "value"
+    t.decimal "retail_price",                precision: 8, scale: 2
+    t.integer "retail_price_currency_id_id"
   end
 
   add_index "product_options", ["option_group_id"], name: "index_product_options_on_option_group_id", using: :btree
   add_index "product_options", ["product_id"], name: "index_product_options_on_product_id", using: :btree
+  add_index "product_options", ["retail_price_currency_id_id"], name: "index_product_options_on_retail_price_currency_id_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "title_ru"
@@ -174,6 +195,7 @@ ActiveRecord::Schema.define(version: 20160630074212) do
     t.integer  "category_id"
   end
 
+  add_index "products", ["active"], name: "index_products_on_active", using: :btree
   add_index "products", ["retail_price_currency_id"], name: "index_products_on_retail_price_currency_id", using: :btree
   add_index "products", ["special_price_currency_id"], name: "index_products_on_special_price_currency_id", using: :btree
   add_index "products", ["wholesale_price_currency_id"], name: "index_products_on_wholesale_price_currency_id", using: :btree

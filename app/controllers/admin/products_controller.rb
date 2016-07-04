@@ -28,6 +28,26 @@ module Admin
 
     def update
       if @product.try(:update, product_params)
+        options = @product.options
+        new_options = params[:new_option]
+        if new_options
+          new_options.each do |option|
+            option[:priority] = 0 if option[:priority] == ''
+            unless options.try(:create, option.permit!)
+              return redirect_to edit_admin_product_path(@product.id), alert: @product.errors.messages
+            end
+          end
+        end
+        edit_options = params[:edit_option]
+        if edit_options
+          edit_options.each do |option|
+            option[:priority] = 0 if option[:priority] == ''
+            id = option[:id].to_i
+            unless options.find{|o| o.id == id}.try(:update, option.permit!.except(:id))
+              return redirect_to edit_admin_product_path(@product.id), alert: @product.errors.messages
+            end
+          end
+        end
         redirect_to admin_products_path, notice: t('admin.update.success')
       else
         redirect_to edit_admin_product_path(@product.id), alert: @product.errors.messages
