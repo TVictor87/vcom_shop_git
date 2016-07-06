@@ -62,6 +62,7 @@ ru:
         special_price: Специальная цена
         special_price_currency_id: Валюта специальной цены
         special_link_id: Ссылка на акцию
+        option_ids: Опции
 
       currency:
         value: Курс

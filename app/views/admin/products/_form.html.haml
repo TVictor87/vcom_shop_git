@@ -7,7 +7,6 @@
 
 - pages = Page.select :id, :title_ru
 - currencies = Currency.select :id, :title_ru
-- currency_id = currencies.first.id
 
 .box-body.tab-content
   #inf.tab-pane.active
@@ -26,50 +25,21 @@
       = f.input :page_ids, collection: pages, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :site_ids, collection: Site.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :retail_price
-      = f.input :retail_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
+      = f.input :retail_price_currency_id, selected: (@product.retail_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :wholesale_price
-      = f.input :wholesale_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
+      = f.input :wholesale_price_currency_id, selected: (@product.wholesale_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_price
-      = f.input :special_price_currency_id, selected: currency_id, collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
+      = f.input :special_price_currency_id, selected: (@product.special_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_link_id
       = f.input :active, label: t('activerecord.attributes.active')
       - category = @product.category
       - if category
-        - category.option_groups.each do |option_group|
+        - category.option_groups.select(:id, "title_#{locale}").to_a.uniq.each do |option_group|
           .box
             .box-header.with-border
               .box-title= option_group["title_#{locale}"]
             .box-body
-              %table.table.table-bordered
-                %tbody
-                  %tr
-                    %th Позиция
-                    %th Колонка
-                    %th Значение
-                    - if option_group.active
-                      %th Наценка
-                      %th Валюта
-                    %th Действия
-                  - @product.options.each do |option|
-                    %tr
-                      %input{type: 'hidden', name: 'edit_option[][id]', value: option.id}
-                      %td
-                        %input.form-control{type:'text', name: 'edit_option[][priority]', value: option.priority}
-                      %td
-                        %input.form-control{type:'text', name: 'edit_option[][column]', value: option.column}
-                      %td
-                        %input.form-control{type:'text', name: 'edit_option[][value]', value: option.value}
-                      - if option_group.active
-                        %td
-                          %input.form-control{type:'text', name: 'edit_option[][retail_price]', value: option.retail_price}
-                        %td
-                          .form-group.select.optional
-                            %select.select.optional.select2.form-control{name: "edit_option[][retail_price_currency_id]"}
-                              - currencies.each do |c|
-                                %option{selected: (option.retail_price_currency_id == c.id ? true : false), value: c.id}= c["title_#{locale}"]
-                      %td= link_to t('helpers.links.destroy'), admin_option_path(option.id), method: :delete, "data-confirm" => "Точно?", class: 'btn btn-danger'
-              %br
-              .btn.btn-primary{onclick: "addOption(this, #{option_group.id}, #{option_group.active})"} Добавить
+              = f.input :option_ids, collection: option_group.options.select(:id, "value_#{locale}"), label_method: "value_#{locale}", input_html: { class: 'select2', multiple: true }
 
   - unless @product.new_record?
     #img.tab-pane
