@@ -33,6 +33,8 @@ class Product < ActiveRecord::Base
   validates :title_ru, presence: true, length: { minimum: 2 }
   # validates :description_ru, presence: true, length: { minimum: 5 }
   validates :url_ru, presence: true, uniqueness: true
+  validates :retail_price, null: false
+  validates :retail_price_currency_id, null: false
 
   def title
     self["title_#{I18n.locale}"] || title_ru
