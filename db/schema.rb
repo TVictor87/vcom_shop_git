@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701115401) do
+ActiveRecord::Schema.define(version: 20160713103807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,8 +182,8 @@ ActiveRecord::Schema.define(version: 20160701115401) do
     t.text     "description_en"
     t.string   "url_en"
     t.integer  "priority",                    default: 0,    null: false
-    t.float    "retail_price"
-    t.integer  "retail_price_currency_id"
+    t.float    "retail_price",                               null: false
+    t.integer  "retail_price_currency_id",                   null: false
     t.float    "wholesale_price"
     t.integer  "wholesale_price_currency_id"
     t.float    "special_price"
