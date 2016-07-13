@@ -56,8 +56,9 @@
                                         <% if option_group.columns == 1 %>
                                             <% @options[index].each do |option| %>
                                                 <% value = option.value %>
+                                                <% id = option.id %>
                                                 <div class="form-row check-row">
-                                                    <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='string'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= value %></label>
+                                                    <label><input<% if @available_options and !@available_options[id] %> disabled='disabled'<% end %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='string'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
                                                 </div>
                                             <% end %>
                                         <% else %>
@@ -67,8 +68,9 @@
                                                     <div class="sizes-column">
                                                         <% options.find_all{|o| o.column == column}.each do |option| %>
                                                             <% value = option.value %>
+                                                            <% id = option.id %>
                                                             <div class="form-row check-row">
-                                                                <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='<%= column %>' data-type='string'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"/> <%= value %></label>
+                                                                <label><input<% if @available_options and !@available_options[id] %> disabled='disabled'<% end %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='<%= column %>' data-type='string'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
                                                             </div>
                                                         <% end %>
                                                     </div>
@@ -79,9 +81,10 @@
                                         <ul class="list-colors">
                                             <% @options[index].each do |option| %>
                                                 <% value = option.value %>
+                                                <% id = option.id %>
                                                 <% color = value[0..5] %>
                                                 <li>
-                                                    <label><input data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='color'<% if @checked_options.include? option.id %> checked<% end %> value="<%= option.id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
+                                                    <label><input<% if @available_options and !@available_options[id] %> disabled='disabled'<% end %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='color'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
                                                     <div class="tooltip">
                                                         <span class="square" style="background:#<%= color %>"></span>
                                                         <%= value[6..-1] %>

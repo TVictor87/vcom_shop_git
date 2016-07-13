@@ -124,6 +124,21 @@ loadProducts = ->
 
 			$("[rel='lightbox']").fancybox()
 
+			available_options = res.available_options
+			if available_options
+				a = {}
+				a[k] = true for k in available_options
+				for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
+					if a[input.value]
+						input.disabled = false
+						input.parentNode.className = ''
+					else
+						input.disabled = true
+						input.parentNode.className = 'jcf-label-disabled'
+			else
+				for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
+					input.disabled = false
+					input.parentNode.className = ''
 			loading = false
 
 		xhr.send JSON.stringify filterOptions

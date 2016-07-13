@@ -497,6 +497,7 @@ h3{
 .form-row label{
     cursor: pointer;
     border-bottom: 1px solid transparent;
+    display: inline-block;
 }
 .radio-row label:hover,
 .check-row label:hover{

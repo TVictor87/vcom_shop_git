@@ -17,12 +17,19 @@ class CatalogController < PagesController
     set_from_to
     set_min_max
     set_total_page
+    available_options
 
     @products = @products.select_few
 
     sort
     set_products
     set_options
+
+    if @available_options
+      a = {}
+      @available_options.each do |k| a[k] = true end
+      @available_options = a
+    end
 
     rend 'catalog/catalog'
   end
@@ -31,20 +38,18 @@ class CatalogController < PagesController
     @products = Product.where(category_id: params[:id]).join_price
     
     filter_by_options
-    p '--------'
-    p @products.size
-    p '--------'
 
     set_from_to
     set_min_max
     set_total_page
+    available_options
 
     @products = @products.select_few
 
     sort
     set_products
 
-    render json: "{\"records\":#{@products.to_json(include: :images)},\"totalPage\":#{@total_page},\"min\":#{@from},\"max\":#{@to}}"
+    render json: "{\"records\":#{@products.to_json(include: :images)},\"totalPage\":#{@total_page},\"min\":#{@from},\"max\":#{@to},\"available_options\":#{@available_options.to_json}}"
   end
 
   private
@@ -102,7 +107,22 @@ class CatalogController < PagesController
     @checked_options = params[:options]
     if @checked_options
       @checked_options.map!(&:to_i)
-      @products = @products.joins(:options).where(options: {id: params[:options]})
+      map = {}
+      ActiveRecord::Base.connection.select_rows("SELECT product_id, option_id FROM options_products WHERE option_id IN (#{@checked_options.join ','})").each do |row|
+        product_id = row[0]
+        m = map[product_id]
+        if m
+          m << row[1]
+        else
+          map[product_id] = [row[1]]
+        end
+      end
+      count = @checked_options.count
+      ids = []
+      for product_id, option_ids in map
+        ids << product_id if option_ids.count == count
+      end
+      @products = @products.where(id: ids)
     else
       @checked_options = []
     end
@@ -116,5 +136,13 @@ class CatalogController < PagesController
     options = Option.select(:id, :option_group_id, "value_#{locale}", :column, :priority).joins(:option_group, :products).where(option_groups: {active: false}, products: {id: @category.products.select(:id)}).uniq
     @option_groups = OptionGroup.where id: options.map(&:option_group_id)
     @options = @option_groups.map{|g| options.find_all{|o| o.option_group_id == g.id}}
+  end
+
+  def available_options
+    if @checked_options.any?
+      @available_options = Option.joins(:products).where(products: {id: @products.unscope(:select, :joins).joins(:options).where(options: {id: params[:options]})}).pluck(:id).uniq
+    else
+      @available_options = nil
+    end
   end
 end
