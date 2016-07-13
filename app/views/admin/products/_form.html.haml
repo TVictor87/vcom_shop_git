@@ -34,13 +34,25 @@
       = f.input :active, label: t('activerecord.attributes.active')
       - category = @product.category
       - if category
-        - category.option_groups.select(:id, "title_#{locale}").to_a.uniq.each do |option_group|
+        - option_value = "value_#{locale}"
+        - option_ids = @product.option_ids
+        - category.option_groups.select(:id, :field_type, "title_#{locale}").to_a.uniq.each do |option_group|
           .box
             .box-header.with-border
               .box-title= option_group["title_#{locale}"]
             .box-body
-              = f.input :option_ids, collection: option_group.options.select(:id, "value_#{locale}"), label_method: "value_#{locale}", input_html: { class: 'select2', multiple: true }
-
+              - case option_group.field_type
+                - when 'string'
+                  = f.input :option_ids, collection: option_group.options.select(:id, "value_#{locale}"), label_method: option_value, input_html: { class: 'select2', multiple: true }
+                - when 'color'
+                  .form-group.boolean.optional
+                    - option_group.options.select(:id, option_value).each do |option|
+                      - id = option.id
+                      - value = option[option_value]
+                      %label.boolean.optional.control-label
+                        %input.boolean.optional{type: 'checkbox', value: id, name: "product[option_ids][]", checked: option_ids.include?(id)}
+                        %div{style: "display: inline-block; vertical-align: middle; margin: 0 10px; width: 30px; height: 20px; background: ##{value[0..5]}"}
+                        = value[6..-1]
   - unless @product.new_record?
     #img.tab-pane
       %table.table.table-bordered.table-striped.dataTable

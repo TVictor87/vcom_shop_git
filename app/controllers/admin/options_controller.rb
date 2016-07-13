@@ -11,9 +11,25 @@ module Admin
     end
 
     def create
-      option = Option.create(option_params)
+      p = option_params
+      option_group_id = p[:option_group_id]
+      color = false
+      if option_group_id
+        group = OptionGroup.select(:field_type).find(option_group_id)
+        if group and group.field_type == 'color'
+          color = true
+          p[:value_ru] = 'ffffff' + p[:value_ru]
+          p[:value_uk] = 'ffffff' + p[:value_uk]
+          p[:value_en] = 'ffffff' + p[:value_en]
+        end
+      end
+      option = Option.create(p)
       if option.valid?
-        redirect_to admin_options_path, notice: t('options.create.success')
+        if color
+          redirect_to edit_admin_option_path(option.id), notice: t('options.create.success')
+        else
+          redirect_to admin_options_path, notice: t('options.create.success')
+        end
       else
         redirect_to new_admin_options_path, alert: option.errors.messages
       end
@@ -31,7 +47,14 @@ module Admin
     end
 
     def update
-      if @option.try(:update, option_params)
+      p = option_params
+      hex = params[:hex]
+      if hex
+        p[:value_ru] = hex + p[:value_ru]
+        p[:value_uk] = hex + p[:value_uk]
+        p[:value_en] = hex + p[:value_en]
+      end
+      if @option.try(:update, p)
         redirect_to admin_options_path, notice: t('admin.update.success')
       else
         redirect_to edit_options_path(@option.id), alert: @option.errors.messages
@@ -41,7 +64,7 @@ module Admin
     private
 
     def option_params
-      params.require(:option).permit(:options_group_id, :title_uk, :title_en, :title_ru, :field_type, :required, :is_active, :priority)
+      params.require(:option).permit(:option_group_id, :value_ru, :value_uk, :value_en, :column, :retail_price, :retail_price_currency_id, :priority)
     end
 
     def set_option

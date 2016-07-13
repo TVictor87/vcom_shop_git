@@ -1,3 +1,16 @@
+- def option_values option, group
+  - res = ''
+  - case group.field_type
+    - when 'string'
+      - ['value_ru', 'value_uk', 'value_en'].each do |value_name| res += "<td>#{option[value_name]}</td>" end
+    - when 'color'
+      - ['value_ru', 'value_uk', 'value_en'].each do |value_name|
+        - value = option[value_name]
+        - res += "<td><div style='display: inline-block; vertical-align: middle; width: 30px; height: 20px; margin-right: 10px; background: ##{value[0..5]}'></div>#{value[6..-1]}</td>"
+  - res
+
+- option_groups = OptionGroup.select(:id, :title_ru, :field_type)
+
 %section.content-header
   %h1
     = t('admin.options.title')
@@ -21,11 +34,10 @@
             %th= t('helpers.actions')
         %tbody
           - @options.each do |option|
+            - option_group = option_groups.find{|g| g.id == option.option_group_id}
             %tr
-              %td= option.option_group.title_ru
-              %td= option.value_ru
-              %td= option.value_uk
-              %td= option.value_en
+              %td= option_group.title_ru
+              = raw option_values option, option_group
               %td= option.column
               %td= option.retail_price
               %td= option.retail_price_currency_id

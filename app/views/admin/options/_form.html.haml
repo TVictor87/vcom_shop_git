@@ -1,7 +1,17 @@
 - currencies = Currency.select :id, :title_ru
+- group = @option.option_group
+- color = group and @option.option_group.field_type == 'color'
 
 =simple_form_for [:admin, @option], validate: true do |f|
   = f.input :option_group_id, collection: OptionGroup.all, label_method: :title_ru, input_html: { class: 'select2' }
+  - if color
+    #Inline
+    %br
+    - color = @option.value_ru[0..5]
+    %input#hex{type: 'hidden', value: color, name: 'hex'}
+    - @option.value_ru = @option.value_ru[6..-1]
+    - @option.value_uk = @option.value_uk[6..-1]
+    - @option.value_en = @option.value_en[6..-1]
   = f.input :value_ru
   = f.input :value_uk
   = f.input :value_en
@@ -9,5 +19,14 @@
   = f.input :retail_price
   = f.input :retail_price_currency_id, selected: (@option.retail_price_currency_id or currencies.first.id), collection: Currency.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2' }
   = f.input :priority
-   
 
+- if color
+  %link{rel: 'stylesheet', type: 'text/css', href: '/jPicker/css/jPicker-1.1.6.min.css'}
+  %script{type: 'text/javascript', src: '/jPicker/jpicker-1.1.6.min.js'}
+  :javascript
+    cb = function(color){
+      hex.value = color.val('hex')
+    }
+    $(document).ready(function(){
+      $('#Inline').jPicker({color:{active:new $.jPicker.Color({ hex: '#{color}' })}}, cb, cb);
+    });
