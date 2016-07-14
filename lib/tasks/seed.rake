@@ -164,7 +164,7 @@ def options
       value_uk: value,
       value_en: value,
       priority: index,
-      product_ids: random_ids(product_ids)
+      product_ids: (index == 15 and product_ids[90..100] or product_ids[(index * 6)..((index + 1) * 6 - 1)])
     )
   end
 

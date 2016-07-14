@@ -10,7 +10,7 @@ class CatalogController < PagesController
   end
 
   def catalog
-    @products = @category.products.join_price
+    @products = @category.products
     
     filter_by_options
 
@@ -35,7 +35,7 @@ class CatalogController < PagesController
   end
 
   def catalog_json
-    @products = Product.where(category_id: params[:id]).join_price
+    @products = Product.where(category_id: params[:id])
     
     filter_by_options
 
@@ -83,6 +83,7 @@ class CatalogController < PagesController
   end
 
   def set_from_to
+    @products = @products.join_price
     @from = @products.min
     @to = @products.max
   end
@@ -140,7 +141,7 @@ class CatalogController < PagesController
 
   def available_options
     if @checked_options.any?
-      @available_options = Option.joins(:products).where(products: {id: @products.unscope(:select, :joins).joins(:options).where(options: {id: params[:options]})}).pluck(:id).uniq
+      @available_options = Option.joins(:products).where(products: {id: @products.unscope(:select).select(:id)}).pluck(:id).uniq
     else
       @available_options = nil
     end
