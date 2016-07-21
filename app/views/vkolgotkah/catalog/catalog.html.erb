@@ -153,7 +153,7 @@
     filterOptions = {
         id: <%= @category.id %>,
         authenticity_token: "<%= form_authenticity_token %>",
-        options: [<%=raw @grouped_options.map{|id, ids| "[#{id},[#{ids.join(',')}]]"}.join(',') %>]
+        options: [<% if @grouped_options %><%=raw @grouped_options.map{|id, ids| "[#{id},[#{ids.join(',')}]]"}.join(',') %><% end %>]
     }
     lang = "<%= I18n.locale %>"
     curPage = <%= @page %>
