@@ -81,7 +81,7 @@ loadProducts = ->
 	for key in ['page', 'show', 'sort', 'min', 'max']
 		if val = filterOptions[key]
 			query.push key + '=' + val
-	
+
 	options = filterOptions.options
 	if options.length
 		blockChosenClass.push 'with-options'
