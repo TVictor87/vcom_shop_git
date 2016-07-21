@@ -25,12 +25,6 @@ class CatalogController < PagesController
     set_products
     set_options
 
-    if @available_options
-      a = {}
-      @available_options.each do |k| a[k] = true end
-      @available_options = a
-    end
-
     rend 'catalog/catalog'
   end
 
@@ -93,6 +87,13 @@ class CatalogController < PagesController
     @products = @products.price_from @price_from if @price_from
     @price_to = params[:max]
     @products = @products.price_to @price_to if @price_to
+    if @checked_options.any?
+      if @price_from or @price_to
+        @options_with_products = @options_with_products.joins(products: :retail_price_currency)
+        @options_with_products = @options_with_products.where('products.retail_price * value >= ?', @price_from.to_f / Currency.course) if @price_from
+        @options_with_products = @options_with_products.where('products.retail_price * value <= ?', @price_to.to_f / Currency.course) if @price_to
+      end
+    end
   end
 
   def set_total_page
@@ -105,28 +106,48 @@ class CatalogController < PagesController
   end
 
   def filter_by_options
-    @checked_options = params[:options]
-    if @checked_options
-      @checked_options.map!(&:to_i)
-      map = {}
-      ActiveRecord::Base.connection.select_rows("SELECT product_id, option_id FROM options_products WHERE option_id IN (#{@checked_options.join ','})").each do |row|
-        product_id = row[0]
-        m = map[product_id]
-        if m
-          m << row[1]
-        else
-          map[product_id] = [row[1]]
+    options = params[:options]
+    if options
+      @checked_options = []
+      @grouped_options = {}
+      for group_id, ids in options
+        ids.map!(&:to_i)
+        if ids.any?
+          @checked_options += ids
+          @grouped_options[group_id.to_i] = ids
         end
       end
-      count = @checked_options.count
-      ids = []
-      for product_id, option_ids in map
-        ids << product_id if option_ids.count == count
+      if @checked_options.any?
+        product_ids = {}
+        map = option_product_map(@checked_options)
+        for product_id, option_ids in map
+          for group_id, ids in @grouped_options
+            unless product_ids[product_id]
+              minused = option_ids - (@checked_options - ids)
+              product_ids[product_id] = true if minused.size == 1 or (ids - minused).size < ids.size
+            end
+          end
+        end
+        @options_with_products = Option.joins(:products)
+        @products = @products.where(id: product_ids.keys)
       end
-      @products = @products.where(id: ids)
     else
       @checked_options = []
     end
+  end
+
+  def option_product_map(option_ids)
+    map = {}
+    ActiveRecord::Base.connection.select_rows("SELECT product_id, option_id FROM options_products WHERE option_id IN (#{option_ids.join ','})").each do |row|
+      product_id = row[0]
+      m = map[product_id]
+      if m
+        m << row[1]
+      else
+        map[product_id] = [row[1]]
+      end
+    end
+    map
   end
 
   def set_products
@@ -134,14 +155,57 @@ class CatalogController < PagesController
   end
 
   def set_options
-    options = Option.select(:id, :option_group_id, "value_#{locale}", :column, :priority).joins(:option_group, :products).where(option_groups: {active: false}, products: {id: @category.products.select(:id)}).uniq
+    options = Option.select(:id, :option_group_id, "value_#{locale}", :column, :priority).joins(:products).where(products: {id: @category.products.select(:id)}).uniq
     @option_groups = OptionGroup.where id: options.map(&:option_group_id)
     @options = @option_groups.map{|g| options.find_all{|o| o.option_group_id == g.id}}
   end
 
   def available_options
     if @checked_options.any?
-      @available_options = Option.joins(:products).where(products: {id: @products.unscope(:select).select(:id)}).pluck(:id).uniq
+      group_ids = {}
+      groups = {}
+      product_ids = {}
+      products = []
+      @options_with_products.select(:id, :option_group_id, :product_id).each_with_index do |row, i|
+        g = row.option_group_id
+        id = row.id
+        unless group_ids[id]
+          group_ids[id] = true
+          if groups[g]
+            groups[g] << id
+          else
+            groups[g] = [id]
+          end
+        end
+        p = row.product_id
+        i = product_ids[p]
+        if i
+          products[i] << id
+        else
+          i = products.size
+          product_ids[p] = i
+          products[i] = [id]
+        end
+      end
+      map = {}
+      for a, b in groups
+        m = {}
+        b.each do |id|
+          add = true
+          for c, d in @grouped_options
+            unless a == c
+              d.each do |e|
+                unless products.any?{|ids| ids.include?(e) and ids.include?(id)}
+                  add = false
+                end
+              end
+            end
+          end
+          m[id] = add
+        end
+        map[a] = m
+      end
+      @available_options = map
     else
       @available_options = nil
     end

@@ -85,8 +85,9 @@ loadProducts = ->
 	options = filterOptions.options
 	if options.length
 		blockChosenClass.push 'with-options'
-		for id in options
-			query.push 'options[]=' + id
+		for arr in options
+			q = "options[#{arr[0]}][]="
+			query.push q + id for id in arr[1]
 
 	blockChosen.className = blockChosenClass.join ' '
 
@@ -126,10 +127,16 @@ loadProducts = ->
 
 			available_options = res.available_options
 			if available_options
-				a = {}
-				a[k] = true for k in available_options
 				for input in [].slice.call(optionsList.getElementsByTagName('input'), 2)
-					if a[input.value]
+					g = available_options[input.getAttribute 'data-group-id']
+					if g
+						if g == true
+							input.disabled = false
+							input.parentNode.className = ''
+							continue
+						arr = g
+					else arr = available_options.all
+					if arr[input.value]
 						input.disabled = false
 						input.parentNode.className = ''
 					else
@@ -232,11 +239,13 @@ freezeFilter = false
 				id: +input.value
 	for group, g in options
 		group.options.sort priorityAsc
-	ids = []
+	map = []
 	ret = ''
 	for group in options
 		values = []
 		string = group.type is 'string'
+		ids = []
+		map.push [group.id, ids]
 		for option in group.options
 			value = option.value
 			values.push string and "<span class='nowrap'>#{value}</span>" or "<span class='nowrap'><span class='square' style='background:##{value.substr 0, 6}'></span><span> #{value.substr 6}</span></span>"
@@ -247,7 +256,7 @@ freezeFilter = false
             #{values.join ', '}
         </li>"
 	listChosen.innerHTML = ret
-	filterOptions.options = ids
+	filterOptions.options = map
 	loadProducts()
 
 @uncheckOptionGroup = (id) ->
