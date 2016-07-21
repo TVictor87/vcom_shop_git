@@ -162,6 +162,7 @@ class CatalogController < PagesController
 
   def available_options
     if @checked_options.any?
+      grouped_options = @grouped_options
       group_ids = {}
       groups = {}
       product_ids = {}
@@ -192,7 +193,7 @@ class CatalogController < PagesController
         m = {}
         b.each do |id|
           add = true
-          for c, d in @grouped_options
+          for c, d in grouped_options
             unless a == c
               d.each do |e|
                 unless products.any?{|ids| ids.include?(e) and ids.include?(id)}
@@ -204,6 +205,12 @@ class CatalogController < PagesController
           m[id] = add
         end
         map[a] = m
+      end
+      for g, ids in grouped_options
+        m = map[g]
+        for id in ids
+          m[id] = true unless m[id]
+        end
       end
       @available_options = map
     else
