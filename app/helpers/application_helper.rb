@@ -5,13 +5,7 @@ module ApplicationHelper
 
   def disabled(group_id, id)
     return '' unless @available_options
-    g = @available_options[group_id]
-    if g
-      return '' if g == true
-      arr = g
-    else
-      arr = @available_options[:all]
-    end
-    if arr[id] then '' else " disabled='disabled'" end
+    arr = @available_options[group_id] or @available_options[:all]
+    if arr[id] or @checked_options_map[id] then '' else " disabled='disabled'" end
   end
 end

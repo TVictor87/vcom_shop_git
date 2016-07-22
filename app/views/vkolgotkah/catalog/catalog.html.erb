@@ -58,7 +58,7 @@
                                                 <% value = option.value %>
                                                 <% id = option.id %>
                                                 <div class="form-row check-row">
-                                                    <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='string'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
+                                                    <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='string'<% if @checked_options_map[id] %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
                                                 </div>
                                             <% end %>
                                         <% else %>
@@ -70,7 +70,7 @@
                                                             <% value = option.value %>
                                                             <% id = option.id %>
                                                             <div class="form-row check-row">
-                                                                <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='<%= column %>' data-type='string'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
+                                                                <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='<%= column %>' data-type='string'<% if @checked_options_map[id] %> checked<% end %> value="<%= id %>" type="checkbox"/> <%= value %></label>
                                                             </div>
                                                         <% end %>
                                                     </div>
@@ -84,7 +84,7 @@
                                                 <% id = option.id %>
                                                 <% color = value[0..5] %>
                                                 <li>
-                                                    <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='color'<% if @checked_options.include? id %> checked<% end %> value="<%= id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
+                                                    <label><input<%= disabled group_id, id %> data-group-id='<%= group_id %>' data-group='<%= title %>' data-group-priority='<%= priority %>' data-priority='<%= option.priority %>' data-value='<%= value %>' data-column='1' data-type='color'<% if @checked_options_map[id] %> checked<% end %> value="<%= id %>" type="checkbox"><span class="square" style="background:#<%= color %>"></span></label>
                                                     <div class="tooltip">
                                                         <span class="square" style="background:#<%= color %>"></span>
                                                         <%= value[6..-1] %>

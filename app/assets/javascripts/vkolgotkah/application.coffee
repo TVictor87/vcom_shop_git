@@ -72,6 +72,7 @@ Number.prototype.productPrice = ->
 loading = false
 
 loadProducts = ->
+	return if loading
 	loading = true
 
 	blockChosenClass = ['block-chosen']
@@ -139,7 +140,7 @@ loadProducts = ->
 					if arr[input.value]
 						input.disabled = false
 						input.parentNode.className = ''
-					else
+					else if not input.checked
 						input.disabled = true
 						input.parentNode.className = 'jcf-label-disabled'
 			else
