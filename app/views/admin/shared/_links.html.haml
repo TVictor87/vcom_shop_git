@@ -8,83 +8,87 @@
     = link_to admin_products_path do
       %i.fa.fa-archive
       %span= t('admin.products.title')
-  %li.treeview{class: %w(categories category_images).include?(controller_name) ? 'active' : ''}
+  %li.treeview{class: controller_name == "currencies" ? 'active' : ''}
+    = link_to admin_currencies_path do
+      %i.fa.fa-money
+      %span= t('admin.currencies.title')
+  %li.treeview{class: controller_name == "categories" ? 'active' : ''}
     = link_to admin_categories_path do
       %i.fa.fa-tag
       %span= t('admin.categories.title')
-  %li.treeview{class: controller_name == 'options_groups' ? 'active' : ''}
-    = link_to admin_options_groups_path do
+  %li.treeview{class: controller_name == 'option_groups' ? 'active' : ''}
+    = link_to admin_option_groups_path do
       %i.fa.fa-th
-      %span= t('admin.options_groups.title')    
+      %span= t('admin.option_groups.title')
   %li.treeview{class: controller_name == 'options' ? 'active' : ''}
     = link_to admin_options_path do
       %i.fa.fa-building-o
-      %span= t('admin.options.title')     
+      %span= t('admin.options.title') 
   %li.treeview{class: controller_name == 'pages' ? 'active' : ''}
     = link_to admin_pages_path do
       %i.fa.fa-folder
-      %span= t('admin.pages.title')
+      %span= t('admin.pages.title')  
   %li.treeview{class: controller_name == 'sites' ? 'active' : ''}
     = link_to admin_sites_path do
       %i.fa.fa-globe
       %span= t('admin.sites.title')
 
-  %li.treeview
-    %a{href: '#'}
-      %i.fa.fa-dashboard
-      %span Dashboard
-      %i.fa.fa-angle-left.pull-right
-    %ul.treeview-menu
-      %li.active
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Dashboard v1
-      %li
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Dashboard v2
-  %li.treeview
-    %a{href: '#'}
-      %i.fa.fa-files-o
-      %span Layout Options
-      %span.label.label-primary.pull-right 4
-    %ul.treeview-menu
-      %li
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Top Navigation
-      %li
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Boxed
-      %li
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Fixed
-      %li
-        %a{href: '#'}
-          %i.fa.fa-circle-o
-          Collapsed Sidebar
-  %li
-    %a{href: '#'}
-      %i.fa.fa-th
-      %span Widgets
-      %small.label.pull-right.bg-green new
-  %li
-    %a{href: '#'}
-      %i.fa.fa-calendar
-      %span Calendar
-      %small.label.pull-right.bg-red 3
-  %li.header LABELS
-  %li
-    %a{href: '#'}
-      %i.fa.fa-circle-o.text-red
-      %span Important
-  %li
-    %a{href: '#'}
-      %i.fa.fa-circle-o.text-yellow
-      %span Warning
-  %li
-    %a{href: '#'}
-      %i.fa.fa-circle-o.text-aqua
-      %span Information
+  / %li.treeview
+  /   %a{href: '#'}
+  /     %i.fa.fa-dashboard
+  /     %span Dashboard
+  /     %i.fa.fa-angle-left.pull-right
+  /   %ul.treeview-menu
+  /     %li.active
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Dashboard v1
+  /     %li
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Dashboard v2
+  / %li.treeview
+  /   %a{href: '#'}
+  /     %i.fa.fa-files-o
+  /     %span Layout Options
+  /     %span.label.label-primary.pull-right 4
+  /   %ul.treeview-menu
+  /     %li
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Top Navigation
+  /     %li
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Boxed
+  /     %li
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Fixed
+  /     %li
+  /       %a{href: '#'}
+  /         %i.fa.fa-circle-o
+  /         Collapsed Sidebar
+  / %li
+  /   %a{href: '#'}
+  /     %i.fa.fa-th
+  /     %span Widgets
+  /     %small.label.pull-right.bg-green new
+  / %li
+  /   %a{href: '#'}
+  /     %i.fa.fa-calendar
+  /     %span Calendar
+  /     %small.label.pull-right.bg-red 3
+  / %li.header LABELS
+  / %li
+  /   %a{href: '#'}
+  /     %i.fa.fa-circle-o.text-red
+  /     %span Important
+  / %li
+  /   %a{href: '#'}
+  /     %i.fa.fa-circle-o.text-yellow
+  /     %span Warning
+  / %li
+  /   %a{href: '#'}
+  /     %i.fa.fa-circle-o.text-aqua
+  /     %span Information

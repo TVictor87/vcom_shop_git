@@ -1,0 +1,36 @@
+%section.content-header
+  %h1
+    = t('admin.option_groups.title')
+    %small= @option_group.try('title_#{locale}') || @option_group.title_ru
+
+%section.content
+  .box
+    .box-body 
+      %ul
+        %li
+          %b= t('activerecord.attributes.option_group.title_uk')
+          %br
+          = @option_group.title_uk
+        %li
+          %b= t('activerecord.attributes.option_group.title_en')
+          %br
+          = @option_group.title_en
+        %li
+          %b= t('activerecord.attributes.option_group.field_type')
+          %br
+          = @option_group.field_type
+        %li
+          %b= t('activerecord.attributes.option_group.columns')
+          %br
+          = t("bool.#{@option_group.columns}")
+        %li
+          %b= t('activerecord.attributes.option_group.required')
+          %br
+          = t("bool.#{@option_group.required}")
+        %li
+          %b= t('activerecord.attributes.option_group.active')
+          %br
+          = t("bool.#{@option_group.active}")
+  .box_footer
+    = link_to t('helpers.links.back'), admin_option_groups_path, class:'btn btn-primary'
+    = link_to t('helpers.links.edit'), edit_admin_option_group_path(@option_group), class:'btn btn-primary'

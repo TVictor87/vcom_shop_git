@@ -4,4 +4,25 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require ./fancybox
  *= require ./all
+ *= require ./list-catalog
+ *= require ./visual-link
  */
+
+
+#optionsList .jcf-label-disabled
+	opacity .3
+	position relative
+	cursor default
+	&:hover
+		border-bottom 0
+	&:before
+		content ''
+		display block
+		position absolute
+		z-index 10
+		top 0
+		left 0
+		right 0
+		bottom 0
+	& + .tooltip
+		display none

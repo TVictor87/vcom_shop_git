@@ -3,7 +3,7 @@ module Admin
     before_action :set_product, only: [:show, :edit, :update, :destroy]
 
     def index
-      @products = Product.unscope :where
+      @products = Product.unscope(:where).includes(:pages, :sites).references(:pages, :sites)
     end
 
     def new
@@ -54,8 +54,7 @@ module Admin
         :retail_price, :retail_price_currency_id,
         :wholesale_price, :wholesale_price_currency_id,
         :special_price, :special_price_currency_id,
-        :special_link_id, :active, :priority,
-        site_ids: [], page_ids: []
+        :special_link_id, :active, :priority, site_ids: [], page_ids: [], option_ids: []
       )
     end
   end

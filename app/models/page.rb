@@ -1,7 +1,6 @@
 class Page < ActiveRecord::Base
-
   scope :active, -> { where(active: true) }
-  scope :local, -> { where(active: true).select :id, "title_#{I18n.locale.to_s}", "description_#{I18n.locale.to_s}" }
+  scope :local, -> { where(active: true).select :id, "title_#{I18n.locale}", "description_#{I18n.locale}" }
   scope :with_products, -> { includes(products: :images) }
 
   has_many :site_pages, dependent: :destroy
@@ -17,11 +16,11 @@ class Page < ActiveRecord::Base
   #           :url_en, length: { minimum: 2, :allow_nil => true }
   validates :constant_name, presence: true
 
-  def self.find_by_url url
-    send "find_by_url_#{I18n.locale.to_s}", url
+  def self.find_by_url(url)
+    send "find_by_url_#{I18n.locale}", url
   end
 
   def description
-    self["description_#{I18n.locale.to_s}"] or description_ru
+    self["description_#{I18n.locale}"] || description_ru
   end
 end

@@ -1,3 +1,16 @@
+- def option_values option, group
+  - res = ''
+  - case group.field_type
+    - when 'string'
+      - ['value_ru', 'value_uk', 'value_en'].each do |value_name| res += "<td>#{option[value_name]}</td>" end
+    - when 'color'
+      - ['value_ru', 'value_uk', 'value_en'].each do |value_name|
+        - value = option[value_name]
+        - res += "<td><div style='display: inline-block; vertical-align: middle; width: 30px; height: 20px; margin-right: 10px; background: ##{value[0..5]}'></div>#{value[6..-1]}</td>"
+  - res
+
+- option_groups = OptionGroup.select(:id, :title_ru, :field_type)
+
 %section.content-header
   %h1
     = t('admin.options.title')
@@ -10,29 +23,26 @@
       %table.table.table-bordered.table-striped.dataTable
         %thead
           %tr
-            %th= t('activerecord.attributes.option.options_group_id')
-            %th= t('activerecord.attributes.option.title_ru')            
-            %th= t('activerecord.attributes.option.title_uk')
-            %th= t('activerecord.attributes.option.title_en')
-            %th= t('activerecord.attributes.option.field_type')
-            %th= t('activerecord.attributes.option.required')
-            %th= t('activerecord.attributes.option.is_active')
+            %th= t('activerecord.attributes.option.option_group_id')
+            %th= t('activerecord.attributes.option.value_ru')
+            %th= t('activerecord.attributes.option.value_uk')
+            %th= t('activerecord.attributes.option.value_en')
+            %th= t('activerecord.attributes.option.column')
+            %th= t('activerecord.attributes.option.retail_price')
+            %th= t('activerecord.attributes.option.retail_price_currency_id')
             %th= t('activerecord.attributes.option.priority')
-            %th= t('helpers.actions') 
-
+            %th= t('helpers.actions')
         %tbody
           - @options.each do |option|
+            - option_group = option_groups.find{|g| g.id == option.option_group_id}
             %tr
-              %td= option.options_group.title_ru
-              %td= option.title_ru
-              %td= option.title_uk
-              %td= option.title_en
-              %td= option.field_type
-              %td= option.required ? t('activerecord.attributes.option.required') : t('activerecord.attributes.option.no_required')
-              %td= option.required ? t('activerecord.attributes.option.active') : t('activerecord.attributes.option.no_active')
+              %td= option_group.title_ru
+              = raw option_values option, option_group
+              %td= option.column
+              %td= option.retail_price
+              %td= option.retail_price_currency_id
               %td= option.priority
-              
               %td
                 = link_to t('helpers.links.show'), admin_option_path(option.id), class:'btn btn-default'
                 = link_to t('helpers.links.edit'), edit_admin_option_path(option.id), class:'btn btn-default'
-                = link_to t('helpers.links.destroy'), admin_option_path(option.id), method: :delete, class:'btn btn-default'
+                = link_to t('helpers.links.destroy'), admin_option_path(option.id), method: :delete, class:'btn btn-default', "data-confirm" => "Точно?"

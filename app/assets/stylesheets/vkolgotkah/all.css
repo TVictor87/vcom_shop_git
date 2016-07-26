@@ -94,6 +94,9 @@ a:hover{
     text-decoration:none;
     color: #ea8b0f;
 }
+.nowrap{
+    white-space: nowrap;
+}
 input,
 textarea,
 select {
@@ -494,6 +497,7 @@ h3{
 .form-row label{
     cursor: pointer;
     border-bottom: 1px solid transparent;
+    display: inline-block;
 }
 .radio-row label:hover,
 .check-row label:hover{
@@ -854,7 +858,8 @@ select{
     display: block;
     margin: 5px 0;
 }
-input[type="reset"]{
+.reset{
+    text-align: center;
     color: #797979;
     font-size: 15px;
     width: 153px;
@@ -868,10 +873,10 @@ input[type="reset"]{
     padding: 0 15px 1px;
     height: 26px;
 }
-#sidebar input[type="reset"]{
+#sidebar .reset{
     margin: 0 auto;
 }
-input[type="reset"]:hover{
+.reset:hover{
     border-color: #b97274;
     color: #b97274;
     cursor: pointer;
@@ -1087,13 +1092,20 @@ input.ui-spinner-input:focus,
     cursor:pointer;
 }
 .block-chosen{
+    display: none;
     color: #797979;
     margin-bottom: 10px;
     padding: 14px 0 22px 11px;
     border-bottom: 1px solid #dadada;
 }
-.block-chosen .title{
+.block-chosen.with-options, .block-chosen.with-price{
     display: block;
+}
+.block-chosen.with-options .list-chosen, .block-chosen.with-options .title{
+    display: block;
+}
+.block-chosen .title{
+    display: none;
     margin: 0 0 6px 14px;
 }
 .delete{
@@ -1114,6 +1126,7 @@ input.ui-spinner-input:focus,
     float: right;
 }
 .list-chosen{
+    display: none;
     margin: 0 0 2px;
     padding: 0;
     list-style: none;
@@ -1209,10 +1222,13 @@ input.ui-spinner-input:focus,
     cursor: pointer;
     position: relative;
 }
-.list-colors a{
+.list-colors label{
     display: block;
     position: relative;
     border: 2px solid #afafaf;
+}
+.list-colors input, .list-colors .chk-area{
+    display: none !important;
 }
 .list-colors .tooltip{
     position: absolute;
@@ -1338,76 +1354,6 @@ input.ui-spinner-input:focus,
 .paging .active a:hover{
     text-decoration: none;
 }
-.list-catalog{
-    margin: 0 -19px -11px -7px;
-    padding: 0;
-    list-style: none;
-    font-size: 16px;
-    line-height: 19px;
-}
-.list-catalog li{
-    display: inline-block;
-    vertical-align: top;
-    padding: 8px 9px 25px;
-    border: solid 2px transparent;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    margin: 0 7px 32px 0;
-    width: 32%;
-    -webkit-transition:border-color .3s ease;
-    -moz-transition:border-color .3s ease;
-    -ms-transition:border-color .3s ease;
-    -o-transition:border-color .3s ease;
-    transition:border-color .3s ease;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    max-width: 248px;
-}
-.list-catalog li:hover{
-    border-color: #c42940;
-}
-.visual-link{
-    display: block;
-    margin-bottom: 16px;
-    position: relative;
-}
-.visual-link img{
-    width: 100%;
-    max-width: 230px;
-    display: block;
-}
-.visual-link:before{
-    content: "";
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 30px;
-    height: 30px;
-    border: solid 1px #c42940;
-    opacity: 0;
-    -webkit-transition: opacity .3s ease;
-    -moz-transition: opacity .3s ease;
-    -ms-transition: opacity .3s ease;
-    -o-transition: opacity .3s ease;
-    transition: opacity .3s ease;
-    background: url(../images/icons.png) -64px -21px no-repeat;
-}
-.visual-link:hover:before{
-    opacity: 1;
-}
-.list-catalog .title{
-    display: block;
-    margin: 0 0 9px;
-}
-.list-catalog .title a{
-    color: #666;
-    text-decoration: none;
-}
-.list-catalog .title a:hover{
-    color: #ea8b0f;
-}
 .add-cart{
     float: left;
     overflow: hidden;
@@ -1416,11 +1362,6 @@ input.ui-spinner-input:focus,
     height: 19px;
     margin-right: 9px;
     background: url(../images/icons.png) -30px -47px no-repeat;
-}
-.list-catalog .price{
-    border-left: 1px solid #cdcdcd;
-    color: #c42940;
-    padding-left: 9px;
 }
 .item-row{
     overflow: hidden;
@@ -2243,9 +2184,6 @@ input.ui-spinner-input:focus,
     .ui-spinner{
         margin-bottom: 15px;
     }
-    .list-catalog li{
-        width: 31%;
-    }
     .form-cart{
         padding: 22px 0 43px;
     }
@@ -2586,13 +2524,6 @@ input.ui-spinner-input:focus,
         width: 100%;
         margin: 0 0 20px;
     }
-    .list-catalog{
-        text-align: center;
-    }
-    .list-catalog li{
-        width: 47%;
-        text-align: left;
-    }
     .heading-col.col6, .col.col6{
         display: none;
     }
@@ -2644,13 +2575,6 @@ input.ui-spinner-input:focus,
     .text-title{
         font-size: 44px;
         line-height: 50px;
-    }
-    .list-catalog{
-        margin: 0;
-    }
-    .list-catalog li{
-        width: auto;
-        margin: 0 0 10px;
     }
     .paging,
     .form-sort .select-block{

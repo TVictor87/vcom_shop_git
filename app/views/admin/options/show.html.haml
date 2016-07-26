@@ -1,22 +1,46 @@
 %section.content-header
   %h1
     = t('admin.options.title')
-    %small= @option.try('title_#{locale}') || @option.title_ru
+    %small= @option.value
 
 %section.content
   .box
     .box-body 
       %ul
-        %li 
-          = @option.options_group_id       
-        %li 
-          = @option.title_uk
-        %li
-          = @option.title_en 
-        %li= @option.required ? t('activerecord.attributes.option.required') : t('activerecord.attributes.option.no_required')
-        %li= @option.required ? t('activerecord.attributes.option.active') : t('activerecord.attributes.option.no_active')
-        %li 
-          = @option.priority 
+        - if group = @option.option_group
+          %li
+            %b= t('activerecord.attributes.option.option_group_id')
+            %br
+            = group.title
+          %li
+            %b= t('activerecord.attributes.option.value_ru')
+            %br
+            = @option.value_ru
+          %li
+            %b= t('activerecord.attributes.option.value_uk')
+            %br
+            = @option.value_uk
+          %li
+            %b= t('activerecord.attributes.option.value_en')
+            %br
+            = @option.value_en
+          - if @option.retail_price_currency_id and currency = Currency.find(@option.retail_price_currency_id)
+            %li
+              %b= t('activerecord.attributes.option.retail_price')
+              %br
+              = @option.retail_price
+            %li
+              %b= t('activerecord.attributes.option.retail_price_currency_id')
+              %br
+              = currency.title_ru
+          %li
+            %b= t('activerecord.attributes.option.column')
+            %br
+            = @option.column
+          %li
+            %b= t('activerecord.attributes.option.priority')
+            %br
+            = @option.priority
   .box_footer
     = link_to t('helpers.links.back'), admin_options_path, class:'btn btn-primary'
     = link_to t('helpers.links.edit'), edit_admin_option_path(@option), class:'btn btn-primary'

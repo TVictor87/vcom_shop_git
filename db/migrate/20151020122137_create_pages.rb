@@ -7,12 +7,16 @@ class CreatePages < ActiveRecord::Migration
       t.string :title_uk
       t.text :description_uk
       t.string :url_uk
-      t.string :title_en
-      t.text :description_en
-      t.string :url_en
-      t.string :constant_name
-      t.integer :parent_page_id
-      t.boolean :active, null: false, default: true
+      part(t)
     end
+  end
+
+  def part(t)
+    t.string :title_en
+    t.text :description_en
+    t.string :url_en
+    t.string :constant_name
+    t.integer :parent_page_id
+    t.boolean :active, null: false, default: true
   end
 end

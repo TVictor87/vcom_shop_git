@@ -6,6 +6,7 @@
       %a{ 'data-toggle': 'tab', href: '#img' }= t('admin.images.title')
 
 - pages = Page.select :id, :title_ru
+- currencies = Currency.select :id, :title_ru
 
 .box-body.tab-content
   #inf.tab-pane.active
@@ -24,14 +25,34 @@
       = f.input :page_ids, collection: pages, label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :site_ids, collection: Site.select(:id, :title_ru), label_method: :title_ru, input_html: { class: 'select2', multiple: true }
       = f.input :retail_price
-      = f.input :retail_price_currency_id
+      = f.input :retail_price_currency_id, selected: (@product.retail_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :wholesale_price
-      = f.input :wholesale_price_currency_id
+      = f.input :wholesale_price_currency_id, selected: (@product.wholesale_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_price
-      = f.input :special_price_currency_id
+      = f.input :special_price_currency_id, selected: (@product.special_price_currency_id or currencies.first.id), collection: currencies, label_method: :title_ru, input_html: { class: 'select2' }
       = f.input :special_link_id
       = f.input :active, label: t('activerecord.attributes.active')
-
+      - category = @product.category
+      - if category
+        - option_value = "value_#{locale}"
+        - option_ids = @product.option_ids
+        - category.option_groups.select(:id, :field_type, "title_#{locale}").to_a.uniq.each do |option_group|
+          .box
+            .box-header.with-border
+              .box-title= option_group["title_#{locale}"]
+            .box-body
+              - case option_group.field_type
+                - when 'string'
+                  = f.input :option_ids, collection: option_group.options.select(:id, "value_#{locale}"), label_method: option_value, input_html: { class: 'select2', multiple: true }
+                - when 'color'
+                  .form-group.boolean.optional
+                    - option_group.options.select(:id, option_value).each do |option|
+                      - id = option.id
+                      - value = option[option_value]
+                      %label.boolean.optional.control-label
+                        %input.boolean.optional{type: 'checkbox', value: id, name: "product[option_ids][]", checked: option_ids.include?(id)}
+                        %div{style: "display: inline-block; vertical-align: middle; margin: 0 10px; width: 30px; height: 20px; background: ##{value[0..5]}"}
+                        = value[6..-1]
   - unless @product.new_record?
     #img.tab-pane
       %table.table.table-bordered.table-striped.dataTable
@@ -60,3 +81,7 @@
               %td= product_image.priority
               %td
                 = link_to t('helpers.links.destroy'), admin_product_product_image_path(@product.id, product_image.id), method: :delete
+
+    :javascript
+      currencies = #{currencies.to_json}
+      locale = "#{locale}"

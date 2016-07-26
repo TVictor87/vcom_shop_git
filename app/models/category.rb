@@ -1,20 +1,22 @@
 class Category < ActiveRecord::Base
-	has_many :categories
-	belongs_to :category
+  has_many :categories
+  belongs_to :category
 
-	has_many :products
+  has_many :products
 
-	mount_uploader :image, CategoryUploader
+  has_and_belongs_to_many :option_groups
 
-	def url
-		self["url_#{I18n.locale.to_s}"] or url_ru
-	end
+  mount_uploader :image, CategoryUploader
 
-	def name
-		self["name_#{I18n.locale.to_s}"] or name_ru
-	end
+  def url
+    self["url_#{I18n.locale}"] || url_ru
+  end
 
-	def text
-		self["text_#{I18n.locale.to_s}"] or text_ru
-	end
+  def name
+    self["name_#{I18n.locale}"] || name_ru
+  end
+
+  def text
+    self["text_#{I18n.locale}"] || text_ru
+  end
 end

@@ -1,0 +1,8 @@
+=simple_form_for [:admin, @option_group], validate: true do |f|
+  =f.input :title_ru
+  =f.input :title_uk
+  =f.input :title_en
+  =f.input :field_type, selected: "Строка", collection: ["Строка", "Цвет"]
+  =f.input :columns
+  =f.input :required
+  =f.input :active

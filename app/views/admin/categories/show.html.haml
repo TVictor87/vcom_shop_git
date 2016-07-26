@@ -8,58 +8,61 @@
 		.box-body
 			%form{ class: 'show_form'}
 				%p
-					%b Картинка
+					%b= t('activerecord.attributes.image.image')
 				- if @category.image?
 					%td= image_tag @category.image.url, class: 'medium_img'
 				- else
 					%td -
 				%p
-					%b name_ru
+					%b= t('activerecord.attributes.category.option_group_ids')
+					= @category.option_groups.pluck("title_#{locale}").join(', ')
+				%p
+					%b= t('activerecord.attributes.category.name_ru')
 					= @category.name_ru
 				%p
-					%b name_uk
+					%b= t('activerecord.attributes.category.name_uk')
 					= @category.name_uk
 				%p
-					%b name_en
+					%b= t('activerecord.attributes.category.name_en')
 					= @category.name_en
 				%p
-					%b title_ru
+					%b= t('activerecord.attributes.category.title_ru')
 					= @category.title_ru
 				%p
-					%b title_uk
+					%b= t('activerecord.attributes.category.title_uk')
 					= @category.title_uk
 				%p
-					%b title_en
+					%b= t('activerecord.attributes.category.title_en')
 					= @category.title_en
 				%p
-					%b keywords_ru
+					%b= t('activerecord.attributes.category.keywords_ru')
 					= @category.keywords_ru
 				%p
-					%b keywords_uk
+					%b= t('activerecord.attributes.category.keywords_uk')
 					= @category.keywords_uk
 				%p
-					%b keywords_en
+					%b= t('activerecord.attributes.category.keywords_en')
 					= @category.keywords_en
 				%p
-					%b description_ru
+					%b= t('activerecord.attributes.category.description_ru')
 					= raw @category.description_ru
 				%p
-					%b description_uk
+					%b= t('activerecord.attributes.category.description_uk')
 					= raw @category.description_uk
 				%p
-					%b description_en
+					%b= t('activerecord.attributes.category.description_en')
 					= raw @category.description_en
 				%p
-					%b text_ru
+					%b= t('activerecord.attributes.category.text_ru')
 					= raw @category.text_ru
 				%p
-					%b text_uk
+					%b= t('activerecord.attributes.category.text_uk')
 					= raw @category.text_uk
 				%p
-					%b text_en
+					%b= t('activerecord.attributes.category.text_en')
 					= raw @category.text_en
 				%p
-					%b priority
+					%b= t('activerecord.attributes.category.priority')
 					= @category.priority
 
 			.editor_actions

@@ -40,7 +40,7 @@
                 = link_to t('admin.products.add_image'), new_admin_product_product_image_path(product.id)
                 = link_to t('helpers.links.show'), admin_product_path(product.id)
                 = link_to t('helpers.links.edit'), edit_admin_product_path(product.id)
-                = link_to t('helpers.links.destroy'), admin_product_path(product.id), method: :delete
+                = link_to t('helpers.links.destroy'), admin_product_path(product.id), method: :delete, "data-confirm" => "Точно?"
               %td= product.title_ru
               %td= raw product.description_ru
               %td= product.url_ru
