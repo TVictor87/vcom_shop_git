@@ -136,25 +136,16 @@ class CatalogController < PagesController
   end
 
   def available_options_map grouped_options, groups, products
-    available_options = @available_options # Так быстрее наверно к переменной обращаться
-    groups.each do |current_group_id, current_option_ids| # Текущая группа и текущие id опций
-      map = {} # Карта для текущей группы
-      current_option_ids.each do |current_id| # id текущей опции
-        available = true # Предположим, она доступна, сомневаться в этом пока нет причин
-        grouped_options.each do |checked_group_id, checked_option_ids| # Отмеченное id группы и массив с отмеченными id опций в этой группе
-          unless current_group_id == checked_group_id # Текущую опцию не фильтруем по её же группе, только по всем остальным
-            checked_option_ids.each do |checked_id| # id выбранной опции внутри группы
-              # Если хоть в одном из товаров одновременно нет текущей опции и отмеченной, значит, текущая недоступна
-              unless products.any?{|ids| ids.include?(checked_id) and ids.include?(current_id)}
-                available = false
-              end
-            end
-          end
-        end
-        map[current_id] = available # Запоминаем в карту
-      end
-      available_options[current_group_id] = map # Запоминаем карту по группе в общую для всех карту
-    end
+    available_options = @available_options # Так быстрее к переменной обращаться
+    groups.each{|current_group_id, current_option_ids| # Текущая группа и текущие id опций
+      available_options[current_group_id] = current_option_ids.map{|current_id| # id текущей опции
+        [current_id, grouped_options.except(current_group_id).all?{|checked_group_id, checked_option_ids| # Отмеченная группа, кроме текущей, и id отмеченных опций в ней
+          checked_option_ids.all?{|checked_id| # id выбранной опции внутри группы
+            products.any?{|ids| ids.include?(checked_id) and ids.include?(current_id)} # Если хоть в одном из товаров одновременно нет текущей опции и отмеченной, значит, текущая недоступна
+          }
+        }]
+      }.to_h
+    }
   end
 
   def set_page

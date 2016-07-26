@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713103807) do
+ActiveRecord::Schema.define(version: 20160726125709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,14 @@ ActiveRecord::Schema.define(version: 20160713103807) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "options_warehouse_products", id: false, force: :cascade do |t|
+    t.integer "warehouse_product_id", null: false
+    t.integer "option_id",            null: false
+  end
+
+  add_index "options_warehouse_products", ["option_id"], name: "index_options_warehouse_products_on_option_id", using: :btree
+  add_index "options_warehouse_products", ["warehouse_product_id"], name: "index_options_warehouse_products_on_warehouse_product_id", using: :btree
+
   create_table "pages", force: :cascade do |t|
     t.string  "title_ru"
     t.text    "description_ru"
@@ -240,5 +248,21 @@ ActiveRecord::Schema.define(version: 20160713103807) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "warehouse_products", force: :cascade do |t|
+    t.integer "warehouse_id"
+    t.integer "product_id"
+    t.integer "quantity",                                        default: 0,   null: false
+    t.decimal "retail_price_changed",    precision: 8, scale: 2, default: 0.0, null: false
+    t.decimal "wholesale_price_changed", precision: 8, scale: 2, default: 0.0, null: false
+    t.decimal "special_price_changed",   precision: 8, scale: 2, default: 0.0, null: false
+  end
+
+  add_index "warehouse_products", ["product_id"], name: "index_warehouse_products_on_product_id", using: :btree
+  add_index "warehouse_products", ["warehouse_id"], name: "index_warehouse_products_on_warehouse_id", using: :btree
+
+  create_table "warehouses", force: :cascade do |t|
+    t.string "name"
+  end
 
 end
