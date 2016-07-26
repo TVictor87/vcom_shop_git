@@ -109,58 +109,54 @@ class CatalogController < PagesController
   end
 
   def available_options
-    all = {}
-    @options_with_products.pluck(:id).each{|id| all[id] = true}
+    @available_options = {all: @options_with_products.pluck(:id).map{|id| [id, true]}.to_h}
     if @checked_options.any?
-      grouped_options = @grouped_options
-      group_ids = {}
-      groups = {}
-      product_ids = {}
-      products = []
-      @options_with_products.select(:id, :option_group_id, :product_id).each_with_index do |row, i|
-        g = row.option_group_id
-        id = row.id
-        unless group_ids[id]
-          group_ids[id] = true
-          if groups[g]
-            groups[g] << id
-          else
-            groups[g] = [id]
-          end
+      finded_option_ids = {} # Чтобы id в groups не дублировались
+      groups = {} # Hash [id группы] => [массив id опций в этой группе]
+      product_ids = {} # Hash [id товара] => индекс массива id опций в products
+      products = [] # [[]] Массив массивов id опций в каждом найденом товаре
+      @options_with_products.pluck(:id, :option_group_id, :product_id).each do |row| # Выборка ключевых id из ранее отфильтрованных опций
+        id, product_id = row[0], row[2]
+        unless finded_option_ids[id] # если ещё не было этой опции
+          finded_option_ids[id] = true # запоминаем её
+          option_group_id = row[1]
+          groups[option_group_id] and groups[option_group_id] << id or groups[option_group_id] = [id] # добавляем id в группу или создаем её с этим id
         end
-        p = row.product_id
-        i = product_ids[p]
-        if i
-          products[i] << id
-        else
-          i = products.size
-          product_ids[p] = i
-          products[i] = [id]
+        i = product_ids[product_id]
+        if i # Если уже был этот товар
+          products[i] << id # Добавляем id его опции в его коллекцию
+        else # А если ещё не было
+          i = products.size # Берем индекс нового массива для id опций
+          product_ids[product_id] = i # Запоминаем какой индекс у какого товара
+          products[i] = [id] # Инициализируем массив id опций для этого товара
         end
       end
-      map = {all: all}
-      for a, b in groups
-        m = {}
-        b.each do |id|
-          add = true
-          for c, d in grouped_options
-            unless a == c
-              d.each do |e|
-                unless products.any?{|ids| ids.include?(e) and ids.include?(id)}
-                  add = false
-                end
+      available_options_map @grouped_options, groups, products
+    end
+  end
+
+  def available_options_map grouped_options, groups, products
+    available_options = @available_options # Так быстрее наверно к переменной обращаться
+    groups.each do |current_group_id, current_option_ids| # Текущая группа и текущие id опций
+      map = {} # Карта для текущей группы
+      current_option_ids.each do |current_id| # id текущей опции
+        available = true # Предположим, она доступна, сомневаться в этом пока нет причин
+        grouped_options.each do |checked_group_id, checked_option_ids| # Отмеченное id группы и массив с отмеченными id опций в этой группе
+          unless current_group_id == checked_group_id # Текущую опцию не фильтруем по её же группе, только по всем остальным
+            checked_option_ids.each do |checked_id| # id выбранной опции внутри группы
+              # Если хоть в одном из товаров одновременно нет текущей опции и отмеченной, значит, текущая недоступна
+              unless products.any?{|ids| ids.include?(checked_id) and ids.include?(current_id)}
+                available = false
               end
             end
           end
-          m[id] = add
         end
-        map[a] = m
+        map[current_id] = available # Запоминаем в карту
       end
-      @available_options = map
-    else
-      @available_options = {all: all}
+      available_options[current_group_id] = map # Запоминаем карту по группе в общую для всех карту
     end
   end
+
   def set_page
     @page = params[:page].to_i
     @page = 1 if @page == 0
