@@ -109,43 +109,22 @@ class CatalogController < PagesController
   end
 
   def available_options
-    @available_options = {all: @options_with_products.pluck(:id).map{|id| [id, true]}.to_h}
-    if @checked_options.any?
-      finded_option_ids = {} # Чтобы id в groups не дублировались
-      groups = {} # Hash [id группы] => [массив id опций в этой группе]
-      product_ids = {} # Hash [id товара] => индекс массива id опций в products
-      products = [] # [[]] Массив массивов id опций в каждом найденом товаре
-      @options_with_products.pluck(:id, :option_group_id, :product_id).each do |row| # Выборка ключевых id из ранее отфильтрованных опций
-        id, product_id = row[0], row[2]
-        unless finded_option_ids[id] # если ещё не было этой опции
-          finded_option_ids[id] = true # запоминаем её
-          option_group_id = row[1]
-          groups[option_group_id] and groups[option_group_id] << id or groups[option_group_id] = [id] # добавляем id в группу или создаем её с этим id
-        end
-        i = product_ids[product_id]
-        if i # Если уже был этот товар
-          products[i] << id # Добавляем id его опции в его коллекцию
-        else # А если ещё не было
-          i = products.size # Берем индекс нового массива для id опций
-          product_ids[product_id] = i # Запоминаем какой индекс у какого товара
-          products[i] = [id] # Инициализируем массив id опций для этого товара
-        end
-      end
-      available_options_map @grouped_options, groups, products
-    end
-  end
+    option_rows = @options_with_products.pluck(:id, :option_group_id, 'products.id')
+    @available_options = {all: option_rows.map{|row| [row[0], true]}.to_h}
 
-  def available_options_map grouped_options, groups, products
-    available_options = @available_options # Так быстрее к переменной обращаться
-    groups.each{|current_group_id, current_option_ids| # Текущая группа и текущие id опций
-      available_options[current_group_id] = current_option_ids.map{|current_id| # id текущей опции
-        [current_id, grouped_options.except(current_group_id).all?{|checked_group_id, checked_option_ids| # Отмеченная группа, кроме текущей, и id отмеченных опций в ней
-          checked_option_ids.all?{|checked_id| # id выбранной опции внутри группы
-            products.any?{|ids| ids.include?(checked_id) and ids.include?(current_id)} # Если хоть в одном из товаров одновременно нет текущей опции и отмеченной, значит, текущая недоступна
-          }
-        }]
-      }.to_h
-    }
+    if @checked_options.any?
+      grouped_options = @grouped_options
+      product_ids = option_rows.map{|row| row[2]}.uniq.join(',')
+      option_rows.map{|row| row[1]}.uniq.each do |current_group_id|
+        @available_options[current_group_id] = Option.where(option_group_id: current_group_id).where(
+          grouped_options.except(current_group_id).map{|group_id, ids|
+            ids.map{|id|
+              "EXISTS (SELECT 1 FROM options_products WHERE options_products.product_id IN (SELECT product_id FROM options_products WHERE options_products.option_id = options.id) AND options_products.option_id = #{id})"
+            }
+          }.join(' AND ')
+        ).pluck(:id).map{|row| [row, true]}.to_h
+      end
+    end
   end
 
   def set_page
