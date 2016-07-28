@@ -15,8 +15,9 @@ Rails.application.routes.draw do
     resources :currencies
     resources :option_groups
     resources :options
-    resources :sites
     resources :pages
+    resources :warehouses, except: :show
+    resources :sites
   end
 
   post 'catalog', to: 'catalog#catalog_json'
