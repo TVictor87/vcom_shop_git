@@ -34,10 +34,62 @@
       = f.input :active, label: t('activerecord.attributes.active')
       - category = @product.category
       - if category
+        - product_id = @product.id
         - option_value = "value_#{locale}"
         - option_ids = @product.option_ids
-        - category.option_groups.select(:id, :field_type, "title_#{locale}").to_a.uniq.each do |option_group|
-          .box
+        - active_groups = []
+        - inactive_groups = []
+        - title = "title_#{locale}"
+        - category.option_groups.select(:id, :field_type, title, :active).to_a.uniq.each do |option_group|
+          - if option_group.active
+            - active_groups << option_group
+          - else
+            - inactive_groups << option_group
+        - Warehouse.order(:id).each do |warehouse|
+          - warehouse_id = warehouse.id
+          .box.box-primary
+            .box-header.with-border
+              %h3.text-center= warehouse.name
+            .box-body.box-body.table-responsive.no-padding
+              %table.table.table-hover.table-bordered.dataTable
+                %thead
+                  %tr
+                    %th №
+                    - w = {style: "width: #{100.0 / (active_groups.size + 2)}%"}
+                    - active_groups.each do |option_group|
+                      %th{w}= option_group[title]
+                    %th{w} Количество
+                    %th{w} Изменение цены
+                %tbody
+                  - ids = {}
+                  - warehouse_products = []
+                  - ActiveRecord::Base.connection.select_rows("SELECT warehouse_products.id, warehouse_products.quantity, warehouse_products.retail_price_changed, options.#{option_value}, options.option_group_id FROM warehouse_products INNER JOIN options_warehouse_products op ON op.warehouse_product_id = warehouse_products.id INNER JOIN options ON options.id = op.option_id WHERE warehouse_products.product_id = #{product_id} AND warehouse_products.warehouse_id = #{warehouse_id} ORDER BY warehouse_products.id").each do |row|
+                    - id = row[0]
+                    - i = ids[id]
+                    - if i
+                      - warehouse_products[i][:option_ids][row[4].to_i] = row[3]
+                    - else
+                      - i = warehouse_products.size
+                      - ids[id] = i
+                      - warehouse_products[i] = {id: id, quantity: row[1], price: row[2], option_ids: {row[4].to_i => row[3]}}
+                  - warehouse_products.each_with_index do |row, i|
+                    - option_ids = row[:option_ids]
+                    %tr
+                      %td= i + 1
+                      - active_groups.each do |option_group|
+                        - case option_group.field_type
+                          - when 'string'
+                            %td= option_ids[option_group.id]
+                          - when 'color'
+                            %td
+                              - value = option_ids[option_group.id]
+                              %div{style: "display: inline-block; vertical-align: middle; margin: 0 10px; width: 30px; height: 20px; background: ##{value[0..5]}"}
+                              = value[6..-1]
+                      %td= row[:quantity]
+                      %td= row[:price]
+
+        - inactive_groups.each do |option_group|
+          .box.box-success
             .box-header.with-border
               .box-title= option_group["title_#{locale}"]
             .box-body
