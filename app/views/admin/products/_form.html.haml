@@ -33,8 +33,8 @@
       = f.input :special_link_id
       = f.input :active, label: t('activerecord.attributes.active')
       - category = @product.category
+      - product_id = @product.id
       - if category
-        - product_id = @product.id
         - option_value = "value_#{locale}"
         - option_ids = @product.option_ids
         - active_groups = []
@@ -48,8 +48,7 @@
         - nowrap = {style: 'white-space:nowrap'}
         - onclickEdit = {onclick: 'WarehouseTable.edit.call(this)'}
         - onclickDelete = {onclick: 'WarehouseTable.delete.call(this)'}
-        - stringType = {'data-type' => 'string'}
-        - colorType = {'data-type' => 'color'}
+        - addRow = {onclick: 'WarehouseTable.add.call(this)', style: 'position:absolute;width:150px;left:50%;margin-left:-75px;z-index:100'}
         - ids = {}
         - warehouse_products = []
         - ActiveRecord::Base.connection.select_rows("SELECT warehouse_products.id, warehouse_products.quantity, warehouse_products.retail_price_changed, warehouse_products.warehouse_id, options.id, options.#{option_value}, options.option_group_id FROM warehouse_products INNER JOIN options_warehouse_products op ON op.warehouse_product_id = warehouse_products.id INNER JOIN options ON options.id = op.option_id WHERE warehouse_products.product_id = #{product_id} ORDER BY warehouse_products.id").each do |row|
@@ -72,14 +71,18 @@
             .box-header.with-border
               %h3.text-center= warehouse.name
             .box-body.box-body.table-responsive.no-padding
+              - addRow['data-warehouse-id'] = warehouse_id
+              .btn.btn-success{addRow} Добавить запись
               %table.table.table-hover.table-bordered.dataTable
                 %thead
                   %tr
                     - w = {style: "width: #{100.0 / (active_groups.size + 2)}%"}
                     - active_groups.each do |option_group|
                       - w['data-id'] = option_group.id
+                      - w['data-type'] = option_group.field_type
                       %th{w}= option_group[title]
                     - w.delete 'data-id'
+                    - w.delete 'data-type'
                     %th{w} Количество
                     %th{w} Изменение цены
                     %th
@@ -92,11 +95,9 @@
                           - option = option_ids[option_group.id]
                           - case option_group.field_type
                             - when 'string'
-                              - stringType['data-id'] = option[:id]
-                              %td{stringType}= option[:value]
+                              %td{'data-id' => option[:id]}= option[:value]
                             - when 'color'
-                              - colorType['data-id'] = option[:id]
-                              %td{colorType}
+                              %td{'data-id' => option[:id]}
                                 - value = option[:value]
                                 %div{style: "display: inline-block; vertical-align: middle; margin: 0 10px; width: 30px; height: 20px; background: ##{value[0..5]}"}
                                 = value[6..-1]
@@ -156,6 +157,7 @@
 
     :javascript
       currencies = #{currencies.to_json}
+      product_id = #{@product.id or 0}
       locale = "#{locale}"
 
 %script{type: 'text/javascript', src: '/assets/admin/product-edit.js'}
