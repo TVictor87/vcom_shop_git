@@ -15,4 +15,3 @@
 #= require jquery-ui.min
 #= require plugins/rails.validations.simple_form.bootstrap.coffee
 #= require admin/AdminLTE/admin-lte
-#= require_tree .

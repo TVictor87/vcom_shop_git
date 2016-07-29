@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :options
     resources :pages
     resources :warehouses, except: :show
+    resources :warehouse_products, only: :destroy
     resources :sites
   end
 
