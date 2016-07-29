@@ -46,19 +46,26 @@
           - else
             - inactive_groups << option_group
         - nowrap = {style: 'white-space:nowrap'}
-        - onclickEdit = {onclick: 'WarehouseTable.edit(this)'}
-        - onclickDelete = {onclick: 'WarehouseTable.delete(this)'}
+        - onclickEdit = {onclick: 'WarehouseTable.edit.call(this)'}
+        - onclickDelete = {onclick: 'WarehouseTable.delete.call(this)'}
+        - stringType = {'data-type' => 'string'}
+        - colorType = {'data-type' => 'color'}
         - ids = {}
         - warehouse_products = []
-        - ActiveRecord::Base.connection.select_rows("SELECT warehouse_products.id, warehouse_products.quantity, warehouse_products.retail_price_changed, warehouse_products.warehouse_id, options.#{option_value}, options.option_group_id FROM warehouse_products INNER JOIN options_warehouse_products op ON op.warehouse_product_id = warehouse_products.id INNER JOIN options ON options.id = op.option_id WHERE warehouse_products.product_id = #{product_id} ORDER BY warehouse_products.id").each do |row|
+        - ActiveRecord::Base.connection.select_rows("SELECT warehouse_products.id, warehouse_products.quantity, warehouse_products.retail_price_changed, warehouse_products.warehouse_id, options.id, options.#{option_value}, options.option_group_id FROM warehouse_products INNER JOIN options_warehouse_products op ON op.warehouse_product_id = warehouse_products.id INNER JOIN options ON options.id = op.option_id WHERE warehouse_products.product_id = #{product_id} ORDER BY warehouse_products.id").each do |row|
           - id = row[0]
           - i = ids[id]
           - if i
-            - warehouse_products[i][:option_ids][row[5].to_i] = row[4]
+            - warehouse_products[i][:option_ids][row[6].to_i] = {id: row[4], value: row[5]}
           - else
             - i = warehouse_products.size
             - ids[id] = i
-            - warehouse_products[i] = {id: id, quantity: row[1], price: row[2], warehouse_id: row[3], option_ids: {row[5].to_i => row[4]}}
+            - warehouse_products[i] = {id: id, quantity: row[1], price: row[2], warehouse_id: row[3], option_ids: {row[6].to_i => {id: row[4], value: row[5]}}}
+        - active_groups.each do |group|
+          .form-group.select.optional{id: "option_group_select_#{group.id}", style: 'display:none'}
+            %select.select.optional.select2.form-control{'data-color': group.field_type == 'color'}
+              - group.options.select(:id, option_value).each do |option|
+                %option{value: option.id}= option[option_value]
         - Warehouse.order(:id).each do |warehouse|
           - warehouse_id = warehouse.id.to_s
           .box.box-primary
@@ -68,27 +75,29 @@
               %table.table.table-hover.table-bordered.dataTable
                 %thead
                   %tr
-                    %th №
                     - w = {style: "width: #{100.0 / (active_groups.size + 2)}%"}
                     - active_groups.each do |option_group|
+                      - w['data-id'] = option_group.id
                       %th{w}= option_group[title]
+                    - w.delete 'data-id'
                     %th{w} Количество
                     %th{w} Изменение цены
                     %th
                 %tbody
-                  - i = 0
                   - warehouse_products.each do |row|
                     - if row[:warehouse_id] == warehouse_id
                       - option_ids = row[:option_ids]
                       %tr{'data-id' => row[:id]}
-                        %td= i += 1
                         - active_groups.each do |option_group|
+                          - option = option_ids[option_group.id]
                           - case option_group.field_type
                             - when 'string'
-                              %td= option_ids[option_group.id]
+                              - stringType['data-id'] = option[:id]
+                              %td{stringType}= option[:value]
                             - when 'color'
-                              %td
-                                - value = option_ids[option_group.id]
+                              - colorType['data-id'] = option[:id]
+                              %td{colorType}
+                                - value = option[:value]
                                 %div{style: "display: inline-block; vertical-align: middle; margin: 0 10px; width: 30px; height: 20px; background: ##{value[0..5]}"}
                                 = value[6..-1]
                         %td= row[:quantity]
