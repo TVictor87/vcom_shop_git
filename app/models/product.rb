@@ -6,7 +6,7 @@ class Product < ActiveRecord::Base
   # :special_price, :special_price_currency_id,
   # :special_link_id, :active
 
-  default_scope { where(active: true).order(:priority) }
+  default_scope { where(active: true) }
   scope :join_price, -> { joins(:retail_price_currency) }
   scope :min, lambda {
     min = unscope(:order).select('min(products.retail_price * currencies.value) as retail_price')

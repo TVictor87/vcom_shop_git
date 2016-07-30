@@ -275,6 +275,9 @@ def options
         end
       end
     end
+    Product.update(product_id, {
+      option_ids: Option.joins(:products).where(options_products: {product_id: product_id}).pluck(:id) + random_size_ids + random_color_ids
+    })
   end
 end
 
