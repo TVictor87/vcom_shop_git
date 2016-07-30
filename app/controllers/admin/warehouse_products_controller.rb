@@ -2,34 +2,36 @@ module Admin
   class WarehouseProductsController < Admin::BaseController
     before_action :set_warehouse_product, only: [:update, :destroy]
 
-    def create
-      @warehouse_product = WarehouseProduct.new warehouse_product_params
-      if uniq(params[:option_ids])
-        @warehouse_product.save
-        get_ids
-        save_options
-        render text: 'ok'
-      else
-        render nothing: true, status: 422
-      end
-    end
+    # TODO
 
-    def update
-      option_ids = params[:option_ids]
-      @current_ids = @warehouse_product.option_ids
-      if (@current_ids == option_ids or @current_ids == option_ids.reverse) or uniq(option_ids)
-        @warehouse_product.update warehouse_product_params
-        remove_old_ids
-        render text: 'ok'
-      else
-        render nothing: true, status: 422
-      end
-    end
+    # def create
+    #   @warehouse_product = WarehouseProduct.new warehouse_product_params
+    #   if uniq(params[:option_ids])
+    #     @warehouse_product.save
+    #     get_ids
+    #     save_options
+    #     render text: 'ok'
+    #   else
+    #     render nothing: true, status: 422
+    #   end
+    # end
 
-    def destroy
-      @warehouse_product.destroy
-      render text: 'ok'
-    end
+    # def update
+    #   option_ids = params[:option_ids]
+    #   @current_ids = @warehouse_product.option_ids
+    #   if (@current_ids == option_ids or @current_ids == option_ids.reverse) or uniq(option_ids)
+    #     @warehouse_product.update warehouse_product_params
+    #     remove_old_ids
+    #     render text: 'ok'
+    #   else
+    #     render nothing: true, status: 422
+    #   end
+    # end
+
+    # def destroy
+    #   @warehouse_product.destroy
+    #   render text: 'ok'
+    # end
 
     private
 
