@@ -260,8 +260,8 @@ def options
 
   warehouse_ids = Warehouse.pluck(:id)
   product_ids.each do |product_id|
-    random_size_ids = random_ids(size_ids)
-    random_color_ids = random_ids(color_ids)
+    random_size_ids = random_ids random_ids(size_ids)
+    random_color_ids = random_ids random_ids(color_ids)
     warehouse_ids.each do |warehouse_id|
       random_ids(random_size_ids).each do |size_id|
         random_ids(random_color_ids).each do |color_id|

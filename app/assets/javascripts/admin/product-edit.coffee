@@ -205,8 +205,8 @@ addSelect = (td, th) ->
 			ch = tr.children
 			for td in slice ch
 				row.push td.innerHTML
+			b.removeChild tr
 			tr = $(b.parentNode).DataTable().row.add(row).draw().node()
 			tr.dataset.id = +id
 			l = ch.length
 			ch[l - i].dataset.value = +ch.innerHTML for i in [2..3]
-			b.removeChild tr
