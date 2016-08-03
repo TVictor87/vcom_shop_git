@@ -107,15 +107,16 @@ loadProducts = ->
 				ret += "<li>"
 				if record = p.images[0]
 					image = record.image
+					href = "#{location.pathname}/#{record.id}"
 					ret += "<div class='image'>
-						<a href=''>
+						<a href='#{href}'>
 							<img src='#{image.medium.url}' title='#{record.title or ''}' alt='#{record.alt or ''}'>
 						</a>
 						<a data-rel='lightbox' class='visual-icon' href='#{image.url}' rel='lightbox'></a>
 					</div>"
-				ret += "<strong class='title'><a href=''>#{p[title]}</a></strong>
+				ret += "<strong class='title'><a href='#{href}'>#{p[title]}</a></strong>
 					<div class='item-row'>
-						<a class='add-cart' href=''>В корзину</a>
+						<a class='add-cart' href='#{href}'>В корзину</a>
 						<span class='price' data-price=#{p.retail_price}>#{p.retail_price.productPrice()}</span>
 					</div>
 				</li>\n"

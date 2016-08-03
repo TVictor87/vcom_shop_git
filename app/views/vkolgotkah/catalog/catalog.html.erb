@@ -135,7 +135,7 @@
                 </fieldset>
             </form>
             <ul class="list-catalog" id="products">
-                <%= render 'vkolgotkah/products/product', collection: @products %>
+                <%= render partial: 'vkolgotkah/products/product', collection: @products, locals: {url: request.path} %>
             </ul>
             <form class="form-sort bottom" action="#">
                 <fieldset>

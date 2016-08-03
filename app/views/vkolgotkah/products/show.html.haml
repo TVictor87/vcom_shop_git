@@ -1,122 +1,77 @@
 #main.row
-  %aside#sidebar
-    %h2.headline Фильтр
-    %form.form-filter{action: '#'}
+  .content-holder
+    %ul.breadcrumbs
+      %li
+        %a{href: ''} Главная
+      %li= @parent.name
+    %h1.headline= @category.name
+    %form.form-product{action: '#'}
       %fieldset
-        %ul.accordion
-          %li.active
-            %a.opener{href: ''} Бренды
-            .slide
-              .slide-holder
-                .form-row.check-row
-                  %input#Ballerina{type: 'checkbox'}/
-                  %label{for: 'Ballerina'} Ballerina
-                .form-row.check-row
-                  %input#Charmante{type: 'checkbox'}/
-                  %label{for: 'Charmante'} Charmante
-                .form-row.check-row
-                  %input#Falke{type: 'checkbox'}/
-                  %label{for: 'Falke'} Falke
-                .form-row.check-row
-                  %input#Filodoro{type: 'checkbox'}/
-                  %label{for: 'Filodoro'} Filodoro
-                .form-row.check-row
-                  %input#Gatta{type: 'checkbox'}/
-                  %label{for: 'Gatta'} Gatta
-                .form-row.check-row
-                  %input#Giulietta{type: 'checkbox'}/
-                  %label{for: 'Giulietta'} Giulietta
-                .form-row.check-row
-                  %input#Glamour{type: 'checkbox'}/
-                  %label{for: 'Glamour'} Glamour
-                .form-row.check-row
-                  %input#Golden-Lady{type: 'checkbox'}/
-                  %label{for: 'Golden-Lady'} Golden Lady
-                .form-row.check-row
-                  %input#Innamore{type: 'checkbox'}/
-                  %label{for: 'Innamore'} Innamore
-                .form-row.check-row
-                  %input#Jadea{type: 'checkbox'}/
-                  %label{for: 'Jadea'} Jadea
-                .form-row.check-row
-                  %input#LORA-GRIG{type: 'checkbox'}/
-                  %label{for: 'LORA-GRIG'} LORA GRIG
-                .form-row.check-row
-                  %input#Marilyn{type: 'checkbox'}/
-                  %label{for: 'Marilyn'} Marilyn
-                .form-row.check-row
-                  %input#MiNiMi{type: 'checkbox'}/
-                  %label{for: 'MiNiMi'} MiNiMi
-                .form-row.check-row
-                  %input#Omsa{type: 'checkbox'}/
-                  %label{for: 'Omsa'} Omsa
-  #content
-    .content-holder
-      %ul.breadcrumbs
-        %li
-          %a{href: ''} Главная
-        %li Корзина
-      %h1.headline Колготки
-      %form.form-product{action: '#'}
-        %fieldset
-          .block-product
-            %img.alignleft{alt: '', src: "#{image_path 'images/img01.jpg'}"}/
-            .text-block
-              %h2
-                Колготки
-                %strong Sweety 04 - 20 den
-              .info-block
-                %dl
-                  %dt Изготовитель:
-                  %dd Польша
-                  %dt Модель:
-                  %dd 12345
-                  %dt Наличие:
-                  %dd Есть в наличии
-              .info-block
-                %span.price
-                  Цена:
-                  %strong 67.50
-                  %span.small грн.
-              .info-block.select-holder
+        .block-product
+          %img.alignleft{alt: '', src: "#{image_path 'images/img01.jpg'}"}/
+          .text-block
+            %h2
+              = @category.name
+              %strong= @product.title
+            .info-block
+              %dl
+                %dt Изготовитель:
+                %dd Польша
+                %dt Модель:
+                %dd 12345
+                %dt Наличие:
+                %dd Есть в наличии
+            .info-block
+              %span.price
+                Цена:
+                %strong 67.50
+                %span.small грн.
+            .info-block.select-holder
+              - @groups.each do |group_id, group|
+                - options = group[:options]
+                - p options
                 .form-row
                   .text-row
-                    %label{for: 'size'} Размер:
+                    %label{for: 'size'}= group[:title] + ':'
                   %select#size
                     %option 1
                     %option 2
                     %option 3
                     %option 4
-                .form-row
-                  .text-row
-                    %label{for: 'color'} Цвет:
-                  %select#color.color-select
-                    %option{title: "#{image_path 'images/color-black.gif'}"}
-                    %option{title: "#{image_path 'images/color-beige.gif'}"}
-                    %option{title: "#{image_path 'images/color-gray.gif'}"}
-              .info-block
-                .row-qty
-                  %label Количество:
-                  %input.spinner{readonly: 'readonly', type: 'text', value: '1'}/
-                  %input{type: 'submit', value: 'КУПИТЬ'}/
-      %ul.tabset
-        %li
-          %a.active{href: '#about'} Описание
-        %li
-          %a{href: '#delivery'} Доставка и оплата
-        %li
-          %a{href: '#testimonials'} Отзывы
-      .tabs-content
-        #about
-          %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
-          %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
-          %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
-        #delivery
-          %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
-          %p Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
-          %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
-        #testimonials
-          %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
-          %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
-
-      = render partial: 'vkolgotkah/layouts/products', locals: { title: t('related_products')}
+              / .form-row
+              /   .text-row
+              /     %label{for: 'color'} Цвет:
+              /   %select#color.color-select
+              /     %option{title: "#{image_path 'images/color-black.gif'}"}
+              /     %option{title: "#{image_path 'images/color-beige.gif'}"}
+              /     %option{title: "#{image_path 'images/color-gray.gif'}"}
+            .info-block
+              .row-qty
+                %label Количество:
+                %input.spinner{readonly: 'readonly', type: 'text', value: '1'}/
+                %input{type: 'submit', value: 'КУПИТЬ'}/
+    %ul.tabset
+      %li
+        %a.active{href: '#about'} Описание
+      %li
+        %a{href: '#delivery'} Доставка и оплата
+      %li
+        %a{href: '#testimonials'} Отзывы
+    .tabs-content
+      #about
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+        %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
+      #delivery
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+        %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
+      #testimonials
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+    %section.section-similar
+      .row
+        %h1.headline-center
+          %span.center= t('related_products')
+        %ul.list-catalog
+          = render partial: 'vkolgotkah/products/product', collection: Product.limit(4), locals: { url: 'link'}

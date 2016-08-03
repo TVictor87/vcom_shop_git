@@ -1,18 +1,17 @@
-<% collection.each do |p| %>
-	<li>
-		<% if record = p.images.first
-			image = record.image %>
-			<div class="image">
-				<a href="">
-					<img src="<%= image.url :medium %>" title="<%= record.title %>" alt="<%= record.alt %>">
-				</a>
-				<a data-rel="lightbox" class="visual-icon" href="<%= image.url %>" rel="lightbox"></a>
-			</div>
-		<% end %>
-		<strong class="title"><a href=""><%= p.title %></a></strong>
-		<div class="item-row">
-			<a class="add-cart" href="">В корзину</a>
-			<span class="price" data-price="<%= p.retail_price %>"><%= raw p.price %></span>
+<% href = "#{url}/#{product.id}" %>
+<li>
+	<% if record = product.images.first
+		image = record.image %>
+		<div class="image">
+			<a href="<%= href %>">
+				<img src="<%= image.url :medium %>" title="<%= record.title %>" alt="<%= record.alt %>">
+			</a>
+			<a data-rel="lightbox" class="visual-icon" href="<%= image.url %>" rel="lightbox"></a>
 		</div>
-	</li>
-<% end %>
+	<% end %>
+	<strong class="title"><a href="<%= href %>"><%= product.title %></a></strong>
+	<div class="item-row">
+		<a class="add-cart" href="<%= href %>">В корзину</a>
+		<span class="price" data-price="<%= product.retail_price %>"><%= raw product.price %></span>
+	</div>
+</li>

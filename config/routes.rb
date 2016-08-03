@@ -30,24 +30,33 @@ Rails.application.routes.draw do
 
   get 'zhenshchinam', to: 'catalog#categories', as: 'women_ru', defaults: { url: 'zhenshchinam', column: 'url_ru' }
   get 'zhenshchinam/:category_url', to: 'catalog#catalog', defaults: { url: 'zhenshchinam', column: 'url_ru' }
+  get 'zhenshchinam/:category_url/:product_id', to: 'products#show', defaults: { url: 'zhenshchinam', column: 'url_ru' }
   get 'women', to: 'catalog#categories', as: 'women_en', defaults: { url: 'women', column: 'url_en' }
   get 'women/:category_url', to: 'catalog#catalog', defaults: { url: 'women', column: 'url_en' }
-  get 'zhinkam', to: 'catalog#categories', as: 'women_uk', defaults: { url: 'zhinkam', column: 'url_en' }
-  get 'zhinkam/:category_url', to: 'catalog#catalog', defaults: { url: 'zhinkam', column: 'url_en' }
+  get 'women/:category_url/:product_id', to: 'products#show', defaults: { url: 'women', column: 'url_en' }
+  get 'zhinkam', to: 'catalog#categories', as: 'women_uk', defaults: { url: 'zhinkam', column: 'url_uk' }
+  get 'zhinkam/:category_url', to: 'catalog#catalog', defaults: { url: 'zhinkam', column: 'url_uk' }
+  get 'zhinkam/:category_url/:product_id', to: 'products#show', defaults: { url: 'zhinkam', column: 'url_uk' }
 
   get 'muzhchinam', to: 'catalog#categories', as: 'men_ru', defaults: { url: 'muzhchinam', column: 'url_ru' }
   get 'muzhchinam/:category_url', to: 'catalog#catalog', defaults: { url: 'muzhchinam', column: 'url_ru' }
-  get 'men', to: 'catalog#categories', as: 'men_en', defaults: { url: 'men', column: 'url_ru' }
-  get 'men/:category_url', to: 'catalog#catalog', defaults: { url: 'men', column: 'url_ru' }
-  get 'cholovikam', to: 'catalog#categories', as: 'men_uk', defaults: { url: 'cholovikam', column: 'url_ru' }
-  get 'cholovikam/:category_url', to: 'catalog#catalog', defaults: { url: 'cholovikam', column: 'url_ru' }
+  get 'muzhchinam/:category_url/:product_id', to: 'products#show', defaults: { url: 'muzhchinam', column: 'url_ru' }
+  get 'men', to: 'catalog#categories', as: 'men_en', defaults: { url: 'men', column: 'url_en' }
+  get 'men/:category_url', to: 'catalog#catalog', defaults: { url: 'men', column: 'url_en' }
+  get 'men/:category_url/:product_id', to: 'products#show', defaults: { url: 'men', column: 'url_en' }
+  get 'cholovikam', to: 'catalog#categories', as: 'men_uk', defaults: { url: 'cholovikam', column: 'url_uk' }
+  get 'cholovikam/:category_url', to: 'catalog#catalog', defaults: { url: 'cholovikam', column: 'url_uk' }
+  get 'cholovikam/:category_url/:product_id', to: 'products#show', defaults: { url: 'cholovikam', column: 'url_uk' }
 
   get 'detyam', to: 'catalog#categories', as: 'child_ru', defaults: { url: 'detyam', column: 'url_ru' }
   get 'detyam/:category_url', to: 'catalog#catalog', defaults: { url: 'detyam', column: 'url_ru' }
-  get 'child', to: 'catalog#categories', as: 'child_en', defaults: { url: 'child', column: 'url_ru' }
-  get 'child/:category_url', to: 'catalog#catalog', defaults: { url: 'child', column: 'url_ru' }
-  get 'dityam', to: 'catalog#categories', as: 'child_uk', defaults: { url: 'dityam', column: 'url_ru' }
-  get 'dityam/:category_url', to: 'catalog#catalog', defaults: { url: 'dityam', column: 'url_ru' }
+  get 'detyam/:category_url/:product_id', to: 'products#show', defaults: { url: 'detyam', column: 'url_ru' }
+  get 'child', to: 'catalog#categories', as: 'child_en', defaults: { url: 'child', column: 'url_en' }
+  get 'child/:category_url', to: 'catalog#catalog', defaults: { url: 'child', column: 'url_en' }
+  get 'child/:category_url/:product_id', to: 'products#show', defaults: { url: 'child', column: 'url_en' }
+  get 'dityam', to: 'catalog#categories', as: 'child_uk', defaults: { url: 'dityam', column: 'url_uk' }
+  get 'dityam/:category_url', to: 'catalog#catalog', defaults: { url: 'dityam', column: 'url_uk' }
+  get 'dityam/:category_url/:product_id', to: 'products#show', defaults: { url: 'dityam', column: 'url_uk' }
 
   # Dynamic Pages route
   get '*urls' => 'pages#show'

@@ -43,6 +43,7 @@ class CatalogController < PagesController
   end
 
   def filter_by_options
+    @options_products = @products
     options = params[:options]
     if options
       @checked_options = []
@@ -89,6 +90,11 @@ class CatalogController < PagesController
     @products = @products.price_from @price_from if @price_from
     @price_to = params[:max]
     @products = @products.price_to @price_to if @price_to
+    if @price_from or @price_to
+      @options_products = @options_products.join_price
+      @options_products = @options_products.price_from @price_from if @price_from
+      @options_products = @options_products.price_to @price_to if @price_to
+    end
     set_total_page
   end
 
@@ -103,13 +109,13 @@ class CatalogController < PagesController
   end
 
   def available_options
-    option_rows = Option.joins(:products).where(products: {id: @products.unscope(:select).select(:id)}).pluck(:id, :option_group_id)
+    option_rows = Option.joins(:products).where(products: {id: @options_products.unscope(:select).select(:id)}).pluck(:id, :option_group_id)
     @available_options = {all: option_rows.map{|row| [row[0], true]}.to_h}
 
     if @checked_options.any?
       grouped_options = @grouped_options
       option_rows.map{|row| row[1]}.uniq.each do |current_group_id|
-        @available_options[current_group_id] = Option.where(id: option_rows.find_all{|r| r[1] == current_group_id}).where(
+        @available_options[current_group_id] = Option.where(id: option_rows.find_all{|r| r[1] == current_group_id}.map{|r| r[0]}).where(
           grouped_options.except(current_group_id).map{|group_id, ids|
             ids.map{|id|
               "EXISTS (SELECT 1 FROM options_products WHERE options_products.product_id IN (SELECT product_id FROM options_products WHERE options_products.option_id = options.id) AND options_products.option_id = #{id})"
