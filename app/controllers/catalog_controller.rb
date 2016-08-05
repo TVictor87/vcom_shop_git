@@ -3,10 +3,15 @@ class CatalogController < PagesController
   before_action :set_show
   before_action :set_parent, only: :catalog
   before_action :set_category, only: :catalog
+  before_action :set_product, only: :show
 
   def categories
     @category = Category.find_by(params[:column] => params[:url])
     rend 'catalog/categories'
+  end
+
+  def refresh_options
+
   end
 
   def catalog
@@ -45,6 +50,34 @@ class CatalogController < PagesController
     @where = [condition]
     @products = Product.where(condition)
     filter_by_options
+  end
+
+  def set_product
+    @product = Product.send("find_by_#{params[:column]}", params[:product_url])
+    @category = Category.find_by(params[:column] => params[:category_url], id: @product.category_id)
+    @parent = @category.category
+    @groups = get_options(@product.id)
+  end
+
+  def get_options(product_id)
+    groups = {}
+
+    ActiveRecord::Base.connection.select_rows(
+        "SELECT og.id, og.title_#{locale}, og.field_type, o.id, o.value_#{locale}, wp.id "\
+      "FROM warehouse_products wp "\
+      "INNER JOIN options_warehouse_products owp ON owp.warehouse_product_id = wp.id "\
+      "INNER JOIN options o ON o.id = owp.option_id "\
+      "INNER JOIN option_groups og ON og.id = o.option_group_id "\
+      "WHERE wp.product_id = #{product_id} ORDER BY og.priority"
+    ).each{|row|
+      group_id = row[0]
+      if groups[group_id].nil?
+        groups[group_id] = {title: row[1], field_type: row[2], options: {}}
+      else
+        groups[group_id][:options].merge!(row[3] => row[4]) if groups[group_id][:options][row[3]].nil?
+      end if group_id
+    }
+    groups
   end
 
   def filter_by_options

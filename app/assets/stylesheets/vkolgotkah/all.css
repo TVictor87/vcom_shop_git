@@ -464,6 +464,9 @@ h3{
 .block-product .select-holder{
     padding-bottom: 18px;
 }
+.block-product .select-holder select{
+    width: 100px;
+}
 .block-product .form-row{
     padding: 2px 0 9px;
 }
@@ -686,11 +689,7 @@ select{
     width: 53px;
 }
 #color{
-    width: 88px;
-}
-.color-container{
-    width:24px;
-    height: 24px;
+    width: 124px;
 }
 .jcf-hidden {
     display: block !important;

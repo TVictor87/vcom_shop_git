@@ -25,12 +25,8 @@
 #= require ./jquery.tabs
 #= require ./jquery.carousel
 #= require ./jquery.custom.forms
-#= require ./jquery.ui.widget.js
-#= require ./jquery.ui.button.js
-#= require ./jquery.ui.spinner.js
-#= require ./jquery.ui.slider.js
 #= require ./jquery.main
-
+#= require jquery-ui
 #= require jquery.turbolinks
 
 ready = ->

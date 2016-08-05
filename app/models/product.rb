@@ -47,7 +47,7 @@ class Product < ActiveRecord::Base
     end
   end
 
-  { main: 1, color: 2, size: 5 }.each do |key, value|
-    define_method("#{key}_options"){ options.where(option_group_id: value) }
+  { main: 0, color: 1, size: 4 }.each do |key, value|
+    define_method("#{key}_options"){ options.joins(:option_group).where(option_groups: { priority: value }) }
   end
 end

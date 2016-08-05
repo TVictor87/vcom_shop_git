@@ -1,3 +1,5 @@
+= content_for :plugins do
+  = javascript_include_tag 'vkolgotkah/show'
 #main.row
   .content-holder
     %ul.breadcrumbs
@@ -24,20 +26,20 @@
             .info-block
               %span.price
                 Цена:
-                %strong 67.50
-                %span.small грн.
+                = @product.price.html_safe
             .info-block.select-holder
               - @groups.each do |group_id, group|
-                - options = group[:options]
-                - p options
                 .form-row
                   .text-row
-                    %label{for: 'size'}= group[:title] + ':'
-                  %select#size
-                    %option 1
-                    %option 2
-                    %option 3
-                    %option 4
+                    %label{for: 'size'}= "#{group[:title]}:"
+                  %select{id: group[:field_type] == 'color' ? 'color' : '', data: { group_id: group_id }}
+                    %option{value: ''}
+                    - group[:options].each do |option_id, option_value|
+                      - if group[:field_type] == 'color'
+                        %option= option_value[6..-1]
+                      - else
+                        %option= option_value
+
               / .form-row
               /   .text-row
               /     %label{for: 'color'} Цвет:

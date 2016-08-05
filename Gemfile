@@ -48,7 +48,6 @@ gem 'rmagick'
 # gem 'capistrano-rails', group: :development
 
 # Haml is a templating engine for HTML
-# ?????????????????????? hamlit
 gem 'hamlit'
 # CSS bootstrap 3
 gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'

@@ -13,6 +13,7 @@
     <div id="wrapper">
         <%= render 'vkolgotkah/layouts/top_menu' %>
         <%= yield %>
+        <%= yield :plugins %>
         <%= render partial: 'vkolgotkah/layouts/footer' %>
     </div>
 
