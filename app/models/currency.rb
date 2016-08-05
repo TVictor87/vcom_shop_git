@@ -1,7 +1,5 @@
 class Currency < ActiveRecord::Base
-  def title
-    self["title_#{I18n.locale}"] || title_ru
-  end
+  include I18nable
 
   class << self
     attr_accessor :course

@@ -32,6 +32,11 @@ class CatalogController < PagesController
     render json: "{\"records\":#{@products.to_json(include: :images)},\"totalPage\":#{@total_page},\"min\":#{@from},\"max\":#{@to},\"available_options\":#{@available_options.to_json}}"
   end
 
+  def show
+    @product = Product.send("find_by_#{params[:column]}", params[:product_url])
+    rend 'catalog/show'
+  end
+
   private
 
   def get_products id

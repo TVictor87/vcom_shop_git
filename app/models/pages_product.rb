@@ -1,4 +1,4 @@
-class PageProduct < ActiveRecord::Base
+class PagesProduct < ActiveRecord::Base
   belongs_to :page
   belongs_to :product
 end

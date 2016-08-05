@@ -415,9 +415,6 @@ h3{
     line-height: 25px;
     padding: 6px 0 5px 26px;
 }
-#content{
-    margin-left: 264px;
-}
 .content-holder{
     float: left;
     width: 100%;
@@ -690,6 +687,10 @@ select{
 }
 #color{
     width: 88px;
+}
+.color-container{
+    width:24px;
+    height: 24px;
 }
 .jcf-hidden {
     display: block !important;
