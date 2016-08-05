@@ -29,6 +29,7 @@ class Product < ActiveRecord::Base
   has_many :site_products, dependent: :destroy
   has_many :sites, through: :site_products
   has_many :images, dependent: :destroy
+  has_many :warehouse_products
   has_and_belongs_to_many :options
 
   validates :title_ru, presence: true, length: { minimum: 2 }

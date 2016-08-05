@@ -86,6 +86,13 @@ def product_create_image(product)
   )
 end
 
+def warehouses
+  Warehouse.delete_all
+  Warehouse.create name: 'Главный склад'  
+  Warehouse.create name: 'Второй склад'  
+  Warehouse.create name: 'Третий склад'  
+end
+
 def option_groups
   OptionGroup.delete_all
 
@@ -97,15 +104,6 @@ def option_groups
     title_uk: 'Бренды',
     title_en: 'Бренды',
     field_type: 'string'
-  )
-
-  OptionGroup.create(
-    category_ids: category_ids,
-    title_ru: 'Цвет',
-    title_uk: 'Цвет',
-    title_en: 'Цвет',
-    field_type: 'color',
-    priority: 1
   )
 
   OptionGroup.create(
@@ -129,21 +127,32 @@ def option_groups
 
   OptionGroup.create(
     category_ids: category_ids,
-    title_ru: 'Размеры',
-    title_uk: 'Размеры',
-    title_en: 'Размеры',
-    field_type: 'string',
-    columns: 3,
-    priority: 4
-  )
-
-  OptionGroup.create(
-    category_ids: category_ids,
     title_ru: 'Категории',
     title_uk: 'Категории',
     title_en: 'Категории',
     field_type: 'string',
     priority: 5
+  )
+
+  OptionGroup.create(
+    category_ids: category_ids,
+    title_ru: 'Цвет',
+    title_uk: 'Цвет',
+    title_en: 'Цвет',
+    field_type: 'color',
+    priority: 1,
+    active: true
+  )
+
+  OptionGroup.create(
+    category_ids: category_ids,
+    title_ru: 'Размер',
+    title_uk: 'Размер',
+    title_en: 'Размер',
+    field_type: 'string',
+    columns: 3,
+    priority: 4,
+    active: true
   )
 end
 
@@ -165,18 +174,6 @@ def options
       value_en: value,
       priority: index,
       product_ids: (index == 15 and product_ids[90..100] or product_ids[(index * 6)..((index + 1) * 6 - 1)])
-    )
-  end
-
-  option_group_id = OptionGroup.select(:id).find_by_title_ru('Цвет').id
-  %W(ffffffбелый fdf3aeжёлтый f0dfd0кремовый d21d17красный c99967телесный ccb9a5бежевый c55124оранжевый bd90c7лаванда b78a73бежевый af2e94сиреневый aed7aaмятный a68668бежевый 930000красный 8f6d52бежевый 848484серый 59351dкоричневый 39728cголубой 0b363eсиний 000000чёрный).each_with_index do |value, index|
-    Option.create(
-      option_group_id: option_group_id,
-      value_ru: value,
-      value_uk: value,
-      value_en: value,
-      priority: index,
-      product_ids: random_ids(product_ids)
     )
   end
   
@@ -204,41 +201,6 @@ def options
     )
   end
   
-  option_group_id = OptionGroup.select(:id).find_by_title_ru('Размеры').id
-  %W(XS S S/M M ML L XL 2XL 3XL 4XL).each_with_index do |value, index|
-    Option.create(
-      option_group_id: option_group_id,
-      value_ru: value,
-      value_uk: value,
-      value_en: value,
-      priority: index,
-      column: 1,
-      product_ids: random_ids(product_ids)
-    )
-  end
-  %W(T1 T2 T3 T4 T5 T6).each_with_index do |value, index|
-    Option.create(
-      option_group_id: option_group_id,
-      value_ru: value,
-      value_uk: value,
-      value_en: value,
-      priority: index,
-      column: 2,
-      product_ids: random_ids(product_ids)
-    )
-  end
-  ['One Size', '1', '2', '3', '4', '5'].each_with_index do |value, index|
-    Option.create(
-      option_group_id: option_group_id,
-      value_ru: value,
-      value_uk: value,
-      value_en: value,
-      priority: index,
-      column: 3,
-      product_ids: random_ids(product_ids)
-    )
-  end
-  
   option_group_id = OptionGroup.select(:id).find_by_title_ru('Категории').id
   ['Бесшовные', 'Имитация чулков', 'Имитация ботфорт', 'Корректирующие', 'Без шортиков', 'Для берменных', 'С шортиками', 'Низкая талия', 'На свадьбу', 'С трусиками', 'Большие размеры', 'С открытыми пальчиками', 'Сеточка'].each_with_index do |value, index|
     Option.create(
@@ -249,6 +211,73 @@ def options
       priority: index,
       product_ids: random_ids(product_ids)
     )
+  end
+
+  option_group_id = OptionGroup.select(:id).find_by_title_ru('Цвет').id
+  color_ids = []
+  %W(ffffffбелый fdf3aeжёлтый f0dfd0кремовый d21d17красный c99967телесный ccb9a5бежевый c55124оранжевый bd90c7лаванда b78a73бежевый af2e94сиреневый aed7aaмятный a68668бежевый 930000красный 8f6d52бежевый 848484серый 59351dкоричневый 39728cголубой 0b363eсиний 000000чёрный).each_with_index do |value, index|
+    color_ids << Option.create(
+      option_group_id: option_group_id,
+      value_ru: value,
+      value_uk: value,
+      value_en: value,
+      priority: index
+    ).id
+  end
+  
+  option_group_id = OptionGroup.select(:id).find_by_title_ru('Размер').id
+  size_ids = []
+  %W(XS S S/M M ML L XL 2XL 3XL 4XL).each_with_index do |value, index|
+    size_ids << Option.create(
+      option_group_id: option_group_id,
+      value_ru: value,
+      value_uk: value,
+      value_en: value,
+      priority: index,
+      column: 1
+    ).id
+  end
+  %W(T1 T2 T3 T4 T5 T6).each_with_index do |value, index|
+    size_ids << Option.create(
+      option_group_id: option_group_id,
+      value_ru: value,
+      value_uk: value,
+      value_en: value,
+      priority: index,
+      column: 2
+    ).id
+  end
+  ['One Size', '1', '2', '3', '4', '5'].each_with_index do |value, index|
+    size_ids << Option.create(
+      option_group_id: option_group_id,
+      value_ru: value,
+      value_uk: value,
+      value_en: value,
+      priority: index,
+      column: 3
+    ).id
+  end
+
+  warehouse_ids = Warehouse.pluck(:id)
+  product_ids.each do |product_id|
+    random_size_ids = random_ids random_ids(size_ids)
+    random_color_ids = random_ids random_ids(color_ids)
+    warehouse_ids.each do |warehouse_id|
+      random_ids(random_size_ids).each do |size_id|
+        random_ids(random_color_ids).each do |color_id|
+          WarehouseProduct.create(
+            warehouse_id: warehouse_id,
+            product_id: product_id,
+            quantity: rand(0..20),
+            retail_price_changed: rand(0..100),
+            option_ids: [size_id, color_id]
+          )
+        end
+      end
+    end
+    Product.update(product_id, {
+      option_ids: Option.joins(:products).where(options_products: {product_id: product_id}).pluck(:id) + random_size_ids + random_color_ids
+    })
   end
 end
 
@@ -285,6 +314,7 @@ namespace :seed do
   task all: :environment do
     categories
     products
+    warehouses
     option_groups
     options
   end

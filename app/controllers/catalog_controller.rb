@@ -11,12 +11,12 @@ class CatalogController < PagesController
 
   def catalog
     get_products @category.id
+    set_options
 
     @products = @products.select_few
 
     sort
     set_products
-    set_options
 
     rend 'catalog/catalog'
   end
@@ -48,6 +48,7 @@ class CatalogController < PagesController
   end
 
   def filter_by_options
+    @options_products = @products
     options = params[:options]
     if options
       @checked_options = []
@@ -67,7 +68,6 @@ class CatalogController < PagesController
     end
     @checked_options_map = {}
     @checked_options.each{|id| @checked_options_map[id] = true}
-    @options_with_products = Option.joins(:products).where(products: {category_id: @category_id})
     set_from_to
   end
 
@@ -96,9 +96,9 @@ class CatalogController < PagesController
     @price_to = params[:max]
     @products = @products.price_to @price_to if @price_to
     if @price_from or @price_to
-      @options_with_products = @options_with_products.joins(products: :retail_price_currency)
-      @options_with_products = @options_with_products.where('products.retail_price * value >= ?', @price_from.to_f / Currency.course) if @price_from
-      @options_with_products = @options_with_products.where('products.retail_price * value <= ?', @price_to.to_f / Currency.course) if @price_to
+      @options_products = @options_products.join_price
+      @options_products = @options_products.price_from @price_from if @price_from
+      @options_products = @options_products.price_to @price_to if @price_to
     end
     set_total_page
   end
@@ -114,58 +114,23 @@ class CatalogController < PagesController
   end
 
   def available_options
-    all = {}
-    @options_with_products.pluck(:id).each{|id| all[id] = true}
+    option_rows = Option.joins(:products).where(products: {id: @options_products.unscope(:select).select(:id)}).pluck(:id, :option_group_id)
+    @available_options = {all: option_rows.map{|row| [row[0], true]}.to_h}
+
     if @checked_options.any?
       grouped_options = @grouped_options
-      group_ids = {}
-      groups = {}
-      product_ids = {}
-      products = []
-      @options_with_products.select(:id, :option_group_id, :product_id).each_with_index do |row, i|
-        g = row.option_group_id
-        id = row.id
-        unless group_ids[id]
-          group_ids[id] = true
-          if groups[g]
-            groups[g] << id
-          else
-            groups[g] = [id]
-          end
-        end
-        p = row.product_id
-        i = product_ids[p]
-        if i
-          products[i] << id
-        else
-          i = products.size
-          product_ids[p] = i
-          products[i] = [id]
-        end
+      option_rows.map{|row| row[1]}.uniq.each do |current_group_id|
+        @available_options[current_group_id] = Option.where(id: option_rows.find_all{|r| r[1] == current_group_id}.map{|r| r[0]}).where(
+          grouped_options.except(current_group_id).map{|group_id, ids|
+            ids.map{|id|
+              "EXISTS (SELECT 1 FROM options_products WHERE options_products.product_id IN (SELECT product_id FROM options_products WHERE options_products.option_id = options.id) AND options_products.option_id = #{id})"
+            }
+          }.join(' AND ')
+        ).pluck(:id).map{|row| [row, true]}.to_h
       end
-      map = {all: all}
-      for a, b in groups
-        m = {}
-        b.each do |id|
-          add = true
-          for c, d in grouped_options
-            unless a == c
-              d.each do |e|
-                unless products.any?{|ids| ids.include?(e) and ids.include?(id)}
-                  add = false
-                end
-              end
-            end
-          end
-          m[id] = add
-        end
-        map[a] = m
-      end
-      @available_options = map
-    else
-      @available_options = {all: all}
     end
   end
+
   def set_page
     @page = params[:page].to_i
     @page = 1 if @page == 0

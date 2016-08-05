@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713103807) do
+ActiveRecord::Schema.define(version: 20160726125709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,15 @@ ActiveRecord::Schema.define(version: 20160713103807) do
   add_index "options", ["option_group_id"], name: "index_options_on_option_group_id", using: :btree
   add_index "options", ["retail_price_currency_id"], name: "index_options_on_retail_price_currency_id", using: :btree
 
+  create_table "options_groups", force: :cascade do |t|
+    t.string   "title_ru"
+    t.string   "title_uk"
+    t.string   "title_en"
+    t.string   "constant_name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "options_products", id: false, force: :cascade do |t|
     t.integer "option_id",  null: false
     t.integer "product_id", null: false
@@ -117,6 +126,23 @@ ActiveRecord::Schema.define(version: 20160713103807) do
 
   add_index "options_products", ["option_id", "product_id"], name: "o_p_index", using: :btree
   add_index "options_products", ["product_id", "option_id"], name: "p_o_index", using: :btree
+
+  create_table "options_values", force: :cascade do |t|
+    t.integer  "option_id",  null: false
+    t.string   "title_ru"
+    t.string   "title_uk"
+    t.string   "title_en"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "options_warehouse_products", id: false, force: :cascade do |t|
+    t.integer "warehouse_product_id", null: false
+    t.integer "option_id",            null: false
+  end
+
+  add_index "options_warehouse_products", ["option_id"], name: "index_options_warehouse_products_on_option_id", using: :btree
+  add_index "options_warehouse_products", ["warehouse_product_id"], name: "index_options_warehouse_products_on_warehouse_product_id", using: :btree
 
   create_table "pages", force: :cascade do |t|
     t.string  "title_ru"
@@ -141,6 +167,18 @@ ActiveRecord::Schema.define(version: 20160713103807) do
   add_index "pages_products", ["page_id"], name: "index_pages_products_on_page_id", using: :btree
   add_index "pages_products", ["product_id"], name: "index_pages_products_on_product_id", using: :btree
 
+  create_table "product_options", force: :cascade do |t|
+    t.integer "option_group_id"
+    t.integer "product_id"
+    t.string  "value"
+    t.decimal "retail_price",                precision: 8, scale: 2
+    t.integer "retail_price_currency_id_id"
+  end
+
+  add_index "product_options", ["option_group_id"], name: "index_product_options_on_option_group_id", using: :btree
+  add_index "product_options", ["product_id"], name: "index_product_options_on_product_id", using: :btree
+  add_index "product_options", ["retail_price_currency_id_id"], name: "index_product_options_on_retail_price_currency_id_id", using: :btree
+
   create_table "products", force: :cascade do |t|
     t.string   "title_ru"
     t.text     "description_ru"
@@ -151,17 +189,17 @@ ActiveRecord::Schema.define(version: 20160713103807) do
     t.string   "title_en"
     t.text     "description_en"
     t.string   "url_en"
-    t.integer  "priority",                                            default: 0,    null: false
-    t.float    "retail_price",                                                       null: false
-    t.integer  "retail_price_currency_id",                                           null: false
-    t.decimal  "wholesale_price",             precision: 8, scale: 2
+    t.integer  "priority",                    default: 0,    null: false
+    t.float    "retail_price",                               null: false
+    t.integer  "retail_price_currency_id",                   null: false
+    t.float    "wholesale_price"
     t.integer  "wholesale_price_currency_id"
-    t.decimal  "special_price",               precision: 8, scale: 2
+    t.float    "special_price"
     t.integer  "special_price_currency_id"
     t.integer  "special_link_id"
-    t.boolean  "active",                                              default: true, null: false
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.boolean  "active",                      default: true, null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.integer  "category_id"
   end
 
@@ -210,5 +248,21 @@ ActiveRecord::Schema.define(version: 20160713103807) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "warehouse_products", force: :cascade do |t|
+    t.integer "warehouse_id"
+    t.integer "product_id"
+    t.integer "quantity",                                        default: 0,   null: false
+    t.decimal "retail_price_changed",    precision: 8, scale: 2, default: 0.0, null: false
+    t.decimal "wholesale_price_changed", precision: 8, scale: 2, default: 0.0, null: false
+    t.decimal "special_price_changed",   precision: 8, scale: 2, default: 0.0, null: false
+  end
+
+  add_index "warehouse_products", ["product_id"], name: "index_warehouse_products_on_product_id", using: :btree
+  add_index "warehouse_products", ["warehouse_id"], name: "index_warehouse_products_on_warehouse_id", using: :btree
+
+  create_table "warehouses", force: :cascade do |t|
+    t.string "name"
+  end
 
 end

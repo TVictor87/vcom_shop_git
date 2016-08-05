@@ -1,0 +1,26 @@
+%section.content-header
+  %h1
+    = t('admin.warehouses.title')
+    .pull-right
+      = link_to new_admin_warehouse_path, class: 'btn btn-default', title: t('helpers.links.new') do
+        %i.fa.fa-plus
+%section.content
+  .box
+    -#.box-header
+    -#  %h3.box-title Data Table With Full Features
+    .box-body
+      %table.table.table-bordered.table-striped.dataTable
+        %thead
+          %tr
+            %th= t('activerecord.attributes.warehouse.name')
+
+            %th= t('helpers.actions')
+        %tbody
+          - @warehouses.each do |warehouse|
+            %tr
+              %td= warehouse.name
+
+              %td
+                = link_to t('helpers.links.edit'), edit_admin_warehouse_path(warehouse.id)
+                &nbsp;&nbsp;&nbsp;
+                = link_to t('helpers.links.destroy'), admin_warehouse_path(warehouse.id), method: :delete, "data-confirm" => "Точно?"

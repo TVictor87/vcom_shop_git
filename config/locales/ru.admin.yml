@@ -26,6 +26,8 @@ ru:
       title: Валюты
     pages:
       title: Страницы
+    warehouses:
+      title: Склады
     sites:
       title: Сайты
     images:
@@ -131,3 +133,6 @@ ru:
         retail_price: Цена
         retail_price_currency_id: Валюта
         column: Колонка
+
+      warehouse:
+        name: Название
