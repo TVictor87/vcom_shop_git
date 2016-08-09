@@ -11,7 +11,16 @@ class CatalogController < PagesController
   end
 
   def refresh_options
+    options_params = params.select{|key, value| key.include?('id_') && value.present? }
+                           .map{|key, value| [key[3..-1], value] }.to_h
+    product_id = params['product_id']
+    data = available_products_settings(product_id, options_params)
+    @max = data[:max]
+    @groups = data.select{|key, value| key.is_a? Numeric }
 
+    respond_to do |format|
+      format.js { render 'vkolgotkah/catalog/refresh_options' }
+    end
   end
 
   def catalog
@@ -56,10 +65,45 @@ class CatalogController < PagesController
     @product = Product.send("find_by_#{params[:column]}", params[:product_url])
     @category = Category.find_by(params[:column] => params[:category_url], id: @product.category_id)
     @parent = @category.category
-    @groups = get_options(@product.id)
+    @groups = get_init_options(@product.id)
+    @max = 0
   end
 
-  def get_options(product_id)
+  def available_products_settings(product_id, params = {})
+
+    #empty selects
+
+    if params.blank?
+      groups = get_init_options(product_id)
+      groups[:max] = 0
+      return groups
+    end
+
+    #data - available products from warehouse
+    data = []
+
+    #groups - data for selects
+    groups = {}
+
+    params.each_with_index do |(group_id, settings), index|
+      data = if !index.zero?
+               WarehouseProduct.joins(:option_warehouse_products).joins(:options).where(id: data.pluck(:id), product_id: product_id, options: { option_group_id: group_id }, options_warehouse_products: { option_id: settings })
+             else
+               WarehouseProduct.joins(:option_warehouse_products).joins(:options).where(product_id: product_id, options: { option_group_id: group_id }, options_warehouse_products: { option_id: settings })
+             end
+    end
+
+    groups[:max] = data.size
+
+    data.inject([]){|arr, d| arr.concat(d.option_warehouse_products) }.map(&:option).uniq.each do |option|
+      option_group = option.option_group
+      form_option!(groups, option_group.id, option_group.title, option_group.field_type, option.id, option.value, params[option_group.id.to_s])
+    end
+
+    groups
+  end
+
+  def get_init_options(product_id)
     groups = {}
 
     ActiveRecord::Base.connection.select_rows(
@@ -70,14 +114,18 @@ class CatalogController < PagesController
       "INNER JOIN option_groups og ON og.id = o.option_group_id "\
       "WHERE wp.product_id = #{product_id} ORDER BY og.priority"
     ).each{|row|
-      group_id = row[0]
-      if groups[group_id].nil?
-        groups[group_id] = {title: row[1], field_type: row[2], options: {}}
-      else
-        groups[group_id][:options].merge!(row[3] => row[4]) if groups[group_id][:options][row[3]].nil?
-      end if group_id
+      form_option!(groups, row[0].to_i, row[1], row[2], row[3].to_i, row[4])
     }
     groups
+  end
+
+  def form_option!(collection, og_id, og_title, og_field_type, o_id, o_value, selected = nil)
+    group_id = og_id
+    if collection[group_id].nil?
+      collection[group_id] = {title: og_title, selected: selected, field_type: og_field_type, options: {o_id => o_value}}
+    else
+      collection[group_id][:options].merge!(o_id => o_value) if collection[group_id][:options][o_id].nil?
+    end
   end
 
   def filter_by_options

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   end
 
   post 'catalog', to: 'catalog#catalog_json'
+  get 'catalog/refresh_options', to: 'catalog#refresh_options', as: 'refresh_options'
 
   devise_for :users
   root 'pages#index'

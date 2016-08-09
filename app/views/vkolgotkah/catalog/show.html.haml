@@ -1,5 +1,7 @@
 = content_for :plugins do
   = javascript_include_tag 'vkolgotkah/show'
+= content_for :styles do
+  = stylesheet_link_tag 'vkolgotkah/forms'
 #main.row
   .content-holder
     %ul.breadcrumbs
@@ -7,10 +9,16 @@
         %a{href: ''} Главная
       %li= @parent.name
     %h1.headline= @category.name
-    %form.form-product{action: '#'}
+    %form.form-product{action: '#', data: { product_id: @product.id }}
       %fieldset
         .block-product
-          %img.alignleft{alt: '', src: "#{image_path 'images/img01.jpg'}"}/
+          .product-images.alignleft
+            = link_to @product.images[0].image.url, class: 'fancybox', rel: 'gallery', title: @product.images[0].title do
+              = image_tag image_path(@product.images[0].image.url), alt: ''
+            .images-container
+              - (@product.images - [@product.images[0]]).each do |image_object|
+                = link_to image_object.image.url, class: 'fancybox', rel: 'gallery', title: image_object.title do
+                  = image_tag image_path(image_object.image.url), alt: '', class: 'resized-img'
           .text-block
             %h2
               = @category.name
@@ -27,18 +35,8 @@
               %span.price
                 Цена:
                 = @product.price.html_safe
-            .info-block.select-holder
-              - @groups.each do |group_id, group|
-                .form-row
-                  .text-row
-                    %label{for: 'size'}= "#{group[:title]}:"
-                  %select{id: group[:field_type] == 'color' ? 'color' : '', data: { group_id: group_id }}
-                    %option{value: ''}
-                    - group[:options].each do |option_id, option_value|
-                      - if group[:field_type] == 'color'
-                        %option= option_value[6..-1]
-                      - else
-                        %option= option_value
+            .info-block.select-holder{data: { url: refresh_options_url }}
+              = render partial: 'vkolgotkah/catalog/groups', locals: { groups: @groups }
 
               / .form-row
               /   .text-row
@@ -50,7 +48,7 @@
             .info-block
               .row-qty
                 %label Количество:
-                %input.spinner{readonly: 'readonly', type: 'text', value: '1'}/
+                %input.spinner{readonly: 'readonly', type: 'text', data: { max: @max }}/
                 %input{type: 'submit', value: 'КУПИТЬ'}/
     %ul.tabset
       %li
@@ -59,6 +57,8 @@
         %a{href: '#delivery'} Доставка и оплата
       %li
         %a{href: '#testimonials'} Отзывы
+      %li
+        %a{href: '#characteristics'} Характеристики
     .tabs-content
       #about
         %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
@@ -71,6 +71,8 @@
       #testimonials
         %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
         %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+      #characteristics
+
     %section.section-similar
       .row
         %h1.headline-center

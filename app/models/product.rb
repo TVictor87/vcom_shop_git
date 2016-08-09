@@ -46,8 +46,4 @@ class Product < ActiveRecord::Base
       format('$<b>%.2f</b>', (retail_price / Currency.course)).gsub(/\B(?=(\d{3})+(?!\d))/, ' ')
     end
   end
-
-  { main: 0, color: 1, size: 4 }.each do |key, value|
-    define_method("#{key}_options"){ options.joins(:option_group).where(option_groups: { priority: value }) }
-  end
 end

@@ -1,0 +1,22 @@
+!!!
+%html{:lang => "ru"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %title В колготках
+    %link{:href => "https://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,cyrillic", :rel => "stylesheet", :type => "text/css"}/
+    = stylesheet_link_tag 'vkolgotkah/application', media: 'all', 'data-turbolinks-track': true
+    = yield :styles
+    = javascript_include_tag 'vkolgotkah/application', 'data-turbolinks-track': true
+    /[if IE] <script src="/ie.js"></script>
+  %body
+    #wrapper
+      = render 'vkolgotkah/layouts/top_menu'
+      = yield
+      = yield :plugins
+      = render partial: 'vkolgotkah/layouts/footer'
+    %link{:href => "/css/gray.min.css", :rel => "stylesheet", :type => "text/css"}/
+    %script{:src => "/js/jquery.gray.min.js", :type => "text/javascript"}
+    :javascript
+      currency = "#{Currency.currency}"; course = #{Currency.course}

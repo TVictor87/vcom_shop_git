@@ -1,0 +1,4 @@
+$('.select-holder').html("<%= escape_javascript(render partial: 'vkolgotkah/catalog/groups', locals: { groups: @groups, matched: true }) %>");
+jcf.customForms.replaceAll();
+var max = <%= @max %>;
+spinner_settings($('.spinner'), max);
