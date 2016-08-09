@@ -7,7 +7,7 @@
         %a.visual-link{'data-rel' => 'lightbox', href: "#{image_path 'images/img05.jpg'}"}
           = image_tag 'images/img05.jpg'
         %strong.title
-          = link_to 'Колготки Jazz 03 - 40 den', women_product_ru_path(Product.find(93).category.url, Product.find(93).url)
+          = link_to 'Колготки Jazz 03 - 40 den', women_product_ru_path(Product.first.category.url, Product.first.url)
         .item-row
           %a.add-cart{href: ''}= t('in_cart')
           %span.price
