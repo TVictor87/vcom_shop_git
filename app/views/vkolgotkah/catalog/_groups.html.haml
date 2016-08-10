@@ -1,0 +1,14 @@
+- groups.each do |group_id, group|
+  .form-row
+    .text-row
+      %label{for: 'size'}= "#{group[:title]}:"
+    %select{id: group[:field_type] == 'color' ? 'color' : '', data: { group_id: "id_#{group_id}" }}
+      - if group[:selected].blank?
+        %option{hidden: true, selected: true}
+      - else
+        %option{value: '', disabled: true, hidden: false} <Очистити>
+      - group[:options].each do |option_id, option_value|
+        - if group[:field_type] == 'color'
+          %option{value: option_id, selected: (group[:selected] == option_id)? true : false}= option_value[6..-1]
+        - else
+          %option{value: option_id, selected: (group[:selected] == option_id)? true : false}= option_value

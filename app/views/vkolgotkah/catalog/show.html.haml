@@ -1,0 +1,81 @@
+= content_for :plugins do
+  = javascript_include_tag 'vkolgotkah/show'
+= content_for :styles do
+  = stylesheet_link_tag 'vkolgotkah/forms'
+#main.row
+  .content-holder
+    %ul.breadcrumbs
+      %li
+        %a{href: ''} Главная
+      %li= @parent.name
+    %h1.headline= @category.name
+    %form.form-product{action: '#', data: { product_id: @product.id }}
+      %fieldset
+        .block-product
+          .product-images.alignleft
+            = link_to @product.images[0].image.url, class: 'fancybox', rel: 'gallery', title: @product.images[0].title do
+              = image_tag image_path(@product.images[0].image.url), alt: ''
+            .images-container
+              - (@product.images - [@product.images[0]]).each do |image_object|
+                = link_to image_object.image.url, class: 'fancybox', rel: 'gallery', title: image_object.title do
+                  = image_tag image_path(image_object.image.url), alt: '', class: 'resized-img'
+          .text-block
+            %h2
+              = @category.name
+              %strong= @product.title
+            .info-block
+              %dl
+                %dt Изготовитель:
+                %dd Польша
+                %dt Модель:
+                %dd 12345
+                %dt Наличие:
+                %dd Есть в наличии
+            .info-block
+              %span.price
+                Цена:
+                = @product.price.html_safe
+            .info-block.select-holder{data: { url: refresh_options_url }}
+              = render partial: 'vkolgotkah/catalog/groups', locals: { groups: @groups }
+
+              / .form-row
+              /   .text-row
+              /     %label{for: 'color'} Цвет:
+              /   %select#color.color-select
+              /     %option{title: "#{image_path 'images/color-black.gif'}"}
+              /     %option{title: "#{image_path 'images/color-beige.gif'}"}
+              /     %option{title: "#{image_path 'images/color-gray.gif'}"}
+            .info-block
+              .row-qty
+                %label Количество:
+                %input.spinner{readonly: 'readonly', type: 'text', data: { max: @max }}/
+                %input{type: 'submit', value: 'КУПИТЬ'}/
+    %ul.tabset
+      %li
+        %a.active{href: '#about'} Описание
+      %li
+        %a{href: '#delivery'} Доставка и оплата
+      %li
+        %a{href: '#testimonials'} Отзывы
+      %li
+        %a{href: '#characteristics'} Характеристики
+    .tabs-content
+      #about
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+        %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
+      #delivery
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+        %p Мариуполь, Сумы, Кировоград, Тернополь, Ужгород, Черновцы, Кременчуг, Луцк, Алчевск, Павлоград, Ивано-Франковск.
+      #testimonials
+        %p В интернет-магазине Вколготках можно купить колготки, чулки и леггинсы по доступной цене без предоплаты. На нашем сайте представлены только качественные вещи от надежных производителей. Купите себе колготки, или необходимый товар и Вы сами в этом убедитесь.
+        %p Доставка осуществляется по всей Украине: Черкассы, Киев, Харьков, Одесса, Днепропетровск, Львов, Донецк, Запорожье, Симферополь, Николаев, Луганск, Винница, Севастополь, Херсон, Полтава, Житомир, Кривой Рог, Чернигов, Хмельницкий, Ровно.
+      #characteristics
+
+    %section.section-similar
+      .row
+        %h1.headline-center
+          %span.center= t('related_products')
+        %ul.list-catalog
+          = render partial: 'vkolgotkah/products/product', collection: Product.limit(4), locals: { url: 'link'}

@@ -1,4 +1,5 @@
 class Page < ActiveRecord::Base
+  include I18nable
   scope :active, -> { where(active: true) }
   scope :local, -> { where(active: true).select :id, "title_#{I18n.locale}", "description_#{I18n.locale}" }
   scope :with_products, -> { includes(products: :images) }
@@ -18,9 +19,5 @@ class Page < ActiveRecord::Base
 
   def self.find_by_url(url)
     send "find_by_url_#{I18n.locale}", url
-  end
-
-  def description
-    self["description_#{I18n.locale}"] || description_ru
   end
 end

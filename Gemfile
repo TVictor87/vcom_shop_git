@@ -22,8 +22,9 @@ gem 'coffee-rails', '~> 4.1.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+# This gem packages the jQuery UI assets (JavaScripts, stylesheets, and images) for the Rails
+gem 'jquery-ui-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-
 gem 'fancybox2-rails'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
@@ -47,7 +48,7 @@ gem 'rmagick'
 # gem 'capistrano-rails', group: :development
 
 # Haml is a templating engine for HTML
-gem 'haml-rails', '~> 0.9'
+gem 'hamlit'
 # CSS bootstrap 3
 gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 # Font-Awesome web fonts and stylesheets as a Rails engine for use with the asset pipeline
@@ -84,6 +85,7 @@ group :development do
   # Better Errors replaces the standard Rails error page with a much better and more useful error page. Read more: https://github.com/charliesome/better_errors
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'awesome_print'
   # Install RailsPanel extension for Google Chrome browser from: https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg
   gem 'meta_request'
 end

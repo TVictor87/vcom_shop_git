@@ -290,7 +290,7 @@ def products
   end
 
   Product.all.each do |product|
-    product_create_image product
+    Random.rand(1..3).times { product_create_image product }
   end
 end
 

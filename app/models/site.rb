@@ -1,4 +1,5 @@
 class Site < ActiveRecord::Base
+  include I18nable
   has_many :pages, through: :site_pages
   has_many :products, through: :site_products
   #

@@ -1,0 +1,19 @@
+/ = render 'vkolgotkah/pages/main_slider'
+/ = render 'vkolgotkah/pages/promotions'
+/ = render 'vkolgotkah/pages/collections'
+/ = render partial: 'vkolgotkah/layouts/products', locals: { title: t('bestsellers')}
+/ %section.section-about
+/ .row
+/ .text-box
+/ .holder
+/ %h2
+/ %span.center= t('about_shop')
+/ = safe_translate(@page, :description)
+/ = render partial: 'vkolgotkah/layouts/brands'
+.row
+  %article.post= sanitize @page.description
+%section.section-similar
+  .row
+    %h1.headline-center
+      %span.center ХИТЫ ПРОДАЖ
+    %ul.list-catalog= render 'vkolgotkah/products/product', collection: @page.products

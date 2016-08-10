@@ -1,0 +1,11 @@
+= stylesheet_link_tag 'vkolgotkah/categories', media: 'all'
+.row
+  %article#categories-blocks.post
+    - url = @category.url
+    - for cat in @category.categories
+      %a.category-block{:href => "/#{url}/#{cat.url}"}
+        - if cat.image?
+          %img{:src => cat.image.main.url}/
+          %img.grayscale{:src => cat.image.main.url}/
+        .button= cat.name
+  = sanitize @category.text
